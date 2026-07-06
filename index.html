@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#0d1014">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>ДЕ · трекер</title>
 <link rel="manifest" id="mf">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -52,14 +51,15 @@
   .box{background:var(--card);border:1px solid var(--line);border-radius:10px;
     padding:14px;margin-bottom:16px}
   .row{display:flex;gap:8px}
-  input[type=text],textarea{flex:1;background:var(--sub);border:1px solid var(--line);border-radius:7px;
+  input[type=text],textarea,select{flex:1;background:var(--sub);border:1px solid var(--line);border-radius:7px;
     color:var(--text);font-family:'Inter',sans-serif;font-size:15px;padding:10px 12px;outline:none;width:100%}
+  select{appearance:none;-webkit-appearance:none}
   textarea{resize:vertical;min-height:56px;line-height:1.4}
-  input:focus,textarea:focus{border-color:var(--gold)}
+  input:focus,textarea:focus,select:focus{border-color:var(--gold)}
   input::placeholder,textarea::placeholder{color:#5c6672}
   .de-in{width:84px !important;flex:none !important;color:var(--gold) !important;
     font-family:'JetBrains Mono',monospace !important;font-weight:600;text-align:center}
-  .hint{font-size:11px;color:var(--dim);margin-top:8px;font-family:'JetBrains Mono',monospace}
+  .hint{font-size:11px;color:var(--dim);margin-top:8px;font-family:'JetBrains Mono',monospace;line-height:1.5}
   .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
     color:var(--dim);text-transform:uppercase;margin:12px 0 5px}
   .lbl:first-child{margin-top:0}
@@ -80,12 +80,16 @@
   .a-nums{display:flex;justify-content:space-between;margin-top:8px;
     font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)}
   .a-nums b{color:var(--text);font-weight:600}
+  .edit{color:var(--dim);cursor:pointer;font-size:14px;padding:2px 6px;opacity:.7}
+  .edit:active{opacity:1;color:var(--gold)}
 
   .bar{margin-top:8px;height:22px;background:var(--sub);border:1px solid var(--line);
     border-radius:6px;overflow:hidden;position:relative}
+  .bar.slim{height:16px;margin-top:6px}
   .fill{height:100%;background:linear-gradient(90deg,#7a5f14,var(--gold));transition:width .35s ease}
   .done-card .fill{background:linear-gradient(90deg,#2a5f54,var(--teal))}
   .dead-card .fill{background:linear-gradient(90deg,#6e2f24,var(--ember))}
+  .fill.f-teal{background:linear-gradient(90deg,#2a5f54,var(--teal))}
   .ticks{position:absolute;inset:0;display:flex;pointer-events:none}
   .ticks i{flex:1;border-right:1px solid rgba(13,16,20,.55)}
   .ticks i:last-child{border-right:none}
@@ -131,6 +135,7 @@
     font-size:12px;padding:10px 14px;display:none;max-width:90%}
   .ok{border-color:var(--teal);background:#14211e;color:#9ed6c8}
 
+  /* сезон */
   .season-head{display:flex;justify-content:space-between;align-items:baseline}
   .s-num{font-family:'Cormorant',serif;font-weight:700;font-size:22px}
   .s-day{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue)}
@@ -139,13 +144,48 @@
   .s-meta{margin-top:9px;font-size:13px;color:var(--dim);line-height:1.5;white-space:pre-wrap}
   .s-meta b{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;
     text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:8px}
-  .out-block{text-align:center}
-  .out-nums{display:flex;gap:8px;margin-bottom:10px}
   .btn-out{width:100%;background:linear-gradient(135deg,#16303f,#0d1d27);border:1px solid var(--blue);
     border-radius:8px;color:#8fc3e8;font-family:'JetBrains Mono',monospace;
     font-size:14px;font-weight:600;padding:14px;cursor:pointer;letter-spacing:.05em}
   .btn-out:active{transform:scale(.98)}
   .arch{margin-bottom:12px}
+
+  .quest-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .q-week{font-family:'Cormorant',serif;font-weight:700;font-size:19px}
+  .q-streak{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold)}
+  .q-status{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    margin-bottom:10px}
+  .trk{background:var(--sub);border:1px solid var(--line);border-radius:8px;
+    padding:10px 11px;margin-bottom:9px}
+  .t-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .t-name{font-weight:600;font-size:14.5px}
+  .lvl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+    text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid;white-space:nowrap}
+  .t-nums{display:flex;justify-content:space-between;margin-top:6px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--dim)}
+  .t-nums b{color:var(--text)}
+  .t-act{display:flex;gap:7px;margin-top:9px}
+  .t-btn{flex:1;background:linear-gradient(135deg,#3a2f12,#241d0b);border:1px solid var(--gold);
+    border-radius:7px;color:var(--gold);font-family:'JetBrains Mono',monospace;
+    font-size:13px;font-weight:600;padding:10px;cursor:pointer}
+  .t-btn:active{transform:scale(.98)}
+  .t-sm{background:var(--card);border:1px solid var(--line);border-radius:7px;
+    color:var(--dim);font-size:12px;padding:10px 11px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace}
+  .wchips{display:flex;flex-wrap:wrap;gap:6px}
+  .wchip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 9px;
+    border-radius:6px;border:1px solid var(--line);background:var(--sub)}
+  .w-ok{border-color:var(--teal);color:var(--teal)}
+  .w-no{border-color:#5a3a34;color:#c98874}
+
+  details.addf{margin-bottom:16px}
+  details.addf summary{list-style:none;cursor:pointer;user-select:none;
+    background:var(--card);border:1px dashed var(--line);border-radius:10px;
+    padding:12px;text-align:center;font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--dim);letter-spacing:.08em}
+  details.addf summary::-webkit-details-marker{display:none}
+  details.addf[open] summary{border-radius:10px 10px 0 0;border-bottom:none}
+  details.addf .box{border-radius:0 0 10px 10px;margin-bottom:0}
 
   .ref{background:var(--card);border:1px solid var(--line);border-radius:10px;
     margin-bottom:10px;overflow:hidden}
@@ -160,7 +200,6 @@
   .ref-body p{margin-bottom:7px}
   .ref[open]{border-color:#3a4452}
 
-  /* нижняя панель бэкапа */
   .backup{position:fixed;left:0;right:0;bottom:0;z-index:8;
     background:rgba(13,16,20,.94);border-top:1px solid var(--line);
     padding:9px 14px calc(9px + env(safe-area-inset-bottom));
@@ -193,13 +232,11 @@
 
 <!-- ================= СТАВКИ ================= -->
 <div class="pane on" id="p-bets">
-
   <div class="stats">
     <div class="stat"><div class="v" id="s-active">—</div><div class="l">активных</div></div>
     <div class="stat"><div class="v" id="s-hours">—</div><div class="l">часов вложено</div></div>
     <div class="stat"><div class="v" id="s-de">—</div><div class="l">ДЕ закрыто</div></div>
   </div>
-
   <div class="box">
     <div class="row">
       <input type="text" id="in-name" placeholder="Название аллокации" maxlength="60">
@@ -208,7 +245,6 @@
     <div class="hint" id="calc">0.2 ДЕ = 20 ч = 40 чекпоинтов</div>
     <button class="btn-g" onclick="addAlloc()">ОТКРЫТЬ СТАВКУ</button>
   </div>
-
   <div id="active-list"></div>
   <div id="done-sec" style="display:none"><div class="sec">Закрытые · архив ретро</div><div id="done-list"></div></div>
 </div>
@@ -218,20 +254,17 @@
 
 <!-- ================= СПРАВКА ================= -->
 <div class="pane" id="p-ref">
-
   <details class="ref"><summary><span class="rtag" style="color:var(--gold)">Ядро</span><span class="rt">Целевая функция</span></summary>
   <div class="ref-body">
     <p><b>Доход от систем ≥ расходы</b> — при растущем внутреннем счёте. Это формула выхода, всё остальное — средства.</p>
     <p>Этапы не перепрыгиваются: <b>топливо → скорость → активы</b>. Строить активы без cash-flow — лотерея, не стратегия.</p>
     <p><b>Двойная бухгалтерия:</b> внешний рост без внутреннего = клетка дороже. Внутренний без внешнего = гедонизм на заёмные.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:var(--ember)">Ур.0</span><span class="rt">Носитель</span></summary>
   <div class="ref-body">
     <p>Носитель = тело и нервная система — «железо», на котором выполняется вся система. <b>Обслуживается до портфеля:</b> спина, ЖКТ, сон, движение вычитаются из бюджета первыми, как газ из транзакции.</p>
     <p>Дашборд — стат <b>Энергия</b>. Час на фоне боли даёт 40–60% номинала. Низкая Энергия неделю подряд → авторебаланс часов в обслуживание, по регламенту, без самообвинений.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:var(--gold)">Ур.1</span><span class="rt">Ресурсы</span></summary>
   <div class="ref-body">
     <p><b>Время</b> — единственный инвестируемый ресурс при нуле капитала. Актив — не время, а аллокация: час либо накапливается, либо потреблён.</p>
@@ -239,14 +272,12 @@
     <p><b>Энергия</b> — множитель КПД часа (×0,4–1,0).</p>
     <p><b>Деньги</b> — сначала буфер 3–6 месяцев (право решать не из страха), потом ускоритель. Профицит фиксируется до роста дохода, иначе съедается образом жизни.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:var(--teal)">Ур.2</span><span class="rt">Накопительные счета</span></summary>
   <div class="ref-body">
     <p><b>Внешний:</b> навык, репутация, связи, буфер. Связи — побочный выход каждого действия, компаундятся касаниями.</p>
     <p><b>Внутренний — наполненность:</b> пик в моменте → запись через завершение → дивиденды памятью. Недоделанное не консолидируется: брошенный проект — двойная потеря.</p>
     <p><b>Тест решения:</b> пополняет ли хотя бы один из пяти выходов (навык / репутация / связи / буфер / наполненность). Ноль из пяти — потребление. Легально, но не маскируется под игру. Пост-чек: что осталось через час — ресурс или туман.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:var(--violet)">Ур.3</span><span class="rt">Портфель</span></summary>
   <div class="ref-body">
     <p><b>Core — не валидируется, не отсекается:</b> cash-flow трек, английский, носитель. Это инфраструктура, её платят, а не проверяют.</p>
@@ -254,21 +285,18 @@
     <p><b>Цикл:</b> разведка 0,1–0,2 ДЕ → контракт письменно (цель, метрики на 50 ч, kill-критерий на 100) → полный ДЕ → удвоить / пивот / закрыть.</p>
     <p>Ребаланс не чаще раза в 90 дней. Дефицитный ресурс — слоты, не часы: реально 2–3 полных ДЕ в год. Растяжка дольше ×1,5 от плана = провал аллокации независимо от метрик.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Сезонность</span></summary>
   <div class="ref-body">
-    <p><b>Сезон = 90 дней.</b> Спецификация из трёх полей: цель (одна, бинарная) + билд (часы по корзинам) + kill-критерии. Билд заморожен до конца сезона — скука на середине это мидгейм, не сигнал менять билд.</p>
-    <p><b>Метрика недели — исходящие действия</b> (отклики, письма, питчи, публикации), не произведённое. Ноль исходящих = неделя провалена независимо от продакшна.</p>
-    <p><b>Условия движка</b> (из диабло-кейса): связность (одна вселенная), видимая прогрессия (счётчик), завершаемые куски (титры каждые 90 дней). Ретро 30 минут: конвертировалось / сгорело / меняем.</p>
+    <p><b>Сезон = 90 дней.</b> Спецификация: цель (одна, бинарная) + треки-билд (что прокачивается, с недельными нормами) + kill-критерии. Билд заморожен до конца сезона — скука на середине это мидгейм, не сигнал менять билд.</p>
+    <p><b>Исходящие</b> — транзакции с внешним миром, где возможен отказ: отклики, письма, питчи, публикации. Часы английского или ЛФК — не исходящие: там некому отказать. Ноль исходящих = неделя провалена независимо от продакшна.</p>
+    <p><b>Недельный квест:</b> все нормы треков закрыты + исходящих не меньше нормы. Выполненные недели складываются в стрик. Условия движка: связность, видимая прогрессия, завершаемые куски — титры каждую неделю и каждые 90 дней.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:#8a94a0">Протоколы</span><span class="rt">Эксплуатация</span></summary>
   <div class="ref-body">
     <p><b>Запуск:</b> триггер = первая транзакция с рынком. Бинарный, внешне проверяемый, за один присест. Система без момента запуска эксплуатируется вечно в режиме проектирования.</p>
     <p><b>Деградация — один бит: носитель функционален?</b> Нет → пауза без санкций (только носитель + 1 касание в неделю, выход по стату Энергия). Да, но форс-мажор → перераспределение: Experimental заморожен, часы в горячую точку.</p>
     <p><b>Изменения:</b> правки системы раз в 90 дней, по данным сезона, не по настроению. Защита системы от её же архитектора.</p>
   </div></details>
-
   <details class="ref"><summary><span class="rtag" style="color:#b08d6a">Свод</span><span class="rt">Принципы</span></summary>
   <div class="ref-body">
     <p><b>Глубина сильнее ширины</b> — второй ДЕ в ту же нишу даёт больше первого в новую. Компаундинг, не посев.</p>
@@ -278,12 +306,10 @@
     <p><b>Кайф не квотируется</b> — суверенная зона, пики батчами, не размазывать. Система нормирует слоты ставок, не жизнь.</p>
     <p><b>Восстановление объявляется вперёд,</b> не обнаруживается задним числом. У него есть точка выхода.</p>
   </div></details>
-
 </div>
 
 </div>
 
-<!-- панель бэкапа -->
 <div class="backup">
   <div class="backup-in">
     <div class="b-info" id="b-info">данные — в памяти телефона</div>
@@ -294,7 +320,7 @@
 </div>
 
 <script>
-/* ---------- манифест PWA ---------- */
+/* ---------- манифест ---------- */
 const manifest={
   name:"ДЕ Трекер",short_name:"ДЕ",
   start_url:location.href.split('#')[0],scope:"./",
@@ -317,6 +343,10 @@ function load(){
     const r=localStorage.getItem(KEY);
     if(r)state={...state,...JSON.parse(r)};
   }catch(e){showErr('Ошибка чтения данных.')}
+  /* миграция старого сезона без треков */
+  if(state.season&&!state.season.tracks){
+    state.season.tracks=[];state.season.outGoal=state.season.outGoal||10;
+  }
   render();updateInfo();
 }
 function save(){
@@ -327,21 +357,16 @@ function save(){
   }catch(e){showErr('Не удалось сохранить. Сделай экспорт бэкапа.')}
 }
 if(navigator.storage&&navigator.storage.persist){navigator.storage.persist();}
-
 function updateInfo(){
   const ts=localStorage.getItem(KEY+'_ts');
-  const el=document.getElementById('b-info');
-  if(ts){
-    const d=new Date(+ts);
-    el.textContent='сохранено '+d.toLocaleDateString('ru')+' '+d.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})+' · бэкап в Drive — раз в неделю';
-  }
+  if(ts){const d=new Date(+ts);
+    document.getElementById('b-info').textContent='сохранено '+d.toLocaleDateString('ru')+' '+d.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})+' · бэкап в Drive — раз в неделю';}
 }
 
 /* ---------- экспорт / импорт ---------- */
 async function exportData(){
   const name='DE_backup_'+new Date().toISOString().slice(0,10)+'.json';
-  const json=JSON.stringify(state,null,2);
-  const blob=new Blob([json],{type:'application/json'});
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const file=new File([blob],name,{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],title:'ДЕ трекер · бэкап'});
@@ -359,8 +384,9 @@ function importData(inp){
     try{
       const d=JSON.parse(r.result);
       if(!d.allocs)throw 0;
-      if(!confirm('Заменить текущие данные бэкапом от файла «'+f.name+'»?'))return;
+      if(!confirm('Заменить текущие данные бэкапом «'+f.name+'»?'))return;
       state={allocs:[],season:null,seasons:[],out:[],...d};
+      if(state.season&&!state.season.tracks){state.season.tracks=[];state.season.outGoal=10;}
       save();render();showOk('Бэкап восстановлен.');
     }catch(e){showErr('Файл не похож на бэкап трекера.')}
   };
@@ -374,13 +400,17 @@ function showErr(t){const e=document.getElementById('err');e.className='err';e.t
   e.style.display='block';setTimeout(()=>e.style.display='none',4000)}
 function showOk(t){const e=document.getElementById('err');e.className='err ok';e.textContent=t;
   e.style.display='block';setTimeout(()=>e.style.display='none',4000)}
-
 function swTab(el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
   el.classList.add('on');
   document.getElementById(el.dataset.p).classList.add('on');
 }
+function weekStart(ts){
+  const d=new Date(ts);const day=(d.getDay()+6)%7;
+  d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getTime();
+}
+function dstr(ts){const d=new Date(ts);return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')}
 
 /* ---------- ставки ---------- */
 document.getElementById('in-de').addEventListener('input',e=>{
@@ -389,7 +419,6 @@ document.getElementById('in-de').addEventListener('input',e=>{
     ? fmt(de,2)+' ДЕ = '+fmt(de*100)+' ч = '+Math.round(de*200)+' чекпоинтов'
     : '0.2 ДЕ = 20 ч = 40 чекпоинтов';
 });
-
 function addAlloc(){
   const name=document.getElementById('in-name').value.trim();
   const de=parseFloat(document.getElementById('in-de').value.replace(',','.'));
@@ -408,13 +437,23 @@ function tick(id,delta){
   a.done=Math.max(0,Math.min(a.total,a.done+delta));
   save();render();
 }
-function killAlloc(id){
+function killAlloc(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=true;save();render()}
+function unkill(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=false;save();render()}
+function renameAlloc(id){
   const a=state.allocs.find(x=>x.id===id);if(!a)return;
-  a.killed=true;save();render();
+  const n=prompt('Новое название ставки:',a.name);
+  if(n===null)return;
+  const t=n.trim();
+  if(!t){showErr('Название не может быть пустым.');return}
+  a.name=t.slice(0,60);save();render();
 }
-function unkill(id){
-  const a=state.allocs.find(x=>x.id===id);if(!a)return;
-  a.killed=false;save();render();
+function removeAlloc(id){
+  const a=state.allocs.find(x=>x.id===id);
+  if(!confirm('Удалить ставку «'+(a?a.name:'')+'»? Действие необратимо.'))return;
+  if(state.season&&state.season.tracks)
+    state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=null});
+  state.allocs=state.allocs.filter(x=>x.id!==id);
+  save();render();
 }
 let rSel={};
 function pickOutcome(id,o){rSel[id]=o;render()}
@@ -427,6 +466,7 @@ function saveRetro(id){
   if(!delta){showErr('Заполни дельту: было → стало.');return}
   a.retro={outcome:out,delta,note,ts:Date.now()};
   delete rSel[id];
+  let newId=null;
   if(out!=='kl'){
     const rx=document.getElementById('rx-'+id);
     let nde=parseFloat(((rx&&rx.value)||'').replace(',','.'));
@@ -434,24 +474,21 @@ function saveRetro(id){
     if(nde>10)nde=10;
     const base=a.name.replace(/ · \d+$/,'');
     const gen=(a.gen||1)+1;
-    state.allocs.unshift({id:Date.now().toString(36),name:base+' · '+gen,
+    newId=Date.now().toString(36);
+    state.allocs.unshift({id:newId,name:base+' · '+gen,
       de:nde,total:Math.round(nde*200),done:0,created:Date.now(),
       retro:null,killed:false,gen});
   }
+  /* треки, привязанные к закрытой ставке, переезжают на итерацию или отвязываются */
+  if(state.season&&state.season.tracks)
+    state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
   save();render();
 }
-function removeAlloc(id){
-  if(!confirm('Удалить аллокацию из архива?'))return;
-  state.allocs=state.allocs.filter(x=>x.id!==id);
-  save();render();
-}
-
 const OUT_META={
   x2:{badge:'◆ УДВОИТЬ',color:'var(--teal)',card:'done-card'},
   pv:{badge:'◆ ПИВОТ',color:'var(--gold)',card:'done-card'},
   kl:{badge:'✕ ЗАКРЫТО',color:'var(--ember)',card:'dead-card'}
 };
-
 function retroForm(a){
   const s=rSel[a.id];
   return `<div class="retro">
@@ -498,8 +535,8 @@ function card(a){
     </div>`;
   }
   return `<div class="alloc ${cls}">
-    <div class="a-top"><div class="a-name">${esc(a.name)}</div>
-      <div class="a-de">${fmt(a.de,2)} ДЕ</div></div>
+    <div class="a-top"><div class="a-name">${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
+      <div class="a-de">${fmt(a.de,2)} ДЕ${(!a.retro&&!needsRetro)?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
     <div class="bar"><div class="fill" style="width:${pct}%"></div>${ticks}
       <div class="pct">${pct}%</div></div>
     <div class="a-nums"><span><b>${fmt(hrs)}</b> / ${fmt(a.total*0.5)} ч</span>
@@ -510,18 +547,110 @@ function card(a){
   </div>`;
 }
 
-/* ---------- сезон ---------- */
-function weekStart(ts){
-  const d=new Date(ts);const day=(d.getDay()+6)%7;
-  d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getTime();
+/* ---------- сезон: движок недель ---------- */
+const LVL={body:{t:'Носитель',c:'var(--ember)'},core:{t:'Core',c:'var(--gold)'},exp:{t:'Exp',c:'var(--violet)'}};
+
+function ensureWeek(){
+  const s=state.season;if(!s)return;
+  if(!s.wk)s.wk={start:weekStart(s.start),done:{}};
+  let g=0;
+  while(s.wk.start<weekStart(Date.now())&&g<520){
+    const end=s.wk.start+7*86400000;
+    const out=state.out.filter(t=>t>=s.wk.start&&t<end).length;
+    let ok=(s.tracks||[]).length>0;let hrs=0;
+    for(const tr of (s.tracks||[])){
+      const d=s.wk.done[tr.id]||0;hrs+=d*0.5;
+      if(d<Math.round(tr.norm*2))ok=false;
+    }
+    if(out<(s.outGoal||0))ok=false;
+    if(!s.weeks)s.weeks=[];
+    s.weeks.push({start:s.wk.start,ok,hrs,out});
+    s.wk={start:end,done:{}};g++;
+  }
+}
+function streak(){
+  const s=state.season;if(!s||!s.weeks)return 0;
+  let n=0;
+  for(let i=s.weeks.length-1;i>=0;i--){if(s.weeks[i].ok)n++;else break}
+  return n;
+}
+function trackTick(tid,delta){
+  const s=state.season;if(!s)return;
+  ensureWeek();
+  const cur=s.wk.done[tid]||0;
+  s.wk.done[tid]=Math.max(0,cur+delta);
+  const tr=s.tracks.find(t=>t.id===tid);
+  if(tr&&tr.betId){
+    const a=state.allocs.find(x=>x.id===tr.betId&&!x.retro);
+    if(a)a.done=Math.max(0,Math.min(a.total,a.done+delta));
+  }
+  save();render();
+}
+function addTrack(){
+  const s=state.season;if(!s)return;
+  const name=document.getElementById('tk-name').value.trim();
+  const level=document.getElementById('tk-level').value;
+  const norm=parseFloat(document.getElementById('tk-norm').value.replace(',','.'));
+  const betId=document.getElementById('tk-bet').value||null;
+  if(!name){showErr('Название трека обязательно.');return}
+  if(!(norm>0)||norm>60){showErr('Норма: часов в неделю, от 0,5 до 60.');return}
+  if(level==='exp'&&s.tracks.some(t=>t.level==='exp')){
+    showErr('Experimental — строго 1 слот. По регламенту.');return}
+  if(norm>=3&&!betId)showOk('Трек ≥3 ч/нед без ставки: за сезон это ~'+fmt(norm*13/100,2)+' ДЕ мимо общего учёта. Подумай про ставку.');
+  s.tracks.push({id:Date.now().toString(36),name,level,norm,betId});
+  document.getElementById('tk-name').value='';
+  document.getElementById('tk-norm').value='';
+  save();render();
+}
+function editTrack(tid){
+  const s=state.season;if(!s)return;
+  const tr=s.tracks.find(t=>t.id===tid);if(!tr)return;
+  const n=prompt('Название трека:',tr.name);
+  if(n===null)return;
+  if(n.trim())tr.name=n.trim().slice(0,50);
+  const nm=prompt('Норма, часов в неделю:',String(tr.norm).replace('.',','));
+  if(nm!==null){
+    const v=parseFloat(nm.replace(',','.'));
+    if(v>0&&v<=60)tr.norm=v;
+  }
+  save();render();
+}
+function delTrack(tid){
+  const s=state.season;if(!s)return;
+  const tr=s.tracks.find(t=>t.id===tid);
+  if(!confirm('Удалить трек «'+(tr?tr.name:'')+'»? История недель сохранится.'))return;
+  s.tracks=s.tracks.filter(t=>t.id!==tid);
+  save();render();
 }
 function startSeason(){
   const num=document.getElementById('sn-num').value.trim()||'1';
   const goal=document.getElementById('sn-goal').value.trim();
-  const build=document.getElementById('sn-build').value.trim();
   const kill=document.getElementById('sn-kill').value.trim();
+  const og=parseInt(document.getElementById('sn-out').value)||0;
   if(!goal){showErr('Цель сезона обязательна — одна, бинарная.');return}
-  state.season={num,goal,build,kill,start:Date.now(),retro:null};
+  state.season={num,goal,kill,outGoal:og,start:Date.now(),tracks:[],weeks:[],wk:null,retro:null};
+  save();render();
+  showOk('Сезон запущен. Теперь добавь треки билда.');
+}
+function editSeason(){window._editSeason=true;render()}
+function saveSeasonEdit(){
+  const s=state.season;if(!s)return;
+  const goal=document.getElementById('se-goal').value.trim();
+  if(!goal){showErr('Цель не может быть пустой.');return}
+  s.num=document.getElementById('se-num').value.trim()||s.num;
+  s.goal=goal;
+  s.kill=document.getElementById('se-kill').value.trim();
+  s.outGoal=parseInt(document.getElementById('se-out').value)||0;
+  window._editSeason=false;
+  save();render();
+}
+function cancelSeason(){
+  if(!confirm('Отменить сезон целиком, без архива и ретро? Только для ошибочно запущенного.'))return;
+  state.season=null;window._editSeason=false;save();render();
+}
+function removeSeason(st){
+  if(!confirm('Удалить сезон из архива?'))return;
+  state.seasons=state.seasons.filter(x=>x.start!==st);
   save();render();
 }
 function addOut(){state.out.push(Date.now());save();render()}
@@ -529,6 +658,7 @@ function undoOut(){if(state.out.length)state.out.pop();save();render()}
 function pickWon(v){window._seasonWon=v;render()}
 function closeSeason(){
   const s=state.season;if(!s)return;
+  ensureWeek();
   const conv=document.getElementById('sr-conv').value.trim();
   const burn=document.getElementById('sr-burn').value.trim();
   const chg=document.getElementById('sr-chg').value.trim();
@@ -538,10 +668,45 @@ function closeSeason(){
   s.retro={won,conv,burn,chg,ts:Date.now()};
   s.end=Date.now();
   s.outTotal=state.out.filter(t=>t>=s.start).length;
+  s.weeksWon=(s.weeks||[]).filter(w=>w.ok).length;
+  s.weeksTotal=(s.weeks||[]).length;
   state.seasons.unshift(s);
   state.season=null;
   window._seasonWon=undefined;
   save();render();
+}
+
+function trackCard(tr){
+  const s=state.season;
+  const need=Math.round(tr.norm*2);
+  const d=s.wk.done[tr.id]||0;
+  const pct=Math.min(100,Math.round(d/need*100));
+  const lv=LVL[tr.level]||LVL.core;
+  const bet=tr.betId?state.allocs.find(x=>x.id===tr.betId&&!x.retro):null;
+  let betLine='';
+  if(bet){
+    const rem=bet.total-bet.done;
+    const wks=need>0?Math.ceil(rem/need):0;
+    betLine=`<div class="t-nums" style="margin-top:4px"><span>→ ставка: <b>${esc(bet.name)}</b></span><span>${bet.done}/${bet.total} чк · ~${wks} нед</span></div>`;
+  }
+  return `<div class="trk" style="border-left:3px solid ${lv.c}">
+    <div class="t-top">
+      <div class="t-name">${esc(tr.name)} <span class="edit" onclick="editTrack('${tr.id}')">✎</span></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span class="lvl" style="color:${lv.c};border-color:${lv.c}">${lv.t}</span>
+        <span class="edit" onclick="delTrack('${tr.id}')">✕</span>
+      </div>
+    </div>
+    <div class="bar slim"><div class="fill ${d>=need?'f-teal':''}" style="width:${pct}%"></div>
+      <div class="pct">${pct}%</div></div>
+    <div class="t-nums"><span><b>${fmt(d*0.5)}</b> / ${fmt(tr.norm)} ч на этой неделе</span>
+      <span><b>${d}</b>/${need} чк</span></div>
+    ${betLine}
+    <div class="t-act">
+      <button class="t-btn" onclick="trackTick('${tr.id}',1)">+ 30 МИН</button>
+      <button class="t-sm" onclick="trackTick('${tr.id}',-1)">−30</button>
+    </div>
+  </div>`;
 }
 
 function seasonPane(){
@@ -554,35 +719,110 @@ function seasonPane(){
       <input type="text" id="sn-num" value="${state.seasons.length+1}">
       <div class="lbl">Цель — одна, бинарная</div>
       <textarea id="sn-goal" placeholder="Например: оффер в CS/consultative B2B — или 3 финальных этапа собеседований"></textarea>
-      <div class="lbl">Билд — часы по корзинам</div>
-      <textarea id="sn-build" placeholder="Core: отклики 6ч/нед, английский 5ч/нед, носитель 3ч/нед. Experimental: слот пуст"></textarea>
+      <div class="lbl">Исходящих в неделю — норма квеста</div>
+      <input type="text" id="sn-out" inputmode="numeric" placeholder="10">
       <div class="lbl">Kill-критерии</div>
-      <textarea id="sn-kill" placeholder="Например: 0 исходящих за неделю = неделя провалена; <30 откликов к дню 30 = пересмотр билда"></textarea>
+      <textarea id="sn-kill" placeholder="Например: 0 исходящих за неделю = провал; <30 откликов к дню 30 = пересмотр"></textarea>
+      <div class="hint">Треки билда (что прокачиваешь) добавляются после запуска.</div>
       <button class="btn-g" onclick="startSeason()">ЗАПУСТИТЬ СЕЗОН</button>
     </div>`;
   }else{
+    ensureWeek();
     const day=Math.min(90,Math.floor((Date.now()-s.start)/86400000)+1);
     const pct=Math.round(day/90*100);
-    const ws=weekStart(Date.now());
+    const ws=s.wk.start;
     const outWeek=state.out.filter(t=>t>=ws).length;
     const outSeason=state.out.filter(t=>t>=s.start).length;
+    const weekNum=(s.weeks||[]).length+1;
+    const st=streak();
+    /* статус квеста недели */
+    let tracksOk=(s.tracks||[]).length>0;
+    for(const tr of (s.tracks||[])){
+      if((s.wk.done[tr.id]||0)<Math.round(tr.norm*2)){tracksOk=false;break}
+    }
+    const outOk=outWeek>=(s.outGoal||0);
+    const questOk=tracksOk&&outOk;
+
+    if(window._editSeason){
+      html+=`<div class="box">
+        <div class="lbl">Номер сезона</div>
+        <input type="text" id="se-num" value="${esc(s.num)}">
+        <div class="lbl">Цель</div>
+        <textarea id="se-goal">${esc(s.goal)}</textarea>
+        <div class="lbl">Исходящих в неделю</div>
+        <input type="text" id="se-out" inputmode="numeric" value="${s.outGoal||0}">
+        <div class="lbl">Kill-критерии</div>
+        <textarea id="se-kill">${esc(s.kill||'')}</textarea>
+        <div class="a-actions"><button class="btn30" onclick="saveSeasonEdit()">СОХРАНИТЬ</button>
+          <button class="btn-sm" onclick="window._editSeason=false;render()">отмена</button></div>
+      </div>`;
+    }else{
+      html+=`<div class="box">
+        <div class="season-head"><span class="s-num">Сезон №${esc(s.num)}</span>
+          <span class="s-day">день ${day} / 90</span></div>
+        <div class="bar" style="margin-top:10px"><div class="fill" style="width:${pct}%;background:linear-gradient(90deg,#274b63,var(--blue))"></div>
+          <div class="pct">${pct}%</div></div>
+        <div class="s-goal">${esc(s.goal)}</div>
+        ${s.kill?`<div class="s-meta"><b>Kill-критерии</b>${esc(s.kill)}</div>`:''}
+        <div class="a-actions">
+          <button class="btn-sm" onclick="editSeason()">✎ править</button>
+          <button class="btn-sm btn-kill" onclick="cancelSeason()">✕ отменить</button>
+        </div>
+      </div>`;
+    }
+
+    /* квест недели */
     html+=`<div class="box">
-      <div class="season-head"><span class="s-num">Сезон №${esc(s.num)}</span>
-        <span class="s-day">день ${day} / 90</span></div>
-      <div class="bar" style="margin-top:10px"><div class="fill" style="width:${pct}%;background:linear-gradient(90deg,#274b63,var(--blue))"></div>
-        <div class="pct">${pct}%</div></div>
-      <div class="s-goal">${esc(s.goal)}</div>
-      <div class="s-meta">${s.build?`<b>Билд</b>${esc(s.build)}`:''}${s.kill?`<b>Kill-критерии</b>${esc(s.kill)}`:''}</div>
-    </div>
-    <div class="box out-block">
-      <div class="out-nums">
-        <div class="stat"><div class="v">${outWeek}</div><div class="l">исходящих · неделя</div></div>
+      <div class="quest-head"><span class="q-week">Неделя ${weekNum} · квест</span>
+        <span class="q-streak">${st>0?'стрик ◆ '+st:'стрик —'}</span></div>
+      <div class="q-status" style="color:${questOk?'var(--teal)':'var(--dim)'}">
+        ${questOk?'◆ КВЕСТ НЕДЕЛИ ЗАКРЫТ':'нормы треков '+(tracksOk?'✓':'…')+' · исходящие '+outWeek+'/'+(s.outGoal||0)+(outOk?' ✓':'')}</div>
+      ${(s.tracks||[]).length?(s.tracks.map(trackCard).join('')):'<div class="empty" style="margin-bottom:9px">Треков нет — билд пуст.<br>Добавь, что прокачиваешь в этом сезоне.</div>'}
+    </div>`;
+
+    /* добавление трека */
+    const activeBets=state.allocs.filter(a=>!a.retro&&!a.killed&&a.done<a.total);
+    html+=`<details class="addf"><summary>+ добавить трек в билд</summary><div class="box">
+      <div class="lbl">Название</div>
+      <input type="text" id="tk-name" placeholder="Английский / ЛФК / Отклики / Ниша…" maxlength="50">
+      <div class="row" style="margin-top:12px">
+        <div style="flex:1"><div class="lbl">Уровень</div>
+          <select id="tk-level">
+            <option value="core">Core</option>
+            <option value="body">Носитель</option>
+            <option value="exp">Experimental</option>
+          </select></div>
+        <div style="width:110px"><div class="lbl">Ч / нед</div>
+          <input type="text" id="tk-norm" inputmode="decimal" placeholder="5"></div>
+      </div>
+      <div class="lbl">Привязать к ставке (+30 пойдёт в оба слоя)</div>
+      <select id="tk-bet">
+        <option value="">— без ставки —</option>
+        ${activeBets.map(a=>`<option value="${a.id}">${esc(a.name)} · ${fmt(a.de,2)} ДЕ</option>`).join('')}
+      </select>
+      <button class="btn-g" onclick="addTrack()">ДОБАВИТЬ ТРЕК</button>
+    </div></details>`;
+
+    /* исходящие */
+    html+=`<div class="box" style="text-align:center">
+      <div class="stats" style="margin-bottom:10px">
+        <div class="stat"><div class="v">${outWeek}${s.outGoal?' / '+s.outGoal:''}</div><div class="l">исходящих · неделя</div></div>
         <div class="stat"><div class="v">${outSeason}</div><div class="l">исходящих · сезон</div></div>
       </div>
       <button class="btn-out" onclick="addOut()">+ 1 ИСХОДЯЩЕЕ · отклик / письмо / питч / публикация</button>
       <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="undoOut()">− отменить последнее</button></div>
-    </div>
-    <div class="box">
+    </div>`;
+
+    /* история недель */
+    if((s.weeks||[]).length){
+      html+=`<div class="box"><div class="lbl" style="margin-top:0">История недель</div>
+        <div class="wchips">${s.weeks.map(w=>
+          `<span class="wchip ${w.ok?'w-ok':'w-no'}">${dstr(w.start)} ${w.ok?'✓':'✗'} · ${fmt(w.hrs)}ч · ${w.out}исх</span>`).join('')}
+        </div></div>`;
+    }
+
+    /* закрытие */
+    html+=`<div class="box">
       <div class="r-title" style="color:var(--blue)">Закрытие сезона — ретро 30 минут</div>
       <div class="opts">
         <div class="opt ${window._seasonWon===true?'sel-x2':''}" onclick="pickWon(true)">Цель достигнута</div>
@@ -596,13 +836,14 @@ function seasonPane(){
       <button class="btn-g" style="border-color:var(--blue);color:#8fc3e8;background:linear-gradient(135deg,#16303f,#0d1d27)" onclick="closeSeason()">ЗАКРЫТЬ СЕЗОН</button>
     </div>`;
   }
+
   if(state.seasons.length){
     html+='<div class="sec">Архив сезонов</div>';
     for(const a of state.seasons){
       const m=a.retro.won?{c:'var(--teal)',t:'◆ ЦЕЛЬ ДОСТИГНУТА'}:{c:'var(--ember)',t:'✕ НЕ ДОСТИГНУТА'};
       html+=`<div class="alloc arch" style="border-left-color:${a.retro.won?'var(--teal)':'var(--ember)'}">
         <div class="a-top"><div class="a-name">Сезон №${esc(a.num)}</div>
-          <div class="a-de">${a.outTotal} исходящих</div></div>
+          <div class="a-de">${a.outTotal||0} исх · недель ${a.weeksWon||0}/${a.weeksTotal||0}</div></div>
         <div class="r-view">
           <div class="r-badge" style="color:${m.c}">${m.t}</div>
           <div class="q">Цель</div><div class="a">${esc(a.goal)}</div>
@@ -610,6 +851,7 @@ function seasonPane(){
           ${a.retro.burn?`<div class="q">Сгорело</div><div class="a">${esc(a.retro.burn)}</div>`:''}
           ${a.retro.chg?`<div class="q">Меняем</div><div class="a">${esc(a.retro.chg)}</div>`:''}
         </div>
+        <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="removeSeason(${a.start})">убрать из архива</button></div>
       </div>`;
     }
   }
