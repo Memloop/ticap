@@ -507,6 +507,7 @@ function retroForm(a){
     </div>`:''}
     <div class="a-actions" style="margin-top:2px">
       <button class="btn30" style="border-color:var(--violet);color:#b6a6e0;background:linear-gradient(135deg,#241d3a,#171129)" onclick="saveRetro('${a.id}')">ЗАФИКСИРОВАТЬ РЕТРО</button>
+      ${a.done>=a.total?`<button class="btn-sm" onclick="tick('${a.id}',-1)">−30 · в работу</button>`:''}
       ${a.killed&&a.done<a.total?`<button class="btn-sm" onclick="unkill('${a.id}')">отмена</button>`:''}
     </div>
   </div>`;
@@ -536,7 +537,7 @@ function card(a){
   }
   return `<div class="alloc ${cls}">
     <div class="a-top"><div class="a-name">${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
-      <div class="a-de">${fmt(a.de,2)} ДЕ${(!a.retro&&!needsRetro)?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
+      <div class="a-de">${fmt(a.de,2)} ДЕ${!a.retro?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
     <div class="bar"><div class="fill" style="width:${pct}%"></div>${ticks}
       <div class="pct">${pct}%</div></div>
     <div class="a-nums"><span><b>${fmt(hrs)}</b> / ${fmt(a.total*0.5)} ч</span>
