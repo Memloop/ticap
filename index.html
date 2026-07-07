@@ -82,6 +82,10 @@
   .a-nums b{color:var(--text);font-weight:600}
   .edit{color:var(--dim);cursor:pointer;font-size:14px;padding:2px 6px;opacity:.7}
   .edit:active{opacity:1;color:var(--gold)}
+  .drag{color:var(--dim);cursor:grab;font-size:16px;padding:2px 9px 2px 1px;
+    touch-action:none;user-select:none;opacity:.6}
+  .alloc.dragging{opacity:.94;position:relative;z-index:6;
+    box-shadow:0 10px 26px rgba(0,0,0,.55);border-color:var(--gold)}
 
   .bar{margin-top:8px;height:22px;background:var(--sub);border:1px solid var(--line);
     border-radius:6px;overflow:hidden;position:relative}
@@ -244,7 +248,7 @@
     </div>
     <div class="row" style="margin-top:8px">
       <select id="in-level">
-        <option value="core">Core — не отсекается</option>
+        <option value="core">Core</option>
         <option value="exp">Experimental — строго 1 слот</option>
         <option value="body">Носитель</option>
       </select>
@@ -494,6 +498,62 @@ function saveRetro(id){
     state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
   save();render();
 }
+/* drag-and-drop внутри блока */
+let drag=null;
+function dragStart(e,id){
+  const el=e.target.closest('.alloc');if(!el)return;
+  e.preventDefault();
+  drag={id,el,startY:e.clientY,gap:13};
+  el.classList.add('dragging');
+  document.addEventListener('pointermove',dragMove,{passive:false});
+  document.addEventListener('pointerup',dragEnd);
+  document.addEventListener('pointercancel',dragEnd);
+}
+function dragMove(e){
+  if(!drag)return;
+  e.preventDefault();
+  const dy=e.clientY-drag.startY;
+  drag.el.style.transform='translateY('+dy+'px)';
+  const parent=drag.el.parentElement;
+  const dr=drag.el.getBoundingClientRect();
+  const dMid=dr.top+dr.height/2;
+  const kids=[...parent.children];
+  const di=kids.indexOf(drag.el);
+  for(const s of kids){
+    if(s===drag.el)continue;
+    const r=s.getBoundingClientRect();
+    const mid=r.top+r.height/2;
+    const si=kids.indexOf(s);
+    if(si<di&&dMid<mid){
+      parent.insertBefore(drag.el,s);
+      drag.startY-=r.height+drag.gap;
+      drag.el.style.transform='translateY('+(e.clientY-drag.startY)+'px)';
+      break;
+    }
+    if(si>di&&dMid>mid){
+      parent.insertBefore(drag.el,s.nextSibling);
+      drag.startY+=r.height+drag.gap;
+      drag.el.style.transform='translateY('+(e.clientY-drag.startY)+'px)';
+      break;
+    }
+  }
+}
+function dragEnd(){
+  if(!drag)return;
+  const parent=drag.el.parentElement;
+  drag.el.classList.remove('dragging');
+  drag.el.style.transform='';
+  document.removeEventListener('pointermove',dragMove);
+  document.removeEventListener('pointerup',dragEnd);
+  document.removeEventListener('pointercancel',dragEnd);
+  const lvl=parent.dataset.level;
+  const ids=[...parent.querySelectorAll('.alloc')].map(x=>x.dataset.id);
+  const slots=state.allocs.map((a,i)=>(!a.retro&&(a.level||'core')===lvl)?i:-1).filter(i=>i>=0);
+  const items=ids.map(id=>state.allocs.find(a=>a.id===id)).filter(Boolean);
+  if(items.length===slots.length)slots.forEach((si,k)=>state.allocs[si]=items[k]);
+  drag=null;
+  save();render();
+}
 const BLVL={core:{t:'Core',c:'var(--gold)',bg:'#1c1810'},exp:{t:'Exp',c:'var(--violet)',bg:'#191424'},body:{t:'Носитель',c:'var(--ember)',bg:'#1e1412'}};
 function cycleLevel(id){
   const a=state.allocs.find(x=>x.id===id);if(!a||a.retro)return;
@@ -555,8 +615,8 @@ function card(a){
       <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">kill</button>
     </div>`;
   }
-  return `<div class="alloc ${cls}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
-    <div class="a-top"><div class="a-name">${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
+  return `<div class="alloc ${cls}" data-id="${a.id}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
+    <div class="a-top"><div class="a-name">${!a.retro?`<span class="drag" onpointerdown="dragStart(event,'${a.id}')">⠿</span>`:''}${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
       <div class="a-de"><span class="lvl" style="color:${lv.c};border-color:${lv.c};margin-right:7px${!a.retro?';cursor:pointer':''}"${!a.retro?` onclick="cycleLevel('${a.id}')"`:''}>${lv.t}</span>${fmt(a.de,2)} ДЕ${!a.retro?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
     <div class="bar"><div class="fill" style="width:${pct}%"></div>${ticks}
       <div class="pct">${pct}%</div></div>
@@ -889,11 +949,12 @@ function render(){
   }
   const act=state.allocs.filter(a=>!a.retro);
   const done=state.allocs.filter(a=>a.retro);
-  const groups=[['core','Core — не отсекается','var(--gold)'],['exp','Experimental — 1 слот','var(--violet)'],['body','Носитель','var(--ember)']];
+  const groups=[['core','Core','var(--gold)'],['exp','Experimental — 1 слот','var(--violet)'],['body','Носитель','var(--ember)']];
   let ah='';
   for(const [k,ttl,c] of groups){
     const list=act.filter(a=>(a.level||'core')===k);
-    if(list.length)ah+='<div class="sec" style="margin:14px 0 9px;color:'+c+'">'+ttl+'</div>'+list.map(card).join('');
+    if(list.length)ah+='<div class="sec" style="margin:14px 0 9px;color:'+c+'">'+ttl+'</div>'
+      +'<div class="glist" data-level="'+k+'">'+list.map(card).join('')+'</div>';
   }
   document.getElementById('active-list').innerHTML=
     ah||'<div class="empty">Нет открытых ставок.</div>';
