@@ -82,10 +82,12 @@
   .a-nums b{color:var(--text);font-weight:600}
   .edit{color:var(--dim);cursor:pointer;font-size:14px;padding:2px 6px;opacity:.7}
   .edit:active{opacity:1;color:var(--gold)}
-  .drag{color:var(--dim);cursor:grab;font-size:16px;padding:2px 9px 2px 1px;
-    touch-action:none;user-select:none;opacity:.6}
-  .alloc.dragging{opacity:.94;position:relative;z-index:6;
-    box-shadow:0 10px 26px rgba(0,0,0,.55);border-color:var(--gold)}
+  .drag{color:var(--dim);cursor:grab;font-size:18px;padding:8px 14px 8px 2px;
+    margin:-8px 0;display:inline-block;touch-action:none;user-select:none;
+    -webkit-user-select:none;opacity:.6}
+  .dragging{opacity:.94;position:relative;z-index:6;
+    box-shadow:0 10px 26px rgba(0,0,0,.55)}
+  .alloc.dragging{border-color:var(--gold)}
 
   .bar{margin-top:8px;height:22px;background:var(--sub);border:1px solid var(--line);
     border-radius:6px;overflow:hidden;position:relative}
@@ -500,24 +502,34 @@ function saveRetro(id){
 }
 /* drag-and-drop внутри блока */
 let drag=null;
-function dragStart(e,id){
-  const el=e.target.closest('.alloc');if(!el)return;
+function blockScroll(e){if(drag)e.preventDefault()}
+function startDrag(e,el,type){
   e.preventDefault();
-  drag={id,el,startY:e.clientY,gap:13};
+  try{e.target.setPointerCapture(e.pointerId)}catch(_){}
+  drag={el,type,startY:e.clientY,lastY:e.clientY,gap:type==='blk'?14:13};
   el.classList.add('dragging');
+  document.body.style.overflow='hidden';
+  drag.timer=setInterval(()=>{if(drag)applyDrag(drag.lastY,true)},16);
+  document.addEventListener('touchmove',blockScroll,{passive:false});
   document.addEventListener('pointermove',dragMove,{passive:false});
   document.addEventListener('pointerup',dragEnd);
   document.addEventListener('pointercancel',dragEnd);
 }
-function dragMove(e){
-  if(!drag)return;
-  e.preventDefault();
-  const dy=e.clientY-drag.startY;
-  drag.el.style.transform='translateY('+dy+'px)';
+function dragStart(e,id){const el=e.target.closest('.alloc');if(el)startDrag(e,el,'card')}
+function blkStart(e){const el=e.target.closest('.blk');if(el)startDrag(e,el,'blk')}
+function dragMove(e){if(!drag)return;e.preventDefault();drag.lastY=e.clientY;applyDrag(e.clientY,false)}
+function applyDrag(y,fromTimer){
+  /* автоскролл у краёв экрана */
+  const M=80;let sv=0;
+  if(y<M)sv=-11;else if(y>innerHeight-M)sv=11;
+  if(sv){window.scrollBy(0,sv);drag.startY-=sv;}
+  else if(fromTimer)return;
+  drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
   const parent=drag.el.parentElement;
+  const cls=drag.type==='blk'?'blk':'alloc';
   const dr=drag.el.getBoundingClientRect();
   const dMid=dr.top+dr.height/2;
-  const kids=[...parent.children];
+  const kids=[...parent.children].filter(x=>x.classList&&x.classList.contains(cls));
   const di=kids.indexOf(drag.el);
   for(const s of kids){
     if(s===drag.el)continue;
@@ -527,30 +539,38 @@ function dragMove(e){
     if(si<di&&dMid<mid){
       parent.insertBefore(drag.el,s);
       drag.startY-=r.height+drag.gap;
-      drag.el.style.transform='translateY('+(e.clientY-drag.startY)+'px)';
+      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
       break;
     }
     if(si>di&&dMid>mid){
       parent.insertBefore(drag.el,s.nextSibling);
       drag.startY+=r.height+drag.gap;
-      drag.el.style.transform='translateY('+(e.clientY-drag.startY)+'px)';
+      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
       break;
     }
   }
 }
 function dragEnd(){
   if(!drag)return;
+  clearInterval(drag.timer);
   const parent=drag.el.parentElement;
+  const type=drag.type;
   drag.el.classList.remove('dragging');
   drag.el.style.transform='';
+  document.body.style.overflow='';
+  document.removeEventListener('touchmove',blockScroll);
   document.removeEventListener('pointermove',dragMove);
   document.removeEventListener('pointerup',dragEnd);
   document.removeEventListener('pointercancel',dragEnd);
-  const lvl=parent.dataset.level;
-  const ids=[...parent.querySelectorAll('.alloc')].map(x=>x.dataset.id);
-  const slots=state.allocs.map((a,i)=>(!a.retro&&(a.level||'core')===lvl)?i:-1).filter(i=>i>=0);
-  const items=ids.map(id=>state.allocs.find(a=>a.id===id)).filter(Boolean);
-  if(items.length===slots.length)slots.forEach((si,k)=>state.allocs[si]=items[k]);
+  if(type==='card'){
+    const lvl=parent.dataset.level;
+    const ids=[...parent.querySelectorAll('.alloc')].map(x=>x.dataset.id);
+    const slots=state.allocs.map((a,i)=>(!a.retro&&(a.level||'core')===lvl)?i:-1).filter(i=>i>=0);
+    const items=ids.map(id=>state.allocs.find(a=>a.id===id)).filter(Boolean);
+    if(items.length===slots.length)slots.forEach((si,k)=>state.allocs[si]=items[k]);
+  }else{
+    state.lvlOrder=[...document.querySelectorAll('#active-list .blk')].map(x=>x.dataset.level);
+  }
   drag=null;
   save();render();
 }
@@ -949,12 +969,16 @@ function render(){
   }
   const act=state.allocs.filter(a=>!a.retro);
   const done=state.allocs.filter(a=>a.retro);
-  const groups=[['core','Core','var(--gold)'],['exp','Experimental — 1 слот','var(--violet)'],['body','Носитель','var(--ember)']];
+  const GMETA={core:['Core','var(--gold)'],exp:['Experimental — 1 слот','var(--violet)'],body:['Носитель','var(--ember)']};
+  const order=(state.lvlOrder&&state.lvlOrder.length===3)?state.lvlOrder:['core','exp','body'];
   let ah='';
-  for(const [k,ttl,c] of groups){
+  for(const k of order){
+    const [ttl,c]=GMETA[k];
     const list=act.filter(a=>(a.level||'core')===k);
-    if(list.length)ah+='<div class="sec" style="margin:14px 0 9px;color:'+c+'">'+ttl+'</div>'
-      +'<div class="glist" data-level="'+k+'">'+list.map(card).join('')+'</div>';
+    if(list.length)ah+='<div class="blk" data-level="'+k+'">'
+      +'<div class="sec" style="margin:14px 0 9px;color:'+c+'">'
+      +'<span class="drag" style="font-size:13px;padding:6px 10px 6px 4px" onpointerdown="blkStart(event)">⠿</span>'+ttl+'</div>'
+      +'<div class="glist" data-level="'+k+'">'+list.map(card).join('')+'</div></div>';
   }
   document.getElementById('active-list').innerHTML=
     ah||'<div class="empty">Нет открытых ставок.</div>';
