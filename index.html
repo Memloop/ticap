@@ -242,6 +242,13 @@
       <input type="text" id="in-name" placeholder="Название аллокации" maxlength="60">
       <input type="text" class="de-in" id="in-de" placeholder="0.2" inputmode="decimal">
     </div>
+    <div class="row" style="margin-top:8px">
+      <select id="in-level">
+        <option value="core">Core — не отсекается</option>
+        <option value="exp">Experimental — строго 1 слот</option>
+        <option value="body">Носитель</option>
+      </select>
+    </div>
     <div class="hint" id="calc">0.2 ДЕ = 20 ч = 40 чекпоинтов</div>
     <button class="btn-g" onclick="addAlloc()">ОТКРЫТЬ СТАВКУ</button>
   </div>
@@ -422,9 +429,12 @@ document.getElementById('in-de').addEventListener('input',e=>{
 function addAlloc(){
   const name=document.getElementById('in-name').value.trim();
   const de=parseFloat(document.getElementById('in-de').value.replace(',','.'));
+  const level=document.getElementById('in-level').value;
   if(!name){showErr('Введи название.');return}
   if(!(de>0)||de>10){showErr('ДЕ: число от 0.05 до 10.');return}
-  state.allocs.unshift({id:Date.now().toString(36),name,de,
+  if(level==='exp'&&state.allocs.some(x=>(x.level||'core')==='exp'&&!x.retro)){
+    showErr('Experimental — строго 1 слот. Сначала закрой текущую Exp-ставку через ретро.');return}
+  state.allocs.unshift({id:Date.now().toString(36),name,de,level,
     total:Math.round(de*200),done:0,created:Date.now(),
     retro:null,killed:false,gen:1});
   document.getElementById('in-name').value='';
@@ -484,6 +494,15 @@ function saveRetro(id){
     state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
   save();render();
 }
+const BLVL={core:{t:'Core',c:'var(--gold)',bg:'#1c1810'},exp:{t:'Exp',c:'var(--violet)',bg:'#191424'},body:{t:'Носитель',c:'var(--ember)',bg:'#1e1412'}};
+function cycleLevel(id){
+  const a=state.allocs.find(x=>x.id===id);if(!a||a.retro)return;
+  const order=['core','exp','body'];
+  let i=(order.indexOf(a.level||'core')+1)%3;
+  if(order[i]==='exp'&&state.allocs.some(x=>x.id!==id&&(x.level||'core')==='exp'&&!x.retro)){
+    showErr('Exp-слот занят другой ставкой.');i=(i+1)%3;}
+  a.level=order[i];save();render();
+}
 const OUT_META={
   x2:{badge:'◆ УДВОИТЬ',color:'var(--teal)',card:'done-card'},
   pv:{badge:'◆ ПИВОТ',color:'var(--gold)',card:'done-card'},
@@ -527,6 +546,7 @@ function card(a){
   const needsRetro=(full||a.killed)&&!a.retro;
   const cls=a.retro?(OUT_META[a.retro.outcome]||OUT_META.kl).card:(needsRetro?'retro-card':'');
   const ticks=a.total<=60?'<div class="ticks">'+Array(a.total).fill('<i></i>').join('')+'</div>':'';
+  const lv=BLVL[a.level||'core'];
   let actions='';
   if(!full&&!a.killed&&!a.retro){
     actions=`<div class="a-actions">
@@ -535,9 +555,9 @@ function card(a){
       <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">kill</button>
     </div>`;
   }
-  return `<div class="alloc ${cls}">
+  return `<div class="alloc ${cls}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
     <div class="a-top"><div class="a-name">${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
-      <div class="a-de">${fmt(a.de,2)} ДЕ${!a.retro?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
+      <div class="a-de"><span class="lvl" style="color:${lv.c};border-color:${lv.c};margin-right:7px${!a.retro?';cursor:pointer':''}"${!a.retro?` onclick="cycleLevel('${a.id}')"`:''}>${lv.t}</span>${fmt(a.de,2)} ДЕ${!a.retro?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
     <div class="bar"><div class="fill" style="width:${pct}%"></div>${ticks}
       <div class="pct">${pct}%</div></div>
     <div class="a-nums"><span><b>${fmt(hrs)}</b> / ${fmt(a.total*0.5)} ч</span>
@@ -869,8 +889,14 @@ function render(){
   }
   const act=state.allocs.filter(a=>!a.retro);
   const done=state.allocs.filter(a=>a.retro);
+  const groups=[['core','Core — не отсекается','var(--gold)'],['exp','Experimental — 1 слот','var(--violet)'],['body','Носитель','var(--ember)']];
+  let ah='';
+  for(const [k,ttl,c] of groups){
+    const list=act.filter(a=>(a.level||'core')===k);
+    if(list.length)ah+='<div class="sec" style="margin:14px 0 9px;color:'+c+'">'+ttl+'</div>'+list.map(card).join('');
+  }
   document.getElementById('active-list').innerHTML=
-    act.length?act.map(card).join(''):'<div class="empty">Нет открытых ставок.</div>';
+    ah||'<div class="empty">Нет открытых ставок.</div>';
   const ds=document.getElementById('done-sec');
   ds.style.display=done.length?'block':'none';
   document.getElementById('done-list').innerHTML=done.map(card).join('');
