@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0d1014">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>ДЕ · трекер</title>
+<title>TICAP</title>
 <link rel="manifest" id="mf">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -14,11 +14,21 @@
     --bg:#0d1014; --card:#151a20; --sub:#1b212a; --line:#2a3340;
     --text:#e6e0d2; --dim:#98a1ac; --gold:#c9a227; --ember:#c0533e;
     --teal:#3e8e7e; --violet:#7c6bae; --blue:#4a7fa5;
+    --bgc-core:#1c1810; --bgc-exp:#191424; --bgc-body:#1e1412;
+    --glow:radial-gradient(ellipse 700px 400px at 50% -80px,#171d26 0%,transparent 60%);
+    --scrim:rgba(6,8,10,.82);
+  }
+  [data-theme="light"]{
+    --bg:#efe9dc; --card:#faf6ec; --sub:#f1eadb; --line:#d6cbb4;
+    --text:#2b2417; --dim:#7c7260; --gold:#8f6f0e; --ember:#a8412e;
+    --teal:#2b6e5f; --violet:#5f4d99; --blue:#33628a;
+    --bgc-core:#f6efdc; --bgc-exp:#efeaf6; --bgc-body:#f6e8e2;
+    --glow:radial-gradient(ellipse 700px 400px at 50% -80px,#f7f2e6 0%,transparent 60%);
+    --scrim:rgba(60,52,36,.55);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{
-    background:var(--bg);
-    background-image:radial-gradient(ellipse 700px 400px at 50% -80px,#171d26 0%,transparent 60%);
+    background:var(--bg);background-image:var(--glow);
     color:var(--text);font-family:'Inter',sans-serif;font-size:15px;
     min-height:100vh;padding:calc(16px + env(safe-area-inset-top)) 14px 90px}
   .wrap{max-width:560px;margin:0 auto}
@@ -27,17 +37,18 @@
   .gem{width:40px;height:40px;transform:rotate(45deg);margin:0 auto 10px;
     background:linear-gradient(135deg,#2a2013,#0f0c07);border:1px solid var(--gold);
     box-shadow:0 0 16px rgba(201,162,39,.3);display:flex;align-items:center;justify-content:center}
+  [data-theme="light"] .gem{background:linear-gradient(135deg,#efe3c2,#e2d3a8);box-shadow:0 0 12px rgba(143,111,14,.35)}
   .gem span{transform:rotate(-45deg);font-family:'Cormorant',serif;font-weight:700;
     font-size:12px;color:var(--gold)}
-  h1{font-family:'Cormorant',serif;font-weight:700;font-size:24px;letter-spacing:.04em}
-  .subt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;
+  h1{font-family:'Cormorant',serif;font-weight:700;font-size:26px;letter-spacing:.1em}
+  .subt{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;
     color:var(--dim);text-transform:uppercase;margin-top:4px}
 
   .tabs{display:flex;gap:6px;margin-bottom:18px;background:var(--card);
     border:1px solid var(--line);border-radius:10px;padding:5px;
     position:sticky;top:calc(6px + env(safe-area-inset-top));z-index:5}
   .tab{flex:1;text-align:center;padding:10px 4px;border-radius:7px;cursor:pointer;
-    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;
     color:var(--dim);text-transform:uppercase;border:1px solid transparent}
   .tab.on{background:var(--sub);color:var(--gold);border-color:var(--line)}
   .pane{display:none}.pane.on{display:block}
@@ -46,7 +57,7 @@
   .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:8px;
     padding:9px 6px;text-align:center}
   .stat .v{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--gold)}
-  .stat .l{font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
+  .stat .l{font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 
   .box{background:var(--card);border:1px solid var(--line);border-radius:10px;
     padding:14px;margin-bottom:16px}
@@ -56,24 +67,25 @@
   select{appearance:none;-webkit-appearance:none}
   textarea{resize:vertical;min-height:56px;line-height:1.4}
   input:focus,textarea:focus,select:focus{border-color:var(--gold)}
-  input::placeholder,textarea::placeholder{color:#5c6672}
+  input::placeholder,textarea::placeholder{color:var(--dim);opacity:.65}
   .de-in{width:84px !important;flex:none !important;color:var(--gold) !important;
     font-family:'JetBrains Mono',monospace !important;font-weight:600;text-align:center}
   .hint{font-size:11px;color:var(--dim);margin-top:8px;font-family:'JetBrains Mono',monospace;line-height:1.5}
-  .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+  .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
     color:var(--dim);text-transform:uppercase;margin:12px 0 5px}
   .lbl:first-child{margin-top:0}
   .btn-g{width:100%;margin-top:12px;background:linear-gradient(135deg,#3a2f12,#241d0b);
     border:1px solid var(--gold);border-radius:8px;color:var(--gold);
     font-family:'Cormorant',serif;font-weight:700;font-size:17px;letter-spacing:.08em;
     padding:11px;cursor:pointer}
+  [data-theme="light"] .btn-g{background:linear-gradient(135deg,#f3e7c4,#ead9a6)}
   .btn-g:active{transform:scale(.985)}
 
   .alloc{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);
     border-radius:10px;padding:14px;margin-bottom:13px}
   .alloc.retro-card{border-left-color:var(--violet)}
-  .alloc.done-card{border-left-color:var(--teal);opacity:.9}
-  .alloc.dead-card{border-left-color:var(--ember);opacity:.85}
+  .alloc.done-card{border-left-color:var(--teal);opacity:.92}
+  .alloc.dead-card{border-left-color:var(--ember);opacity:.88}
   .a-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   .a-name{font-weight:600;font-size:16px;line-height:1.3}
   .a-de{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);white-space:nowrap}
@@ -86,53 +98,55 @@
     margin:-8px 0;display:inline-block;touch-action:none;user-select:none;
     -webkit-user-select:none;opacity:.6}
   .dragging{opacity:.94;position:relative;z-index:6;
-    box-shadow:0 10px 26px rgba(0,0,0,.55)}
+    box-shadow:0 10px 26px rgba(0,0,0,.45)}
   .alloc.dragging{border-color:var(--gold)}
 
   .bar{margin-top:8px;height:22px;background:var(--sub);border:1px solid var(--line);
     border-radius:6px;overflow:hidden;position:relative}
   .bar.slim{height:16px;margin-top:6px}
-  .fill{height:100%;background:linear-gradient(90deg,#7a5f14,var(--gold));transition:width .35s ease}
+  .fill{height:100%;background:linear-gradient(90deg,#7a5f14,var(--gold))}
   .done-card .fill{background:linear-gradient(90deg,#2a5f54,var(--teal))}
   .dead-card .fill{background:linear-gradient(90deg,#6e2f24,var(--ember))}
-  .fill.f-teal{background:linear-gradient(90deg,#2a5f54,var(--teal))}
   .ticks{position:absolute;inset:0;display:flex;pointer-events:none}
-  .ticks i{flex:1;border-right:1px solid rgba(13,16,20,.55)}
+  .ticks i{flex:1;border-right:1px solid var(--bg);opacity:.5}
   .ticks i:last-child{border-right:none}
   .pct{position:absolute;right:7px;top:50%;transform:translateY(-50%);
     font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
-    text-shadow:0 1px 3px rgba(0,0,0,.8)}
+    color:var(--text);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+  [data-theme="light"] .pct{text-shadow:0 1px 2px rgba(255,255,255,.5)}
 
   .a-actions{display:flex;gap:8px;margin-top:11px}
   .btn30{flex:1;background:linear-gradient(135deg,#3a2f12,#241d0b);border:1px solid var(--gold);
     border-radius:8px;color:var(--gold);font-family:'JetBrains Mono',monospace;
     font-size:14px;font-weight:600;padding:12px;cursor:pointer;letter-spacing:.04em}
+  [data-theme="light"] .btn30{background:linear-gradient(135deg,#f3e7c4,#ead9a6)}
   .btn30:active{transform:scale(.98)}
   .btn-sm{background:var(--sub);border:1px solid var(--line);border-radius:8px;
     color:var(--dim);font-size:13px;padding:12px 13px;cursor:pointer;
     font-family:'JetBrains Mono',monospace}
   .btn-sm:active{transform:scale(.96)}
   .btn-kill{border-color:#5a3a34;color:#c98874}
+  [data-theme="light"] .btn-kill{border-color:#c99a8c;color:#a8412e}
 
   .retro{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
-  .r-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+  .r-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
     color:var(--violet);text-transform:uppercase;margin-bottom:9px}
   .opts{display:flex;gap:6px;margin-bottom:9px}
   .opt{flex:1;text-align:center;padding:9px 4px;border:1px solid var(--line);border-radius:7px;
     background:var(--sub);color:var(--dim);font-size:12.5px;cursor:pointer;
     font-family:'JetBrains Mono',monospace}
-  .opt.sel-x2{border-color:var(--teal);color:var(--teal);background:#14211e}
-  .opt.sel-pv{border-color:var(--gold);color:var(--gold);background:#211c10}
-  .opt.sel-kl{border-color:var(--ember);color:var(--ember);background:#211412}
+  .opt.sel-x2{border-color:var(--teal);color:var(--teal)}
+  .opt.sel-pv{border-color:var(--gold);color:var(--gold)}
+  .opt.sel-kl{border-color:var(--ember);color:var(--ember)}
   .retro textarea{margin-bottom:8px;font-size:14px}
 
   .r-view{margin-top:10px;padding:10px 12px;background:var(--sub);border-radius:7px;font-size:13px}
   .r-badge{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
     text-transform:uppercase;margin-bottom:5px}
-  .r-view .q{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-top:7px}
+  .r-view .q{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
   .r-view .a{color:var(--text);line-height:1.4;margin-top:2px;white-space:pre-wrap}
 
-  .sec{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;
+  .sec{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
     color:var(--dim);text-transform:uppercase;margin:20px 0 10px;text-align:center}
   .empty{text-align:center;color:var(--dim);font-size:13px;padding:24px 10px;
     border:1px dashed var(--line);border-radius:10px}
@@ -140,8 +154,9 @@
     background:#2a1614;border:1px solid var(--ember);border-radius:8px;color:#e0a094;
     font-size:12px;padding:10px 14px;display:none;max-width:90%}
   .ok{border-color:var(--teal);background:#14211e;color:#9ed6c8}
+  [data-theme="light"] .err{background:#f6ddd6;color:#8a3325}
+  [data-theme="light"] .ok{background:#dcefe8;color:#1f5c4d}
 
-  /* сезон */
   .season-head{display:flex;justify-content:space-between;align-items:baseline}
   .s-num{font-family:'Cormorant',serif;font-weight:700;font-size:22px}
   .s-day{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue)}
@@ -149,23 +164,23 @@
     border-left:3px solid var(--blue);font-size:14.5px;line-height:1.45}
   .s-meta{margin-top:9px;font-size:13px;color:var(--dim);line-height:1.5;white-space:pre-wrap}
   .s-meta b{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;
-    text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:8px}
+    text-transform:uppercase;letter-spacing:.08em;display:block;margin-top:8px}
   .btn-out{width:100%;background:linear-gradient(135deg,#16303f,#0d1d27);border:1px solid var(--blue);
     border-radius:8px;color:#8fc3e8;font-family:'JetBrains Mono',monospace;
-    font-size:14px;font-weight:600;padding:14px;cursor:pointer;letter-spacing:.05em}
+    font-size:14px;font-weight:600;padding:14px;cursor:pointer;letter-spacing:.04em}
+  [data-theme="light"] .btn-out{background:linear-gradient(135deg,#dcebf5,#c8dfee);color:#255273}
   .btn-out:active{transform:scale(.98)}
   .arch{margin-bottom:12px}
 
   .quest-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
   .q-week{font-family:'Cormorant',serif;font-weight:700;font-size:19px}
   .q-streak{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold)}
-  .q-status{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
-    margin-bottom:10px}
+  .q-status{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;margin-bottom:10px}
   .trk{background:var(--sub);border:1px solid var(--line);border-radius:8px;
     padding:10px 11px;margin-bottom:9px}
   .t-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
   .t-name{font-weight:600;font-size:14.5px}
-  .lvl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;
+  .lvl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;
     text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid;white-space:nowrap}
   .t-nums{display:flex;justify-content:space-between;margin-top:6px;
     font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--dim)}
@@ -174,6 +189,7 @@
   .t-btn{flex:1;background:linear-gradient(135deg,#3a2f12,#241d0b);border:1px solid var(--gold);
     border-radius:7px;color:var(--gold);font-family:'JetBrains Mono',monospace;
     font-size:13px;font-weight:600;padding:10px;cursor:pointer}
+  [data-theme="light"] .t-btn{background:linear-gradient(135deg,#f3e7c4,#ead9a6)}
   .t-btn:active{transform:scale(.98)}
   .t-sm{background:var(--card);border:1px solid var(--line);border-radius:7px;
     color:var(--dim);font-size:12px;padding:10px 11px;cursor:pointer;
@@ -183,12 +199,13 @@
     border-radius:6px;border:1px solid var(--line);background:var(--sub)}
   .w-ok{border-color:var(--teal);color:var(--teal)}
   .w-no{border-color:#5a3a34;color:#c98874}
+  [data-theme="light"] .w-no{border-color:#c99a8c;color:#a8412e}
 
   details.addf{margin-bottom:16px}
   details.addf summary{list-style:none;cursor:pointer;user-select:none;
     background:var(--card);border:1px dashed var(--line);border-radius:10px;
     padding:12px;text-align:center;font-family:'JetBrains Mono',monospace;
-    font-size:12px;color:var(--dim);letter-spacing:.08em}
+    font-size:12px;color:var(--dim);letter-spacing:.06em}
   details.addf summary::-webkit-details-marker{display:none}
   details.addf[open] summary{border-radius:10px 10px 0 0;border-bottom:none}
   details.addf .box{border-radius:0 0 10px 10px;margin-bottom:0}
@@ -199,24 +216,68 @@
     align-items:baseline;gap:9px;user-select:none}
   .ref summary::-webkit-details-marker{display:none}
   .ref .rt{font-family:'Cormorant',serif;font-weight:700;font-size:18px}
-  .ref .rtag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+  .ref .rtag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
     text-transform:uppercase}
   .ref-body{padding:0 14px 13px;font-size:13.5px;color:var(--dim);line-height:1.55}
   .ref-body b{color:var(--text)}
   .ref-body p{margin-bottom:7px}
-  .ref[open]{border-color:#3a4452}
+  .ref[open]{border-color:var(--dim)}
 
   .backup{position:fixed;left:0;right:0;bottom:0;z-index:8;
-    background:rgba(13,16,20,.94);border-top:1px solid var(--line);
-    padding:9px 14px calc(9px + env(safe-area-inset-bottom));
-    backdrop-filter:blur(8px)}
-  .backup-in{max-width:560px;margin:0 auto;display:flex;gap:8px;align-items:center}
-  .b-info{flex:1;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);line-height:1.4}
+    background:var(--bg);opacity:.97;border-top:1px solid var(--line);
+    padding:9px 14px calc(9px + env(safe-area-inset-bottom))}
+  .backup-in{max-width:560px;margin:0 auto;display:flex;gap:7px;align-items:center}
+  .b-info{flex:1;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);line-height:1.4;min-width:0}
   .b-btn{background:var(--sub);border:1px solid var(--line);border-radius:7px;
-    color:var(--text);font-size:12px;padding:9px 12px;cursor:pointer;
+    color:var(--text);font-size:12px;padding:9px 10px;cursor:pointer;
     font-family:'JetBrains Mono',monospace;white-space:nowrap}
   .b-btn:active{transform:scale(.96)}
   .b-btn.gold{border-color:var(--gold);color:var(--gold)}
+
+  /* motion */
+  :root{--ease:cubic-bezier(.32,.72,0,1);--spring:cubic-bezier(.34,1.3,.5,1)}
+  button,.opt,.tab,.edit,.lvl,.b-btn{transition:transform .15s var(--ease),color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease)}
+  .fill{transition:width .5s var(--ease),background .45s linear}
+  @keyframes cardIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+  .anim-in{animation:cardIn .32s var(--ease) both}
+  @keyframes paneIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .pane.on.slide{animation:paneIn .26s var(--ease) both}
+  @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px) scale(.97)}to{opacity:1;transform:translate(-50%,0)}}
+  @keyframes toastOut{to{opacity:0;transform:translate(-50%,8px)}}
+  .err.show{display:block;animation:toastIn .3s var(--spring) both}
+  .err.hide{animation:toastOut .22s var(--ease) both}
+  @keyframes statPop{0%{transform:scale(1)}45%{transform:scale(1.14)}100%{transform:scale(1)}}
+  .stat .v.pop{display:inline-block;animation:statPop .3s var(--ease)}
+  @keyframes onbIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+  #onb.show .onb-card{animation:onbIn .34s var(--spring) both}
+  @keyframes stepIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .step-in{animation:stepIn .24s var(--ease) both}
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+
+  /* онбординг */
+  #onb{position:fixed;inset:0;z-index:20;background:var(--scrim);
+    display:none;align-items:center;justify-content:center;padding:20px;
+    backdrop-filter:blur(4px)}
+  #onb.show{display:flex}
+  .onb-card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    max-width:420px;width:100%;padding:26px 22px 20px;text-align:center}
+  .onb-gem{width:52px;height:52px;transform:rotate(45deg);margin:4px auto 18px;
+    background:linear-gradient(135deg,#2a2013,#0f0c07);border:1px solid var(--gold);
+    box-shadow:0 0 20px rgba(201,162,39,.3);display:flex;align-items:center;justify-content:center}
+  [data-theme="light"] .onb-gem{background:linear-gradient(135deg,#efe3c2,#e2d3a8)}
+  .onb-gem span{transform:rotate(-45deg);font-family:'Cormorant',serif;font-weight:700;
+    font-size:14px;color:var(--gold)}
+  .onb-t{font-family:'Cormorant',serif;font-weight:700;font-size:23px;margin-bottom:10px}
+  .onb-b{font-size:14px;color:var(--dim);line-height:1.6;min-height:120px;text-align:left}
+  .onb-b b{color:var(--text)}
+  .onb-dots{display:flex;gap:7px;justify-content:center;margin:16px 0}
+  .onb-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .onb-dots i.on{background:var(--gold)}
+  .onb-act{display:flex;gap:8px}
+  .onb-skip{background:none;border:none;color:var(--dim);font-size:12px;
+    font-family:'JetBrains Mono',monospace;padding:10px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -224,171 +285,399 @@
 
 <header>
   <div class="gem"><span>ΔE</span></div>
-  <h1>Трекер ДЕ</h1>
-  <div class="subt">Дельта-Единица · 1 ДЕ = 100 ч · чекпоинт 30 мин</div>
+  <h1>TICAP</h1>
+  <div class="subt" id="hdr-sub"></div>
 </header>
 
 <div class="tabs">
-  <div class="tab on" data-p="p-bets" onclick="swTab(this)">Ставки</div>
-  <div class="tab" data-p="p-season" onclick="swTab(this)">Сезон</div>
-  <div class="tab" data-p="p-ref" onclick="swTab(this)">Карта</div>
+  <div class="tab on" data-p="p-alloc" id="tab-alloc" onclick="swTab(this)"></div>
+  <div class="tab" data-p="p-season" id="tab-season" onclick="swTab(this)"></div>
+  <div class="tab" data-p="p-ref" id="tab-ref" onclick="swTab(this)"></div>
 </div>
 
 <div class="err" id="err"></div>
 
-<!-- ================= СТАВКИ ================= -->
-<div class="pane on" id="p-bets">
+<!-- ============ АЛЛОКАЦИИ ============ -->
+<div class="pane on" id="p-alloc">
   <div class="stats">
-    <div class="stat"><div class="v" id="s-active">—</div><div class="l">активных</div></div>
-    <div class="stat"><div class="v" id="s-hours">—</div><div class="l">часов вложено</div></div>
-    <div class="stat"><div class="v" id="s-de">—</div><div class="l">ДЕ закрыто</div></div>
+    <div class="stat"><div class="v" id="s-active">—</div><div class="l" id="sl-active"></div></div>
+    <div class="stat"><div class="v" id="s-hours">—</div><div class="l" id="sl-hours"></div></div>
+    <div class="stat"><div class="v" id="s-de">—</div><div class="l" id="sl-de"></div></div>
   </div>
   <div class="box">
     <div class="row">
-      <input type="text" id="in-name" placeholder="Название аллокации" maxlength="60">
+      <input type="text" id="in-name" maxlength="60">
       <input type="text" class="de-in" id="in-de" placeholder="0.2" inputmode="decimal">
     </div>
     <div class="row" style="margin-top:8px">
-      <select id="in-level">
-        <option value="core">Core</option>
-        <option value="exp">Experimental — строго 1 слот</option>
-        <option value="body">Носитель</option>
-      </select>
+      <select id="in-level"></select>
     </div>
-    <div class="hint" id="calc">0.2 ДЕ = 20 ч = 40 чекпоинтов</div>
-    <button class="btn-g" onclick="addAlloc()">ОТКРЫТЬ СТАВКУ</button>
+    <div class="hint" id="calc"></div>
+    <button class="btn-g" id="btn-open" onclick="addAlloc()"></button>
   </div>
   <div id="active-list"></div>
-  <div id="done-sec" style="display:none"><div class="sec">Закрытые · архив ретро</div><div id="done-list"></div></div>
+  <details class="addf" id="done-sec" style="display:none">
+    <summary id="done-sum"></summary>
+    <div style="padding-top:12px"><div id="done-list"></div></div>
+  </details>
 </div>
 
-<!-- ================= СЕЗОН ================= -->
+<!-- ============ СЕЗОН ============ -->
 <div class="pane" id="p-season"></div>
 
-<!-- ================= СПРАВКА ================= -->
-<div class="pane" id="p-ref">
-  <details class="ref"><summary><span class="rtag" style="color:var(--gold)">Ядро</span><span class="rt">Целевая функция</span></summary>
-  <div class="ref-body">
-    <p><b>Доход от систем ≥ расходы</b> — при растущем внутреннем счёте. Это формула выхода, всё остальное — средства.</p>
-    <p>Этапы не перепрыгиваются: <b>топливо → скорость → активы</b>. Строить активы без cash-flow — лотерея, не стратегия.</p>
-    <p><b>Двойная бухгалтерия:</b> внешний рост без внутреннего = клетка дороже. Внутренний без внешнего = гедонизм на заёмные.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:var(--ember)">Ур.0</span><span class="rt">Носитель</span></summary>
-  <div class="ref-body">
-    <p>Носитель = тело и нервная система — «железо», на котором выполняется вся система. <b>Обслуживается до портфеля:</b> спина, ЖКТ, сон, движение вычитаются из бюджета первыми, как газ из транзакции.</p>
-    <p>Дашборд — стат <b>Энергия</b>. Час на фоне боли даёт 40–60% номинала. Низкая Энергия неделю подряд → авторебаланс часов в обслуживание, по регламенту, без самообвинений.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:var(--gold)">Ур.1</span><span class="rt">Ресурсы</span></summary>
-  <div class="ref-body">
-    <p><b>Время</b> — единственный инвестируемый ресурс при нуле капитала. Актив — не время, а аллокация: час либо накапливается, либо потреблён.</p>
-    <p><b>1 ДЕ (Дельта-Единица) = 100 часов.</b> Дельта = разница «было → стало»: измеряется приращение, не потраченное время. Погружение: ДЕ за 3–4 недели. Фоном: 2–3 месяца. Коэффициенты сред: игры ×1, продажи ×1,5, английский ×2.</p>
-    <p><b>Энергия</b> — множитель КПД часа (×0,4–1,0).</p>
-    <p><b>Деньги</b> — сначала буфер 3–6 месяцев (право решать не из страха), потом ускоритель. Профицит фиксируется до роста дохода, иначе съедается образом жизни.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:var(--teal)">Ур.2</span><span class="rt">Накопительные счета</span></summary>
-  <div class="ref-body">
-    <p><b>Внешний:</b> навык, репутация, связи, буфер. Связи — побочный выход каждого действия, компаундятся касаниями.</p>
-    <p><b>Внутренний — наполненность:</b> пик в моменте → запись через завершение → дивиденды памятью. Недоделанное не консолидируется: брошенный проект — двойная потеря.</p>
-    <p><b>Тест решения:</b> пополняет ли хотя бы один из пяти выходов (навык / репутация / связи / буфер / наполненность). Ноль из пяти — потребление. Легально, но не маскируется под игру. Пост-чек: что осталось через час — ресурс или туман.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:var(--violet)">Ур.3</span><span class="rt">Портфель</span></summary>
-  <div class="ref-body">
-    <p><b>Core — не валидируется, не отсекается:</b> cash-flow трек, английский, носитель. Это инфраструктура, её платят, а не проверяют.</p>
-    <p><b>Experimental — строго 1 слот.</b> Фильтры до ставки: компаундинг (что остаётся при провале), связность (усиливает ли имеющееся), спрос (проверяем дёшево, до ставки).</p>
-    <p><b>Цикл:</b> разведка 0,1–0,2 ДЕ → контракт письменно (цель, метрики на 50 ч, kill-критерий на 100) → полный ДЕ → удвоить / пивот / закрыть.</p>
-    <p>Ребаланс не чаще раза в 90 дней. Дефицитный ресурс — слоты, не часы: реально 2–3 полных ДЕ в год. Растяжка дольше ×1,5 от плана = провал аллокации независимо от метрик.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Сезонность</span></summary>
-  <div class="ref-body">
-    <p><b>Сезон = 90 дней.</b> Спецификация: цель (одна, бинарная) + треки-билд (что прокачивается, с недельными нормами) + kill-критерии. Билд заморожен до конца сезона — скука на середине это мидгейм, не сигнал менять билд.</p>
-    <p><b>Исходящие</b> — транзакции с внешним миром, где возможен отказ: отклики, письма, питчи, публикации. Часы английского или ЛФК — не исходящие: там некому отказать. Ноль исходящих = неделя провалена независимо от продакшна.</p>
-    <p><b>Недельный квест:</b> все нормы треков закрыты + исходящих не меньше нормы. Выполненные недели складываются в стрик. Условия движка: связность, видимая прогрессия, завершаемые куски — титры каждую неделю и каждые 90 дней.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:#8a94a0">Протоколы</span><span class="rt">Эксплуатация</span></summary>
-  <div class="ref-body">
-    <p><b>Запуск:</b> триггер = первая транзакция с рынком. Бинарный, внешне проверяемый, за один присест. Система без момента запуска эксплуатируется вечно в режиме проектирования.</p>
-    <p><b>Деградация — один бит: носитель функционален?</b> Нет → пауза без санкций (только носитель + 1 касание в неделю, выход по стату Энергия). Да, но форс-мажор → перераспределение: Experimental заморожен, часы в горячую точку.</p>
-    <p><b>Изменения:</b> правки системы раз в 90 дней, по данным сезона, не по настроению. Защита системы от её же архитектора.</p>
-  </div></details>
-  <details class="ref"><summary><span class="rtag" style="color:#b08d6a">Свод</span><span class="rt">Принципы</span></summary>
-  <div class="ref-body">
-    <p><b>Глубина сильнее ширины</b> — второй ДЕ в ту же нишу даёт больше первого в новую. Компаундинг, не посев.</p>
-    <p><b>Дистрибуция важнее продукта</b> — правило 50/50: час производства = час аутрича. Исторический перекос 90/10 — главная утечка.</p>
-    <p><b>Две ноги:</b> рублёвый поток + валютный вектор. Чисто локальная игра — потолок, чисто глобальная — риск отрезания.</p>
-    <p><b>Доведение бьёт талант.</b> Движок доведения есть (доказан на 30+ ч/нед) — задача не прокачать характер, а держать движок на карте с конверсией.</p>
-    <p><b>Кайф не квотируется</b> — суверенная зона, пики батчами, не размазывать. Система нормирует слоты ставок, не жизнь.</p>
-    <p><b>Восстановление объявляется вперёд,</b> не обнаруживается задним числом. У него есть точка выхода.</p>
-  </div></details>
-</div>
+<!-- ============ КАРТА ============ -->
+<div class="pane" id="p-ref"><div id="ref-body"></div></div>
 
 </div>
+
+<!-- онбординг -->
+<div id="onb"><div class="onb-card">
+  <div class="onb-gem"><span>ΔE</span></div>
+  <div class="onb-t" id="onb-t"></div>
+  <div class="onb-b" id="onb-b"></div>
+  <div class="onb-dots" id="onb-dots"></div>
+  <div class="onb-act">
+    <button class="onb-skip" id="onb-skip" onclick="onbClose()"></button>
+    <button class="btn-g" style="margin-top:0" id="onb-next" onclick="onbNext()"></button>
+  </div>
+</div></div>
 
 <div class="backup">
   <div class="backup-in">
-    <div class="b-info" id="b-info">данные — в памяти телефона</div>
-    <button class="b-btn gold" onclick="exportData()">⇪ в Drive</button>
-    <button class="b-btn" onclick="document.getElementById('imp').click()">⇩ импорт</button>
+    <div class="b-info" id="b-info"></div>
+    <button class="b-btn" id="mute-btn" onclick="toggleMute()">🔊</button>
+    <button class="b-btn" id="theme-btn" onclick="toggleTheme()">☾</button>
+    <button class="b-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+    <button class="b-btn" onclick="onbOpen()">?</button>
+    <button class="b-btn gold" id="exp-btn" onclick="exportData()"></button>
+    <button class="b-btn" id="imp-btn" onclick="document.getElementById('imp').click()"></button>
     <input type="file" id="imp" accept=".json,application/json" style="display:none" onchange="importData(this)">
   </div>
 </div>
 
 <script>
-/* ---------- манифест ---------- */
-const manifest={
-  name:"ДЕ Трекер",short_name:"ДЕ",
-  start_url:location.href.split('#')[0],scope:"./",
-  display:"standalone",background_color:"#0d1014",theme_color:"#0d1014",
-  icons:[{src:"data:image/svg+xml,"+encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'+
-    '<rect width="512" height="512" fill="#0d1014"/>'+
-    '<rect x="146" y="146" width="220" height="220" transform="rotate(45 256 256)" fill="#1c150a" stroke="#c9a227" stroke-width="14"/>'+
-    '<text x="256" y="292" font-family="Georgia,serif" font-size="120" font-weight="bold" fill="#c9a227" text-anchor="middle">\u0394E</text></svg>'),
-    sizes:"any",type:"image/svg+xml",purpose:"any"}]
-};
-document.getElementById('mf').href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+/* ================= СЛОВАРЬ ================= */
+const L={
+ru:{
+ sub:'Time Capital Allocation System · 1 ДЕ = 100 ч',
+ tabA:'Аллокации',tabS:'Сезон',tabM:'Карта',
+ stA:'активных',stH:'часов вложено',stD:'ДЕ закрыто',
+ namePh:'Название аллокации',open:'ОТКРЫТЬ АЛЛОКАЦИЮ',
+ calc:(de,h,cp)=>de+' ДЕ = '+h+' ч = '+cp+' чекпоинтов',calc0:'0.2 ДЕ = 20 ч = 40 чекпоинтов',
+ lvCore:'Core',lvExp:'Experimental — строго 1 слот',lvBody:'Носитель',
+ gCore:'Core',gExp:'Experimental — 1 слот',gBody:'Носитель',
+ bCore:'Core',bExp:'Exp',bBody:'Носитель',
+ h:'ч',cp:'чк',min30:'+ 30 МИН',kill:'kill',del:'✕',delQ:'удалить?',
+ delBtn:'удалить',delArm:'точно удалить? тапни ещё раз',
+ toWork:'−30 · в работу',cancel:'отмена',
+ retroT:'Ретро аллокации — измерение дельты',
+ oX2:'Удвоить',oPv:'Пивот',oKl:'Закрыть',
+ dPh:'Дельта: было → стало. Что реально приросло?',
+ nPh:'Вывод для следующей аллокации (что учесть)',
+ iterX2:'Прошла отбор → увеличиваем аллокацию. ДЕ следующей итерации:',
+ iterPv:'Пивот: подход меняется, направление остаётся. ДЕ итерации:',
+ fixRetro:'ЗАФИКСИРОВАТЬ РЕТРО',
+ bX2:'◆ УДВОИТЬ',bPv:'◆ ПИВОТ',bKl:'✕ ЗАКРЫТО',
+ qDelta:'Дельта',qNote:'Вывод',
+ emptyA:'Нет открытых аллокаций.',
+ arch:n=>'Закрытые · архив ретро ('+n+')',
+ saved:(d,t)=>'сохранено '+d+' '+t+' · делай бэкап раз в неделю',
+ exp:'⇪ бэкап',imp:'⇩',
+ shareOk:'Файл готов — сохрани локально или в облако из меню.',dlOk:'Бэкап скачан в загрузки телефона.',
+ impQ:n=>'Заменить текущие данные бэкапом «'+n+'»?',impOk:'Бэкап восстановлен.',impErr:'Файл не похож на бэкап.',
+ saveErr:'Не удалось сохранить. Сделай экспорт бэкапа.',
+ eName:'Введи название.',eDe:'ДЕ: число от 0.05 до 10.',
+ eExp:'Experimental — строго 1 слот. Сначала закрой текущую Exp-аллокацию через ретро.',
+ eExpB:'Exp-слот занят другой аллокацией.',
+ eOut:'Выбери исход: удвоить / пивот / закрыть.',eDelta:'Заполни дельту: было → стало.',
+ renQ:'Новое название аллокации:',eEmpty:'Название не может быть пустым.',
+ /* сезон */
+ cheatSum:'Как ставить цель сезона · шпаргалка',
+ cheat:`<div class="lbl" style="margin-top:0">Формула</div>
+ <div style="font-size:13.5px;line-height:1.5"><b>Проверяемый факт + число + к дню N.</b><br>
+ <span style="color:var(--dim)">Тест: посторонний человек в конце сезона скажет «да» или «нет» без твоих объяснений.</span></div>
+ <div class="lbl">Шаблоны</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.65">
+ <b style="color:var(--text)">Карьера:</b> «получен оффер» · «N собеседований» · «N откликов»<br>
+ <b style="color:var(--text)">Навык:</b> «сдан тест уровня X» · «N часов + пройдена веха»<br>
+ <b style="color:var(--text)">Проект:</b> «опубликован / сдан» · «N единиц выпущено» · «MVP у N пользователей»<br>
+ <b style="color:var(--text)">Деньги:</b> «первый платящий клиент» · «N продаж» · «подушка X собрана»<br>
+ <b style="color:var(--text)">Тело:</b> «N недель нормы без пропуска» · «показатель X достигнут»<br>
+ <b style="color:var(--text)">Разгребание:</b> «долг X закрыт» · «процесс Y доведён до статуса Z»</div>
+ <div class="lbl">Не цель</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.55">«стать лучше» · «развивать» · «разобраться» · «начать» — процессы без исхода. Лечение: глагол совершенного вида + число + факт.</div>
+ <div class="lbl">Исходящие</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.6">Касание внешнего мира, где возможен отказ или ответ: <b style="color:var(--text)">отклик, письмо, питч, публикация, заявка.</b><br>НЕ исходящие: часы учёбы, тренировки, производство «в стол» — там некому отказать. Тапай в момент отправки, не пачкой вечером.</div>
+ <div class="lbl">Kill-критерии</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.6">Записанные ДО старта условия «план не работает». Формула: <b style="color:var(--text)">сигнал + порог + день проверки.</b> Kill — штатная операция отбора, не провал.</div>`,
+ snNum:'Номер сезона',snGoal:'Цель — одна, бинарная',
+ snGoalPh:'Факт + число + дедлайн. Например: проект опубликован + 20 откликов отправлено',
+ snLen:'Длительность',len30:'30 дней — спринт / внедрение',len60:'60 дней',len90:'90 дней — полный сезон',
+ snOut:'Исходящих в неделю — норма квеста',
+ snKill:'Kill-критерии',snKillPh:'Сигнал + порог + день. Например: к дню 30 меньше 3 собеседований → пересмотр',
+ snHint:'Треки плана добавляются после запуска. Длина фиксируется — укоротить задним числом нельзя.',
+ start:'ЗАПУСТИТЬ СЕЗОН',started:'Сезон запущен. Добавь треки плана.',
+ season:'Сезон №',day:(d,l)=>'день '+d+' / '+l,
+ killLbl:'Kill-критерии',edit:'✎ править',cancelS:'✕ отменить',cancelSArm:'точно отменить?',
+ killS:'kill · закрыть досрочно',
+ allocFull:'Аллокация заполнена — ретро на вкладке Аллокации',
+ retroWait:'⚑ ретро ждёт на вкладке Аллокации',
+ normClosed:'✓ НОРМА ЗАКРЫТА · НОВАЯ НЕДЕЛЯ — ПН',
+ wkArch:n=>'✓ Закрытые нормы недели ('+n+')',
+ wkRetroPh:'Ретро недели: что дало? одной строкой',
+ saveEdits:'СОХРАНИТЬ',eGoal:'Цель не может быть пустой.',
+ week:'Неделя',quest:'квест',inRow:'нед подряд ✓',streak0:'серия: 0',
+ questOk:'◆ КВЕСТ НЕДЕЛИ ЗАКРЫТ',qTracks:'нормы треков ',qOut:'исходящие ',
+ emptyT:'Треков нет — план пуст.<br>Добавь, что прокачиваешь в этом сезоне.',
+ addTrack:'+ добавить трек',
+ tkName:'Название',tkNamePh:'Английский / ЛФК / Отклики / Ниша…',
+ tkLevel:'Уровень',lvGoal:'Цель сезона',
+ tgCore:'Core',tgExp:'Experimental',tgBody:'Носитель',
+ tkRole:'Роль',roleGoal:'Цель сезона — работает на цель',roleSup:'Инфраструктура — сквозной трек',
+ grpGoal:'→ Цель сезона',grpSup:'Инфраструктура',
+ rGoal:'цель',rSup:'инфра',
+ tkNorm:'Ч / нед',tkBind:'Привязать к аллокации (+30 пойдёт в оба слоя)',tkNoBind:'— без привязки —',
+ addTrackBtn:'ДОБАВИТЬ ТРЕК',
+ eTName:'Название трека обязательно.',eTNorm:'Норма: часов в неделю, от 0,5 до 60.',
+ eTExp:'Experimental — строго 1 слот. По регламенту.',
+ wTrack:(de)=>'Трек ≥3 ч/нед без аллокации: за сезон ~'+de+' ДЕ мимо общего учёта.',
+ tWeek:'на этой неделе',tBind:'→ аллокация:',tWks:'нед',
+ renT:'Название трека:',renN:'Норма, часов в неделю:',
+ delT:'Удалить трек? История недель сохранится.',
+ outW:'исходящих · неделя',outS:'исходящих · сезон',
+ outBtn:'+ 1 ИСХОДЯЩЕЕ · отклик / письмо / питч / публикация',outUndo:'− отменить последнее',
+ hist:'История недель',outAbbr:'исх',
+ closeT:'Закрытие сезона — ретро 30 минут',
+ won:'Цель достигнута',lost:'Не достигнута',
+ convPh:'Что конвертировалось (дельта по счетам: навык, буфер, связи, наполненность)',
+ burnPh:'Что сгорело (часы без дельты — куда и почему)',
+ chgPh:'Что меняем в плане следующего сезона',
+ closeBtn:'ЗАКРЫТЬ СЕЗОН',
+ eWon:'Отметь: цель достигнута или нет.',eConv:'Заполни хотя бы «что конвертировалось».',
+ archS:'Архив сезонов',wonB:'◆ ЦЕЛЬ ДОСТИГНУТА',lostB:'✕ НЕ ДОСТИГНУТА',
+ wk:'недель',goalQ:'Цель',convQ:'Конвертировалось',burnQ:'Сгорело',chgQ:'Меняем',
+ /* онбординг */
+ onb:[
+  {t:'TICAP',b:'<b>Time Capital Allocation System</b> — система управления временем как капиталом.<br><br>Идея одна: час либо <b>накапливается</b> в навык, результат, здоровье — либо потрачен. TICAP делает накопление видимым.<br><br>Начни с вкладки <b>Аллокации</b>. Сезон подключишь, когда привыкнешь.'},
+  {t:'Аллокации',b:'Аллокация — вложение времени в направление.<br><br><b>1 ДЕ (Дельта-Единица) = 100 часов.</b> Разведка нового направления — 0,1–0,2 ДЕ.<br><br>Поработал 30 минут → нажми <b>+30</b>. Шкала растёт и зреет от золота к бирюзе. Каждый чекпоинт — со звуком.'},
+  {t:'Три уровня',b:'<b style="color:var(--gold)">Core</b> — долгие активы: навыки, доход, инфраструктура. Не отсекается.<br><br><b style="color:var(--violet)">Experimental</b> — эксперимент. Строго один слот: меньше распыления.<br><br><b style="color:var(--ember)">Носитель</b> — тело и энергия. Без него КПД любого часа падает.'},
+  {t:'Ретро и отбор',b:'Шкала заполнилась → короткое <b>ретро</b>: что реально приросло (дельта)?<br><br>Три исхода: <b style="color:var(--teal)">Удвоить</b> — работает, следующая итерация больше. <b style="color:var(--gold)">Пивот</b> — направление то, подход другой. <b style="color:var(--ember)">Закрыть</b> — честно убить.<br><br>Не дожидаясь конца: кнопка <b>kill</b>. Это отбор, не провал.'},
+  {t:'Твои данные — твои',b:'Всё хранится <b>только на этом устройстве</b>. Нет сервера, нет аккаунта, нет сбора данных.<br><br>Бэкап — кнопкой ⇪: файл сохраняется у тебя (локально или в своё облако), раз в неделю.<br><br><b>Трекер для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b>'}
+ ],
+ next:'ДАЛЕЕ',startO:'НАЧАТЬ',skip:'пропустить',
+},
+en:{
+ sub:'Time Capital Allocation System · 1 DU = 100 h',
+ tabA:'Allocations',tabS:'Season',tabM:'Map',
+ stA:'active',stH:'hours invested',stD:'DU closed',
+ namePh:'Allocation name',open:'OPEN ALLOCATION',
+ calc:(de,h,cp)=>de+' DU = '+h+' h = '+cp+' checkpoints',calc0:'0.2 DU = 20 h = 40 checkpoints',
+ lvCore:'Core',lvExp:'Experimental — strictly 1 slot',lvBody:'Body',
+ gCore:'Core',gExp:'Experimental — 1 slot',gBody:'Body',
+ bCore:'Core',bExp:'Exp',bBody:'Body',
+ h:'h',cp:'cp',min30:'+ 30 MIN',kill:'kill',del:'✕',delQ:'delete?',
+ delBtn:'delete',delArm:'sure? tap again',
+ toWork:'−30 · reopen',cancel:'cancel',
+ retroT:'Allocation retro — measuring the delta',
+ oX2:'Double',oPv:'Pivot',oKl:'Kill',
+ dPh:'Delta: before → after. What actually accrued?',
+ nPh:'Takeaway for the next allocation',
+ iterX2:'Passed selection → increase the allocation. DU for next iteration:',
+ iterPv:'Pivot: approach changes, direction stays. DU:',
+ fixRetro:'SAVE RETRO',
+ bX2:'◆ DOUBLE',bPv:'◆ PIVOT',bKl:'✕ KILLED',
+ qDelta:'Delta',qNote:'Takeaway',
+ emptyA:'No open allocations.',
+ arch:n=>'Closed · retro archive ('+n+')',
+ saved:(d,t)=>'saved '+d+' '+t+' · back up weekly',
+ exp:'⇪ backup',imp:'⇩',
+ shareOk:'File ready — save locally or to a cloud from the menu.',dlOk:'Backup saved to your downloads.',
+ impQ:n=>'Replace current data with backup "'+n+'"?',impOk:'Backup restored.',impErr:'Not a valid backup file.',
+ saveErr:'Save failed. Export a backup.',
+ eName:'Enter a name.',eDe:'DU: number from 0.05 to 10.',
+ eExp:'Experimental — strictly 1 slot. Close the current Exp allocation via retro first.',
+ eExpB:'Exp slot is taken.',
+ eOut:'Pick an outcome: double / pivot / kill.',eDelta:'Fill in the delta: before → after.',
+ renQ:'New allocation name:',eEmpty:'Name cannot be empty.',
+ cheatSum:'How to set a season goal · cheat sheet',
+ cheat:`<div class="lbl" style="margin-top:0">Formula</div>
+ <div style="font-size:13.5px;line-height:1.5"><b>Verifiable fact + number + by day N.</b><br>
+ <span style="color:var(--dim)">Test: a stranger can say "yes" or "no" at season end without your explanations.</span></div>
+ <div class="lbl">Templates</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.65">
+ <b style="color:var(--text)">Career:</b> "offer received" · "N interviews" · "N applications sent"<br>
+ <b style="color:var(--text)">Skill:</b> "level X test passed" · "N hours + milestone reached"<br>
+ <b style="color:var(--text)">Project:</b> "published / shipped" · "N units released" · "MVP with N users"<br>
+ <b style="color:var(--text)">Money:</b> "first paying client" · "N sales" · "buffer X saved"<br>
+ <b style="color:var(--text)">Body:</b> "N weeks of quota unbroken" · "metric X reached"<br>
+ <b style="color:var(--text)">Cleanup:</b> "debt X closed" · "process Y brought to status Z"</div>
+ <div class="lbl">Not a goal</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.55">"get better" · "develop" · "figure out" · "start" — processes without an outcome. Fix: perfective verb + number + fact.</div>
+ <div class="lbl">Outgoing actions</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.6">A touch of the outer world where rejection is possible: <b style="color:var(--text)">application, email, pitch, publication.</b><br>NOT outgoing: study hours, workouts, producing "for the drawer" — nobody can reject those. Tap at the moment of sending.</div>
+ <div class="lbl">Kill criteria</div>
+ <div style="font-size:13px;color:var(--dim);line-height:1.6">Conditions written BEFORE the start under which you admit the plan isn't working. Formula: <b style="color:var(--text)">signal + threshold + check day.</b> Kill is a routine selection operation, not a failure.</div>`,
+ snNum:'Season number',snGoal:'Goal — one, binary',
+ snGoalPh:'Fact + number + deadline. E.g.: project published + 20 applications sent',
+ snLen:'Length',len30:'30 days — sprint / onboarding',len60:'60 days',len90:'90 days — full season',
+ snOut:'Outgoing per week — quest quota',
+ snKill:'Kill criteria',snKillPh:'Signal + threshold + day. E.g.: <3 interviews by day 30 → revise',
+ snHint:'Plan tracks are added after launch. Length is fixed — no shortening in hindsight.',
+ start:'START SEASON',started:'Season started. Now add plan tracks.',
+ season:'Season #',day:(d,l)=>'day '+d+' / '+l,
+ killLbl:'Kill criteria',edit:'✎ edit',cancelS:'✕ cancel',cancelSArm:'sure?',
+ killS:'kill · close early',
+ allocFull:'Allocation filled — retro on the Allocations tab',
+ retroWait:'⚑ retro awaits on Allocations',
+ normClosed:'✓ QUOTA MET · RESETS MON',
+ wkArch:n=>'✓ Quotas met this week ('+n+')',
+ wkRetroPh:'Week retro: what did it yield? one line',
+ saveEdits:'SAVE',eGoal:'Goal cannot be empty.',
+ week:'Week',quest:'quest',inRow:'wk in a row ✓',streak0:'streak: 0',
+ questOk:'◆ WEEKLY QUEST CLOSED',qTracks:'track quotas ',qOut:'outgoing ',
+ emptyT:'No tracks — the plan is empty.<br>Add what you\'re leveling this season.',
+ addTrack:'+ add a track',
+ tkName:'Name',tkNamePh:'English / Workout / Applications / Niche…',
+ tkLevel:'Level',lvGoal:'Season goal',
+ tgCore:'Core',tgExp:'Experimental',tgBody:'Body',
+ tkRole:'Role',roleGoal:'Season goal — works toward it',roleSup:'Infrastructure — cross-season',
+ grpGoal:'→ Season goal',grpSup:'Infrastructure',
+ rGoal:'goal',rSup:'infra',
+ tkNorm:'H / wk',tkBind:'Bind to an allocation (+30 feeds both layers)',tkNoBind:'— no binding —',
+ addTrackBtn:'ADD TRACK',
+ eTName:'Track name is required.',eTNorm:'Quota: hours per week, 0.5 to 60.',
+ eTExp:'Experimental — strictly 1 slot.',
+ wTrack:(de)=>'Track ≥3 h/wk without an allocation: ~'+de+' DU per season off the books.',
+ tWeek:'this week',tBind:'→ allocation:',tWks:'wk',
+ renT:'Track name:',renN:'Quota, hours per week:',
+ delT:'Delete track? Week history stays.',
+ outW:'outgoing · week',outS:'outgoing · season',
+ outBtn:'+ 1 OUTGOING · application / email / pitch / post',outUndo:'− undo last',
+ hist:'Week history',outAbbr:'out',
+ closeT:'Season close — 30-minute retro',
+ won:'Goal reached',lost:'Not reached',
+ convPh:'What compounded (delta by accounts: skill, buffer, network, fulfillment)',
+ burnPh:'What burned (hours without delta — where and why)',
+ chgPh:'What changes in the next season\'s plan',
+ closeBtn:'CLOSE SEASON',
+ eWon:'Mark: goal reached or not.',eConv:'Fill in at least "what compounded".',
+ archS:'Season archive',wonB:'◆ GOAL REACHED',lostB:'✕ NOT REACHED',
+ wk:'weeks',goalQ:'Goal',convQ:'Compounded',burnQ:'Burned',chgQ:'Changing',
+ onb:[
+  {t:'TICAP',b:'<b>Time Capital Allocation System</b> — manage your time as capital.<br><br>One idea: an hour either <b>compounds</b> into skill, results, health — or it\'s spent. TICAP makes compounding visible.<br><br>Start with the <b>Allocations</b> tab. Add the Season once you\'re used to it.'},
+  {t:'Allocations',b:'An allocation is time invested in a direction.<br><br><b>1 DU (Delta Unit) = 100 hours.</b> Scouting a new direction — 0.1–0.2 DU.<br><br>Worked 30 minutes → tap <b>+30</b>. The bar grows and ripens from gold to teal. Every checkpoint rings.'},
+  {t:'Three levels',b:'<b style="color:var(--gold)">Core</b> — long-term assets: skills, income, infrastructure. Never cut.<br><br><b style="color:var(--violet)">Experimental</b> — strictly one slot: less scatter.<br><br><b style="color:var(--ember)">Body</b> — your carrier. Without it every hour\'s output drops.'},
+  {t:'Retro & selection',b:'Bar filled → a short <b>retro</b>: what actually accrued (the delta)?<br><br>Three outcomes: <b style="color:var(--teal)">Double</b> — it works, next iteration is bigger. <b style="color:var(--gold)">Pivot</b> — same direction, new approach. <b style="color:var(--ember)">Kill</b> — end it honestly.<br><br>Don\'t wait for the end: the <b>kill</b> button. It\'s selection, not failure.'},
+  {t:'Your data is yours',b:'Everything is stored <b>on this device only</b>. No server, no account, no data collection.<br><br>Backup — the ⇪ button: the file stays with you (locally or your own cloud), weekly.<br><br><b>The tracker is for time you invest. Time you live doesn\'t need accounting.</b>'}
+ ],
+ next:'NEXT',startO:'START',skip:'skip',
+}};
+let lang=localStorage.getItem('de_lang')||'ru';
+function T(k){const v=L[lang][k]??L.ru[k];return v}
 
-/* ---------- хранение ---------- */
+/* ================= ХРАНЕНИЕ ================= */
 const KEY='de_tracker_v2';
 let state={allocs:[],season:null,seasons:[],out:[]};
-
 function load(){
-  try{
-    const r=localStorage.getItem(KEY);
-    if(r)state={...state,...JSON.parse(r)};
-  }catch(e){showErr('Ошибка чтения данных.')}
-  /* миграция старого сезона без треков */
-  if(state.season&&!state.season.tracks){
-    state.season.tracks=[];state.season.outGoal=state.season.outGoal||10;
+  try{const r=localStorage.getItem(KEY);if(r)state={...state,...JSON.parse(r)};}catch(e){}
+  if(state.season){
+    if(!state.season.tracks)state.season.tracks=[];
+    if(!state.season.len)state.season.len=90;
+    if(state.season.outGoal===undefined)state.season.outGoal=10;
+    state.season.tracks.forEach(t=>{if(!t.role)t.role='sup';if(!t.lvl)t.lvl=(t.role==='goal'?'goal':'core')});
   }
-  render();updateInfo();
+  applyTheme();applyLang();
+  if(!localStorage.getItem('de_onb'))onbOpen();
 }
 function save(){
   try{
     localStorage.setItem(KEY,JSON.stringify(state));
     localStorage.setItem(KEY+'_ts',Date.now().toString());
     updateInfo();
-  }catch(e){showErr('Не удалось сохранить. Сделай экспорт бэкапа.')}
+  }catch(e){showErr(T('saveErr'))}
 }
-if(navigator.storage&&navigator.storage.persist){navigator.storage.persist();}
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 function updateInfo(){
   const ts=localStorage.getItem(KEY+'_ts');
-  if(ts){const d=new Date(+ts);
-    document.getElementById('b-info').textContent='сохранено '+d.toLocaleDateString('ru')+' '+d.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})+' · бэкап в Drive — раз в неделю';}
+  const el=document.getElementById('b-info');
+  if(ts){const d=new Date(+ts);const loc=lang==='ru'?'ru':'en-GB';
+    el.textContent=T('saved')(d.toLocaleDateString(loc),d.toLocaleTimeString(loc,{hour:'2-digit',minute:'2-digit'}));}
+  else el.textContent='';
 }
 
-/* ---------- экспорт / импорт ---------- */
+/* ================= ТЕМА / ЯЗЫК ================= */
+function applyTheme(){
+  const th=localStorage.getItem('de_theme')||'dark';
+  document.documentElement.setAttribute('data-theme',th);
+  document.getElementById('theme-btn').textContent=th==='dark'?'☾':'☀';
+  document.querySelector('meta[name=theme-color]').content=th==='dark'?'#0d1014':'#efe9dc';
+}
+function toggleTheme(){
+  const th=localStorage.getItem('de_theme')||'dark';
+  localStorage.setItem('de_theme',th==='dark'?'light':'dark');
+  applyTheme();
+}
+function toggleLang(){
+  lang=lang==='ru'?'en':'ru';
+  localStorage.setItem('de_lang',lang);
+  applyLang();
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.getElementById('hdr-sub').textContent=T('sub');
+  document.getElementById('tab-alloc').textContent=T('tabA');
+  document.getElementById('tab-season').textContent=T('tabS');
+  document.getElementById('tab-ref').textContent=T('tabM');
+  document.getElementById('sl-active').textContent=T('stA');
+  document.getElementById('sl-hours').textContent=T('stH');
+  document.getElementById('sl-de').textContent=T('stD');
+  document.getElementById('in-name').placeholder=T('namePh');
+  document.getElementById('btn-open').textContent=T('open');
+  document.getElementById('calc').textContent=T('calc0');
+  const sel=document.getElementById('in-level');
+  sel.innerHTML='<option value="core">'+T('lvCore')+'</option><option value="exp">'+T('lvExp')+'</option><option value="body">'+T('lvBody')+'</option>';
+  document.getElementById('lang-btn').textContent=lang==='ru'?'EN':'RU';
+  document.getElementById('exp-btn').textContent=T('exp');
+  document.getElementById('imp-btn').textContent=T('imp');
+  document.getElementById('onb-skip').textContent=T('skip');
+  refRender();updateInfo();render();
+  if(document.getElementById('onb').classList.contains('show'))onbShow();
+}
+
+/* ================= ОНБОРДИНГ ================= */
+let onbI=0;
+function onbOpen(){onbI=0;document.getElementById('onb').classList.add('show');onbShow()}
+function onbShow(){
+  const cards=T('onb');
+  const c=cards[onbI];
+  const tt=document.getElementById('onb-t'),bb=document.getElementById('onb-b');
+  tt.textContent=c.t;bb.innerHTML=c.b;
+  [tt,bb].forEach(el=>{el.classList.remove('step-in');void el.offsetWidth;el.classList.add('step-in')});
+  document.getElementById('onb-dots').innerHTML=cards.map((_,i)=>'<i class="'+(i===onbI?'on':'')+'"></i>').join('');
+  document.getElementById('onb-next').textContent=onbI<cards.length-1?T('next'):T('startO');
+}
+function onbNext(){
+  const cards=T('onb');
+  if(onbI<cards.length-1){onbI++;onbShow()}
+  else onbClose();
+}
+function onbClose(){
+  document.getElementById('onb').classList.remove('show');
+  localStorage.setItem('de_onb','1');
+}
+
+/* ================= ЭКСПОРТ / ИМПОРТ ================= */
 async function exportData(){
-  const name='DE_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  const name='TICAP_backup_'+new Date().toISOString().slice(0,10)+'.json';
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const file=new File([blob],name,{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],title:'ДЕ трекер · бэкап'});
-      showOk('Выбери Google Диск в меню шэринга.');return}
+    try{await navigator.share({files:[file],title:'TICAP backup'});showOk(T('shareOk'));return}
     catch(e){if(e.name==='AbortError')return}
   }
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();
-  showOk('Файл скачан — загрузи его в Drive.');
+  showOk(T('dlOk'));
 }
 function importData(inp){
   const f=inp.files[0];if(!f)return;
@@ -397,27 +686,48 @@ function importData(inp){
     try{
       const d=JSON.parse(r.result);
       if(!d.allocs)throw 0;
-      if(!confirm('Заменить текущие данные бэкапом «'+f.name+'»?'))return;
+      if(!confirm(T('impQ')(f.name)))return;
       state={allocs:[],season:null,seasons:[],out:[],...d};
-      if(state.season&&!state.season.tracks){state.season.tracks=[];state.season.outGoal=10;}
-      save();render();showOk('Бэкап восстановлен.');
-    }catch(e){showErr('Файл не похож на бэкап трекера.')}
+      if(state.season){if(!state.season.tracks)state.season.tracks=[];
+        if(!state.season.len)state.season.len=90;
+        state.season.tracks.forEach(t=>{if(!t.role)t.role='sup';if(!t.lvl)t.lvl=(t.role==='goal'?'goal':'core')});}
+      save();render();showOk(T('impOk'));
+    }catch(e){showErr(T('impErr'))}
   };
   r.readAsText(f);inp.value='';
 }
 
-/* ---------- утилиты ---------- */
-function fmt(n,d=1){return (Math.round(n*10**d)/10**d).toString().replace('.',',')}
+/* ================= УТИЛИТЫ ================= */
+function fmt(n,d=1){const s=(Math.round(n*10**d)/10**d).toString();return lang==='ru'?s.replace('.',','):s}
 function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function showErr(t){const e=document.getElementById('err');e.className='err';e.textContent=t;
-  e.style.display='block';setTimeout(()=>e.style.display='none',4000)}
-function showOk(t){const e=document.getElementById('err');e.className='err ok';e.textContent=t;
-  e.style.display='block';setTimeout(()=>e.style.display='none',4000)}
+function barCol(pct){
+  const t=Math.min(1,Math.max(0,pct/100));
+  const h=46+(168-46)*t,s=69+(39-69)*t,l=47+(40-47)*t;
+  return ['hsl('+h+','+s+'%,'+(l*0.62)+'%)','hsl('+h+','+s+'%,'+l+'%)'];
+}
+let errT=null;
+function toast(t,ok){
+  const e=document.getElementById('err');
+  clearTimeout(errT);
+  e.className='err'+(ok?' ok':'');
+  e.textContent=t;
+  void e.offsetWidth;
+  e.classList.add('show');
+  errT=setTimeout(()=>{
+    e.classList.add('hide');
+    setTimeout(()=>{e.classList.remove('show','hide')},240);
+  },3600);
+}
+function showErr(t){toast(t,false)}
+function showOk(t){toast(t,true)}
 function swTab(el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on','slide'));
   el.classList.add('on');
-  document.getElementById(el.dataset.p).classList.add('on');
+  const p=document.getElementById(el.dataset.p);
+  p.classList.add('on');
+  void p.offsetWidth;
+  p.classList.add('slide');
 }
 function weekStart(ts){
   const d=new Date(ts);const day=(d.getDay()+6)%7;
@@ -425,88 +735,132 @@ function weekStart(ts){
 }
 function dstr(ts){const d=new Date(ts);return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')}
 
-/* ---------- ставки ---------- */
-document.getElementById('in-de').addEventListener('input',e=>{
-  const de=parseFloat(e.target.value.replace(',','.'));
-  document.getElementById('calc').textContent=(de>0)
-    ? fmt(de,2)+' ДЕ = '+fmt(de*100)+' ч = '+Math.round(de*200)+' чекпоинтов'
-    : '0.2 ДЕ = 20 ч = 40 чекпоинтов';
-});
-function addAlloc(){
-  const name=document.getElementById('in-name').value.trim();
-  const de=parseFloat(document.getElementById('in-de').value.replace(',','.'));
-  const level=document.getElementById('in-level').value;
-  if(!name){showErr('Введи название.');return}
-  if(!(de>0)||de>10){showErr('ДЕ: число от 0.05 до 10.');return}
-  if(level==='exp'&&state.allocs.some(x=>(x.level||'core')==='exp'&&!x.retro)){
-    showErr('Experimental — строго 1 слот. Сначала закрой текущую Exp-ставку через ретро.');return}
-  state.allocs.unshift({id:Date.now().toString(36),name,de,level,
-    total:Math.round(de*200),done:0,created:Date.now(),
-    retro:null,killed:false,gen:1});
-  document.getElementById('in-name').value='';
-  document.getElementById('in-de').value='';
-  document.getElementById('calc').textContent='0.2 ДЕ = 20 ч = 40 чекпоинтов';
-  save();render();
+/* ================= ЗВУК + САЛЮТ ================= */
+let actx=null,lastTap={x:200,y:200};
+document.addEventListener('pointerdown',e=>{lastTap={x:e.clientX,y:e.clientY}},true);
+let verb=null,wetG=null,dryG=null;
+function audioInit(){
+  if(actx)return;
+  actx=new (window.AudioContext||window.webkitAudioContext)();
+  dryG=actx.createGain();dryG.gain.value=0.85;dryG.connect(actx.destination);
+  /* лёгкий реверб: свёртка с затухающим шумом ~1.4 c */
+  wetG=actx.createGain();wetG.gain.value=0.32;
+  verb=actx.createConvolver();
+  const len=actx.sampleRate*1.4,buf=actx.createBuffer(2,len,actx.sampleRate);
+  for(let c=0;c<2;c++){const d=buf.getChannelData(c);
+    for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6);}
+  verb.buffer=buf;verb.connect(actx.destination);wetG.connect(verb);
 }
-function tick(id,delta){
-  const a=state.allocs.find(x=>x.id===id);if(!a)return;
-  a.done=Math.max(0,Math.min(a.total,a.done+delta));
-  save();render();
+function bus(){const g=actx.createGain();g.connect(dryG);g.connect(wetG);return g}
+function piano(f,st,dur,vol){
+  /* пианино: частичные тоны с быстрой атакой, двухступенчатым затуханием и темнеющим фильтром */
+  const out=bus();
+  const lp=actx.createBiquadFilter();lp.type='lowpass';
+  lp.frequency.setValueAtTime(4200,st);
+  lp.frequency.exponentialRampToValueAtTime(900,st+dur);
+  lp.connect(out);
+  [[1,0.5,'triangle'],[0.9982,0.34,'triangle'],[1.0018,0.34,'triangle'],
+   [2,0.3,'sine'],[3,0.1,'sine'],[4.02,0.04,'sine']].forEach(([m,r,tp])=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.type=tp;o.frequency.value=f*m;
+    g.gain.setValueAtTime(0.0001,st);
+    g.gain.linearRampToValueAtTime(vol*r,st+0.004);
+    g.gain.exponentialRampToValueAtTime(vol*r*0.25,st+0.12);
+    g.gain.exponentialRampToValueAtTime(0.0001,st+dur);
+    o.connect(g);g.connect(lp);o.start(st);o.stop(st+dur+0.1);
+  });
 }
-function killAlloc(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=true;save();render()}
-function unkill(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=false;save();render()}
-function renameAlloc(id){
-  const a=state.allocs.find(x=>x.id===id);if(!a)return;
-  const n=prompt('Новое название ставки:',a.name);
-  if(n===null)return;
-  const t=n.trim();
-  if(!t){showErr('Название не может быть пустым.');return}
-  a.name=t.slice(0,60);save();render();
+function gtr(f,st,dur,vol){
+  /* нейлоновая гитара: острая атака, быстро темнеющий фильтр */
+  const out=bus();
+  const lp=actx.createBiquadFilter();lp.type='lowpass';
+  lp.frequency.setValueAtTime(2600,st);
+  lp.frequency.exponentialRampToValueAtTime(620,st+dur*0.7);
+  lp.connect(out);
+  [[1,'sawtooth',0.32],[1.0012,'triangle',0.5],[2,'sine',0.1]].forEach(([m,tp,r])=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.type=tp;o.frequency.value=f*m;
+    g.gain.setValueAtTime(0.0001,st);
+    g.gain.linearRampToValueAtTime(vol*r,st+0.003);
+    g.gain.exponentialRampToValueAtTime(vol*r*0.16,st+0.09);
+    g.gain.exponentialRampToValueAtTime(0.0001,st+dur);
+    o.connect(g);g.connect(lp);o.start(st);o.stop(st+dur+0.05);
+  });
 }
-function removeAlloc(id){
-  const a=state.allocs.find(x=>x.id===id);
-  if(!confirm('Удалить ставку «'+(a?a.name:'')+'»? Действие необратимо.'))return;
-  if(state.season&&state.season.tracks)
-    state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=null});
-  state.allocs=state.allocs.filter(x=>x.id!==id);
-  save();render();
+function snd(type,pct){
+  if(localStorage.getItem('de_mute')==='1')return;
+  try{
+    audioInit();
+    if(actx.state==='suspended')actx.resume();
+    const t=actx.currentTime;
+    if(type==='full'){
+      /* полная каденция IV→V→I: разбег фа-мажор → соль-мажор → широкий Cadd9 с искрами */
+      [174.61,220,261.63].forEach(f=>piano(f,t,0.3,0.045));              /* F */
+      [196,246.94,293.66].forEach(f=>piano(f,t+0.15,0.32,0.052));        /* G */
+      [261.63,329.63,392,523.25,659.25].forEach((f,i)=>piano(f,t+0.31+i*0.05,0.9,0.075)); /* арпеджио */
+      [130.81,196,261.63,329.63,392,523.25,587.33,659.25].forEach(f=>piano(f,t+0.58,2.4,0.052)); /* Cadd9 в 3 октавы */
+      piano(783.99,t+0.85,1.3,0.04);piano(1046.5,t+1.0,1.4,0.042);piano(1318.5,t+1.15,1.5,0.032); /* искры G6-C6-E6 */
+    }else if(type==='kill'){
+      piano(220,t,1.0,0.075);piano(174.61,t+0.14,1.3,0.065);
+    }else if(type==='out'){
+      piano(392,t,0.8,0.085);piano(523.25,t+0.09,1.0,0.08);
+    }else{
+      /* чекпоинт: гитарный щипок + мягкое пианино, высота по пентатонике,
+         ближе к финалу — терция и квинта */
+      const PENTA=[261.63,293.66,329.63,392,440,523.25,587.33,659.25,783.99,880,1046.5];
+      const p=Math.max(0,Math.min(100,pct||0));
+      const f=PENTA[Math.min(PENTA.length-1,Math.floor(p/100*(PENTA.length-1)))];
+      gtr(f,t,0.55,0.08);
+      piano(f,t+0.005,0.85,0.042);
+      if(p>=60)gtr(f*1.2599,t+0.016,0.5,0.042);  /* большая терция */
+      if(p>=85)gtr(f*1.4983,t+0.032,0.5,0.034);  /* квинта */
+    }
+  }catch(e){}
 }
-let rSel={};
-function pickOutcome(id,o){rSel[id]=o;render()}
-function saveRetro(id){
-  const a=state.allocs.find(x=>x.id===id);if(!a)return;
-  const out=rSel[id];
-  if(!out){showErr('Выбери исход: удвоить / пивот / закрыть.');return}
-  const delta=document.getElementById('rd-'+id).value.trim();
-  const note=document.getElementById('rn-'+id).value.trim();
-  if(!delta){showErr('Заполни дельту: было → стало.');return}
-  a.retro={outcome:out,delta,note,ts:Date.now()};
-  delete rSel[id];
-  let newId=null;
-  if(out!=='kl'){
-    const rx=document.getElementById('rx-'+id);
-    let nde=parseFloat(((rx&&rx.value)||'').replace(',','.'));
-    if(!(nde>0))nde=(out==='x2'?Math.min(a.de*2,10):a.de);
-    if(nde>10)nde=10;
-    const base=a.name.replace(/ · \d+$/,'');
-    const gen=(a.gen||1)+1;
-    newId=Date.now().toString(36);
-    state.allocs.unshift({id:newId,name:base+' · '+gen,
-      de:nde,total:Math.round(nde*200),done:0,created:Date.now(),
-      retro:null,killed:false,gen});
+function toggleMute(){
+  localStorage.setItem('de_mute',localStorage.getItem('de_mute')==='1'?'0':'1');
+  updMute();snd('tick');
+}
+function updMute(){
+  const b=document.getElementById('mute-btn');
+  if(b)b.textContent=localStorage.getItem('de_mute')==='1'?'🔇':'🔊';
+}
+function celebrate(){
+  const cv=document.createElement('canvas');
+  cv.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:99';
+  cv.width=innerWidth;cv.height=innerHeight;
+  document.body.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  const cols=['#c9a227','#ffe9a8','#3e8e7e','#c0533e','#e6e0d2'];
+  const P=[];
+  for(let i=0;i<34;i++){
+    const a=Math.random()*Math.PI*2,v=3+Math.random()*4.5;
+    P.push({x:lastTap.x,y:lastTap.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-3.2,
+      s:2.5+Math.random()*3,c:cols[i%cols.length],r:Math.random()*Math.PI,
+      vr:(Math.random()-.5)*.3,life:1});
   }
-  /* треки, привязанные к закрытой ставке, переезжают на итерацию или отвязываются */
-  if(state.season&&state.season.tracks)
-    state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
-  save();render();
+  (function fr(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    let alive=false;
+    for(const p of P){
+      p.x+=p.vx;p.y+=p.vy;p.vy+=0.16;p.r+=p.vr;p.life-=0.016;
+      if(p.life>0){alive=true;
+        ctx.save();ctx.globalAlpha=Math.max(0,p.life);
+        ctx.translate(p.x,p.y);ctx.rotate(p.r);
+        ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.6);
+        ctx.restore();}
+    }
+    if(alive)requestAnimationFrame(fr);else cv.remove();
+  })();
 }
-/* drag-and-drop внутри блока */
+
+/* ================= DRAG & DROP ================= */
 let drag=null;
 function blockScroll(e){if(drag)e.preventDefault()}
 function startDrag(e,el,type){
   e.preventDefault();
   try{e.target.setPointerCapture(e.pointerId)}catch(_){}
-  drag={el,type,startY:e.clientY,lastY:e.clientY,gap:type==='blk'?14:13};
+  drag={el,type,startY:e.clientY,lastY:e.clientY,gap:type==='blk'?14:(type==='trk'?9:13)};
   el.classList.add('dragging');
   document.body.style.overflow='hidden';
   drag.timer=setInterval(()=>{if(drag)applyDrag(drag.lastY,true)},16);
@@ -517,16 +871,16 @@ function startDrag(e,el,type){
 }
 function dragStart(e,id){const el=e.target.closest('.alloc');if(el)startDrag(e,el,'card')}
 function blkStart(e){const el=e.target.closest('.blk');if(el)startDrag(e,el,'blk')}
+function trkStart(e){const el=e.target.closest('.trk');if(el)startDrag(e,el,'trk')}
 function dragMove(e){if(!drag)return;e.preventDefault();drag.lastY=e.clientY;applyDrag(e.clientY,false)}
 function applyDrag(y,fromTimer){
-  /* автоскролл у краёв экрана */
   const M=80;let sv=0;
   if(y<M)sv=-11;else if(y>innerHeight-M)sv=11;
   if(sv){window.scrollBy(0,sv);drag.startY-=sv;}
   else if(fromTimer)return;
   drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
   const parent=drag.el.parentElement;
-  const cls=drag.type==='blk'?'blk':'alloc';
+  const cls=drag.type==='blk'?'blk':(drag.type==='trk'?'trk':'alloc');
   const dr=drag.el.getBoundingClientRect();
   const dMid=dr.top+dr.height/2;
   const kids=[...parent.children].filter(x=>x.classList&&x.classList.contains(cls));
@@ -539,14 +893,12 @@ function applyDrag(y,fromTimer){
     if(si<di&&dMid<mid){
       parent.insertBefore(drag.el,s);
       drag.startY-=r.height+drag.gap;
-      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
-      break;
+      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';break;
     }
     if(si>di&&dMid>mid){
       parent.insertBefore(drag.el,s.nextSibling);
       drag.startY+=r.height+drag.gap;
-      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';
-      break;
+      drag.el.style.transform='translateY('+(y-drag.startY)+'px)';break;
     }
   }
 }
@@ -568,55 +920,152 @@ function dragEnd(){
     const slots=state.allocs.map((a,i)=>(!a.retro&&(a.level||'core')===lvl)?i:-1).filter(i=>i>=0);
     const items=ids.map(id=>state.allocs.find(a=>a.id===id)).filter(Boolean);
     if(items.length===slots.length)slots.forEach((si,k)=>state.allocs[si]=items[k]);
+  }else if(type==='trk'){
+    const s=state.season;
+    if(s){
+      const ids=[...document.querySelectorAll('#quest-blk .trk')].map(x=>x.dataset.tid);
+      const map={};s.tracks.forEach(t=>map[t.id]=t);
+      const nt=ids.map(id=>map[id]).filter(Boolean);
+      if(nt.length===s.tracks.length)s.tracks=nt;
+    }
   }else{
-    state.lvlOrder=[...document.querySelectorAll('#active-list .blk')].map(x=>x.dataset.level);
+    if(parent.id==='quest-blk'&&state.season){
+      state.season.grpOrder=[...parent.querySelectorAll(':scope > .blk')].map(x=>x.dataset.lvl);
+    }else{
+      state.lvlOrder=[...document.querySelectorAll('#active-list .blk')].map(x=>x.dataset.level);
+    }
   }
-  drag=null;
+  drag=null;save();render();
+}
+
+/* ================= АЛЛОКАЦИИ ================= */
+document.getElementById('in-de').addEventListener('input',e=>{
+  const de=parseFloat(e.target.value.replace(',','.'));
+  document.getElementById('calc').textContent=(de>0)
+    ?T('calc')(fmt(de,2),fmt(de*100),Math.round(de*200)):T('calc0');
+});
+function addAlloc(){
+  const name=document.getElementById('in-name').value.trim();
+  const de=parseFloat(document.getElementById('in-de').value.replace(',','.'));
+  const level=document.getElementById('in-level').value;
+  if(!name){showErr(T('eName'));return}
+  if(!(de>0)||de>10){showErr(T('eDe'));return}
+  if(level==='exp'&&state.allocs.some(x=>(x.level||'core')==='exp'&&!x.retro)){showErr(T('eExp'));return}
+  state.allocs.unshift({id:Date.now().toString(36),name,de,level,
+    total:Math.round(de*200),done:0,created:Date.now(),retro:null,killed:false,gen:1});
+  document.getElementById('in-name').value='';
+  document.getElementById('in-de').value='';
+  document.getElementById('calc').textContent=T('calc0');
   save();render();
 }
-const BLVL={core:{t:'Core',c:'var(--gold)',bg:'#1c1810'},exp:{t:'Exp',c:'var(--violet)',bg:'#191424'},body:{t:'Носитель',c:'var(--ember)',bg:'#1e1412'}};
+function tick(id,delta){
+  const a=state.allocs.find(x=>x.id===id);if(!a)return;
+  const prev=a.done;
+  a.done=Math.max(0,Math.min(a.total,a.done+delta));
+  if(delta>0&&a.done>prev){
+    if(a.done>=a.total){snd('full');celebrate();}
+    else snd('tick',Math.round(a.done/a.total*100));
+  }
+  save();render();
+}
+function killAlloc(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=true;snd('kill');save();render()}
+function unkill(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=false;save();render()}
+function renameAlloc(id){
+  const a=state.allocs.find(x=>x.id===id);if(!a)return;
+  const n=prompt(T('renQ'),a.name);
+  if(n===null)return;
+  const t=n.trim();
+  if(!t){showErr(T('eEmpty'));return}
+  a.name=t.slice(0,60);save();render();
+}
+let armed={};
+function arm(key,fn){
+  if(armed[key]){delete armed[key];fn();return}
+  armed[key]=1;render();
+  setTimeout(()=>{if(armed[key]){delete armed[key];render()}},2600);
+}
+function removeAlloc(id){
+  arm('al'+id,()=>{
+    if(state.season&&state.season.tracks)
+      state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=null});
+    state.allocs=state.allocs.filter(x=>x.id!==id);
+    save();render();
+  });
+}
+let rSel={};
+function pickOutcome(id,o){rSel[id]=o;render()}
+function saveRetro(id,ctx=''){
+  const a=state.allocs.find(x=>x.id===id);if(!a)return;
+  const out=rSel[id];
+  if(!out){showErr(T('eOut'));return}
+  const delta=document.getElementById('rd-'+id+ctx).value.trim();
+  const note=document.getElementById('rn-'+id+ctx).value.trim();
+  if(!delta){showErr(T('eDelta'));return}
+  a.retro={outcome:out,delta,note,ts:Date.now()};
+  delete rSel[id];
+  let newId=null;
+  if(out!=='kl'){
+    const rx=document.getElementById('rx-'+id+ctx);
+    let nde=parseFloat(((rx&&rx.value)||'').replace(',','.'));
+    if(!(nde>0))nde=(out==='x2'?Math.min(a.de*2,10):a.de);
+    if(nde>10)nde=10;
+    const base=a.name.replace(/ · \d+$/,'');
+    const gen=(a.gen||1)+1;
+    newId=Date.now().toString(36);
+    state.allocs.unshift({id:newId,name:base+' · '+gen,de:nde,level:a.level||'core',
+      total:Math.round(nde*200),done:0,created:Date.now(),retro:null,killed:false,gen});
+  }
+  if(state.season&&state.season.tracks)
+    state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
+  save();render();
+}
 function cycleLevel(id){
   const a=state.allocs.find(x=>x.id===id);if(!a||a.retro)return;
   const order=['core','exp','body'];
   let i=(order.indexOf(a.level||'core')+1)%3;
   if(order[i]==='exp'&&state.allocs.some(x=>x.id!==id&&(x.level||'core')==='exp'&&!x.retro)){
-    showErr('Exp-слот занят другой ставкой.');i=(i+1)%3;}
+    showErr(T('eExpB'));i=(i+1)%3;}
   a.level=order[i];save();render();
 }
-const OUT_META={
-  x2:{badge:'◆ УДВОИТЬ',color:'var(--teal)',card:'done-card'},
-  pv:{badge:'◆ ПИВОТ',color:'var(--gold)',card:'done-card'},
-  kl:{badge:'✕ ЗАКРЫТО',color:'var(--ember)',card:'dead-card'}
-};
-function retroForm(a){
+const BLVL=()=>({core:{t:T('bCore'),c:'var(--gold)',bg:'var(--bgc-core)'},
+  exp:{t:T('bExp'),c:'var(--violet)',bg:'var(--bgc-exp)'},
+  body:{t:T('bBody'),c:'var(--ember)',bg:'var(--bgc-body)'}});
+const OUT_META=()=>({
+  x2:{badge:T('bX2'),color:'var(--teal)',card:'done-card'},
+  pv:{badge:T('bPv'),color:'var(--gold)',card:'done-card'},
+  kl:{badge:T('bKl'),color:'var(--ember)',card:'dead-card'}});
+function retroForm(a,ctx=''){
   const s=rSel[a.id];
+  const vd=ctx?(a._rds||''):(a._rd||'');
+  const vn=ctx?(a._rns||''):(a._rn||'');
+  const vx=ctx?(a._rxs||''):(a._rx||'');
   return `<div class="retro">
-    <div class="r-title">Ретро ставки — измерение дельты</div>
+    <div class="r-title">${T('retroT')}</div>
     <div class="opts">
-      <div class="opt ${s==='x2'?'sel-x2':''}" onclick="pickOutcome('${a.id}','x2')">Удвоить</div>
-      <div class="opt ${s==='pv'?'sel-pv':''}" onclick="pickOutcome('${a.id}','pv')">Пивот</div>
-      <div class="opt ${s==='kl'?'sel-kl':''}" onclick="pickOutcome('${a.id}','kl')">Закрыть</div>
+      <div class="opt ${s==='x2'?'sel-x2':''}" onclick="pickOutcome('${a.id}','x2')">${T('oX2')}</div>
+      <div class="opt ${s==='pv'?'sel-pv':''}" onclick="pickOutcome('${a.id}','pv')">${T('oPv')}</div>
+      <div class="opt ${s==='kl'?'sel-kl':''}" onclick="pickOutcome('${a.id}','kl')">${T('oKl')}</div>
     </div>
-    <textarea id="rd-${a.id}" placeholder="Дельта: было → стало. Что реально приросло?">${esc(a._rd||'')}</textarea>
-    <textarea id="rn-${a.id}" placeholder="Вывод для следующей аллокации (что учесть)">${esc(a._rn||'')}</textarea>
+    <textarea id="rd-${a.id}${ctx}" placeholder="${T('dPh')}">${esc(vd)}</textarea>
+    <textarea id="rn-${a.id}${ctx}" placeholder="${T('nPh')}">${esc(vn)}</textarea>
     ${(s==='x2'||s==='pv')?`
     <div class="row" style="align-items:center;margin-bottom:8px">
-      <div style="flex:1;font-size:11.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;line-height:1.4">${s==='x2'?'Прошла отбор → увеличиваем ставку. ДЕ следующей итерации:':'Пивот: подход меняется, направление остаётся. ДЕ итерации:'}</div>
-      <input type="text" class="de-in" id="rx-${a.id}" inputmode="decimal" placeholder="${fmt(s==='x2'?Math.min(a.de*2,10):a.de,2)}" value="${esc(a._rx||'')}">
+      <div style="flex:1;font-size:11.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;line-height:1.4">${s==='x2'?T('iterX2'):T('iterPv')}</div>
+      <input type="text" class="de-in" id="rx-${a.id}${ctx}" inputmode="decimal" placeholder="${fmt(s==='x2'?Math.min(a.de*2,10):a.de,2)}" value="${esc(vx)}">
     </div>`:''}
     <div class="a-actions" style="margin-top:2px">
-      <button class="btn30" style="border-color:var(--violet);color:#b6a6e0;background:linear-gradient(135deg,#241d3a,#171129)" onclick="saveRetro('${a.id}')">ЗАФИКСИРОВАТЬ РЕТРО</button>
-      ${a.done>=a.total?`<button class="btn-sm" onclick="tick('${a.id}',-1)">−30 · в работу</button>`:''}
-      ${a.killed&&a.done<a.total?`<button class="btn-sm" onclick="unkill('${a.id}')">отмена</button>`:''}
+      <button class="btn30" style="border-color:var(--violet);color:var(--violet)" onclick="saveRetro('${a.id}','${ctx}')">${T('fixRetro')}</button>
+      ${a.done>=a.total?`<button class="btn-sm" onclick="tick('${a.id}',-1)">${T('toWork')}</button>`:''}
+      ${a.killed&&a.done<a.total?`<button class="btn-sm" onclick="unkill('${a.id}')">${T('cancel')}</button>`:''}
     </div>
   </div>`;
 }
 function retroView(a){
-  const m=OUT_META[a.retro.outcome]||OUT_META.kl;
+  const m=OUT_META()[a.retro.outcome]||OUT_META().kl;
   return `<div class="r-view">
     <div class="r-badge" style="color:${m.color}">${m.badge}</div>
-    <div class="q">Дельта</div><div class="a">${esc(a.retro.delta)}</div>
-    ${a.retro.note?`<div class="q">Вывод</div><div class="a">${esc(a.retro.note)}</div>`:''}
+    <div class="q">${T('qDelta')}</div><div class="a">${esc(a.retro.delta)}</div>
+    ${a.retro.note?`<div class="q">${T('qNote')}</div><div class="a">${esc(a.retro.note)}</div>`:''}
   </div>`;
 }
 function card(a){
@@ -624,36 +1073,37 @@ function card(a){
   const hrs=a.done*0.5;
   const full=a.done>=a.total;
   const needsRetro=(full||a.killed)&&!a.retro;
-  const cls=a.retro?(OUT_META[a.retro.outcome]||OUT_META.kl).card:(needsRetro?'retro-card':'');
+  const cls=a.retro?(OUT_META()[a.retro.outcome]||OUT_META().kl).card:(needsRetro?'retro-card':'');
   const ticks=a.total<=60?'<div class="ticks">'+Array(a.total).fill('<i></i>').join('')+'</div>':'';
-  const lv=BLVL[a.level||'core'];
+  const lv=BLVL()[a.level||'core'];
+  const bc=barCol(pct);
   let actions='';
   if(!full&&!a.killed&&!a.retro){
     actions=`<div class="a-actions">
-      <button class="btn30" onclick="tick('${a.id}',1)">+ 30 МИН</button>
+      <button class="btn30" onclick="tick('${a.id}',1)">${T('min30')}</button>
       <button class="btn-sm" onclick="tick('${a.id}',-1)">−30</button>
-      <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">kill</button>
+      <button class="btn-sm" style="color:var(--teal);border-color:var(--teal)" onclick="doneAlloc('${a.id}')">✓</button>
+      <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">${T('kill')}</button>
     </div>`;
   }
   return `<div class="alloc ${cls}" data-id="${a.id}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
     <div class="a-top"><div class="a-name">${!a.retro?`<span class="drag" onpointerdown="dragStart(event,'${a.id}')">⠿</span>`:''}${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
-      <div class="a-de"><span class="lvl" style="color:${lv.c};border-color:${lv.c};margin-right:7px${!a.retro?';cursor:pointer':''}"${!a.retro?` onclick="cycleLevel('${a.id}')"`:''}>${lv.t}</span>${fmt(a.de,2)} ДЕ${!a.retro?` <span class="edit" onclick="removeAlloc('${a.id}')">✕</span>`:''}</div></div>
-    <div class="bar"><div class="fill" style="width:${pct}%"></div>${ticks}
+      <div class="a-de"><span class="lvl" style="color:${lv.c};border-color:${lv.c};margin-right:7px${!a.retro?';cursor:pointer':''}"${!a.retro?` onclick="cycleLevel('${a.id}')"`:''}>${lv.t}</span>${fmt(a.de,2)} ${lang==='ru'?'ДЕ':'DU'}${!a.retro?` <span class="edit" style="${armed['al'+a.id]?'color:var(--ember);opacity:1':''}" onclick="removeAlloc('${a.id}')">${armed['al'+a.id]?T('delQ'):'✕'}</span>`:''}</div></div>
+    <div class="bar"><div class="fill" data-k="a${a.id}" data-p="${pct}" style="width:${pct}%${!a.retro?`;background:linear-gradient(90deg,${bc[0]},${bc[1]})`:''}"></div>${ticks}
       <div class="pct">${pct}%</div></div>
-    <div class="a-nums"><span><b>${fmt(hrs)}</b> / ${fmt(a.total*0.5)} ч</span>
-      <span><b>${a.done}</b> / ${a.total} чк</span></div>
+    <div class="a-nums"><span><b>${fmt(hrs)}</b> / ${fmt(a.total*0.5)} ${T('h')}</span>
+      <span><b>${a.done}</b> / ${a.total} ${T('cp')}</span></div>
     ${actions}
     ${needsRetro?retroForm(a):''}
-    ${a.retro?retroView(a)+`<div class="a-actions"><button class="btn-sm" style="flex:1" onclick="removeAlloc('${a.id}')">убрать из архива</button></div>`:''}
+    ${a.retro?retroView(a)+`<div class="a-actions"><button class="btn-sm" style="flex:1${armed['al'+a.id]?';border-color:var(--ember);color:var(--ember)':''}" onclick="removeAlloc('${a.id}')">${armed['al'+a.id]?T('delArm'):T('delBtn')}</button></div>`:''}
   </div>`;
 }
 
-/* ---------- сезон: движок недель ---------- */
-const LVL={body:{t:'Носитель',c:'var(--ember)'},core:{t:'Core',c:'var(--gold)'},exp:{t:'Exp',c:'var(--violet)'}};
-
+/* ================= СЕЗОН ================= */
+const LVL=()=>({body:{t:T('bBody'),c:'var(--ember)'},core:{t:T('bCore'),c:'var(--gold)'},exp:{t:T('bExp'),c:'var(--violet)'}});
 function ensureWeek(){
   const s=state.season;if(!s)return;
-  if(!s.wk)s.wk={start:weekStart(s.start),done:{}};
+  if(!s.wk)s.wk={start:weekStart(s.start),done:{},notes:{}};
   let g=0;
   while(s.wk.start<weekStart(Date.now())&&g<520){
     const end=s.wk.start+7*86400000;
@@ -665,9 +1115,14 @@ function ensureWeek(){
     }
     if(out<(s.outGoal||0))ok=false;
     if(!s.weeks)s.weeks=[];
-    s.weeks.push({start:s.wk.start,ok,hrs,out});
-    s.wk={start:end,done:{}};g++;
+    s.weeks.push({start:s.wk.start,ok,hrs,out,notes:s.wk.notes||{}});
+    s.wk={start:end,done:{},notes:{}};g++;
   }
+}
+function wkNote(tid,v){
+  const s=state.season;if(!s)return;
+  if(!s.wk.notes)s.wk.notes={};
+  s.wk.notes[tid]=v;save();
 }
 function streak(){
   const s=state.season;if(!s||!s.weeks)return 0;
@@ -675,30 +1130,46 @@ function streak(){
   for(let i=s.weeks.length-1;i>=0;i--){if(s.weeks[i].ok)n++;else break}
   return n;
 }
+function goAlloc(){const t=document.querySelector('.tab[data-p="p-alloc"]');if(t)swTab(t);window.scrollTo({top:0,behavior:'smooth'})}
 function trackTick(tid,delta){
   const s=state.season;if(!s)return;
   ensureWeek();
   const cur=s.wk.done[tid]||0;
-  s.wk.done[tid]=Math.max(0,cur+delta);
   const tr=s.tracks.find(t=>t.id===tid);
+  if(delta>0&&tr){
+    const need=Math.round(tr.norm*2);
+    const betA=tr.betId?state.allocs.find(x=>x.id===tr.betId&&!x.retro):null;
+    const canOver=betA&&betA.done<betA.total;
+    if(need>0&&cur>=need&&!canOver)return; /* норма закрыта, копить некуда */
+  }
+  s.wk.done[tid]=Math.max(0,cur+delta);
+  let allocDone=false;
   if(tr&&tr.betId){
     const a=state.allocs.find(x=>x.id===tr.betId&&!x.retro);
-    if(a)a.done=Math.max(0,Math.min(a.total,a.done+delta));
+    if(a){
+      const pa=a.done;
+      a.done=Math.max(0,Math.min(a.total,a.done+delta));
+      if(delta>0&&pa<a.total&&a.done>=a.total)allocDone=true;
+    }
+  }
+  if(delta>0&&s.wk.done[tid]>cur){
+    const need=tr?Math.round(tr.norm*2):0;
+    if(allocDone){snd('full');celebrate();showOk(T('allocFull'));}
+    else if(need>0&&cur<need&&s.wk.done[tid]>=need){snd('full');celebrate();}
+    else snd('tick',need>0?Math.min(100,Math.round(s.wk.done[tid]/need*100)):0);
   }
   save();render();
 }
 function addTrack(){
   const s=state.season;if(!s)return;
   const name=document.getElementById('tk-name').value.trim();
-  const level=document.getElementById('tk-level').value;
+  const lvl=document.getElementById('tk-lvl').value;
   const norm=parseFloat(document.getElementById('tk-norm').value.replace(',','.'));
   const betId=document.getElementById('tk-bet').value||null;
-  if(!name){showErr('Название трека обязательно.');return}
-  if(!(norm>0)||norm>60){showErr('Норма: часов в неделю, от 0,5 до 60.');return}
-  if(level==='exp'&&s.tracks.some(t=>t.level==='exp')){
-    showErr('Experimental — строго 1 слот. По регламенту.');return}
-  if(norm>=3&&!betId)showOk('Трек ≥3 ч/нед без ставки: за сезон это ~'+fmt(norm*13/100,2)+' ДЕ мимо общего учёта. Подумай про ставку.');
-  s.tracks.push({id:Date.now().toString(36),name,level,norm,betId});
+  if(!name){showErr(T('eTName'));return}
+  if(!(norm>0)||norm>60){showErr(T('eTNorm'));return}
+  if(norm>=3&&!betId)showOk(T('wTrack')(fmt(norm*13/100,2)));
+  s.tracks.push({id:Date.now().toString(36),name,lvl,role:lvl==='goal'?'goal':'sup',level:'core',norm,betId});
   document.getElementById('tk-name').value='';
   document.getElementById('tk-norm').value='';
   save();render();
@@ -706,10 +1177,10 @@ function addTrack(){
 function editTrack(tid){
   const s=state.season;if(!s)return;
   const tr=s.tracks.find(t=>t.id===tid);if(!tr)return;
-  const n=prompt('Название трека:',tr.name);
+  const n=prompt(T('renT'),tr.name);
   if(n===null)return;
   if(n.trim())tr.name=n.trim().slice(0,50);
-  const nm=prompt('Норма, часов в неделю:',String(tr.norm).replace('.',','));
+  const nm=prompt(T('renN'),String(tr.norm).replace('.',','));
   if(nm!==null){
     const v=parseFloat(nm.replace(',','.'));
     if(v>0&&v<=60)tr.norm=v;
@@ -717,27 +1188,27 @@ function editTrack(tid){
   save();render();
 }
 function delTrack(tid){
-  const s=state.season;if(!s)return;
-  const tr=s.tracks.find(t=>t.id===tid);
-  if(!confirm('Удалить трек «'+(tr?tr.name:'')+'»? История недель сохранится.'))return;
-  s.tracks=s.tracks.filter(t=>t.id!==tid);
-  save();render();
+  arm('tk'+tid,()=>{
+    const s=state.season;if(!s)return;
+    s.tracks=s.tracks.filter(t=>t.id!==tid);
+    save();render();
+  });
 }
 function startSeason(){
   const num=document.getElementById('sn-num').value.trim()||'1';
   const goal=document.getElementById('sn-goal').value.trim();
   const kill=document.getElementById('sn-kill').value.trim();
+  const len=parseInt(document.getElementById('sn-len').value)||90;
   const og=parseInt(document.getElementById('sn-out').value)||0;
-  if(!goal){showErr('Цель сезона обязательна — одна, бинарная.');return}
-  state.season={num,goal,kill,outGoal:og,start:Date.now(),tracks:[],weeks:[],wk:null,retro:null};
-  save();render();
-  showOk('Сезон запущен. Теперь добавь треки билда.');
+  if(!goal){showErr(T('eGoal'));return}
+  state.season={num,goal,kill,len,outGoal:og,start:Date.now(),tracks:[],weeks:[],wk:null,retro:null};
+  save();render();showOk(T('started'));
 }
 function editSeason(){window._editSeason=true;render()}
 function saveSeasonEdit(){
   const s=state.season;if(!s)return;
   const goal=document.getElementById('se-goal').value.trim();
-  if(!goal){showErr('Цель не может быть пустой.');return}
+  if(!goal){showErr(T('eGoal'));return}
   s.num=document.getElementById('se-num').value.trim()||s.num;
   s.goal=goal;
   s.kill=document.getElementById('se-kill').value.trim();
@@ -745,16 +1216,14 @@ function saveSeasonEdit(){
   window._editSeason=false;
   save();render();
 }
+function seasonKill(){window._seasonRetro=true;snd('kill');render();requestAnimationFrame(()=>{const el=document.getElementById('season-retro');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})})}
 function cancelSeason(){
-  if(!confirm('Отменить сезон целиком, без архива и ретро? Только для ошибочно запущенного.'))return;
-  state.season=null;window._editSeason=false;save();render();
+  arm('cs',()=>{state.season=null;window._editSeason=false;save();render();});
 }
 function removeSeason(st){
-  if(!confirm('Удалить сезон из архива?'))return;
-  state.seasons=state.seasons.filter(x=>x.start!==st);
-  save();render();
+  arm('se'+st,()=>{state.seasons=state.seasons.filter(x=>x.start!==st);save();render();});
 }
-function addOut(){state.out.push(Date.now());save();render()}
+function addOut(){state.out.push(Date.now());snd('out');save();render()}
 function undoOut(){if(state.out.length)state.out.pop();save();render()}
 function pickWon(v){window._seasonWon=v;render()}
 function closeSeason(){
@@ -764,8 +1233,8 @@ function closeSeason(){
   const burn=document.getElementById('sr-burn').value.trim();
   const chg=document.getElementById('sr-chg').value.trim();
   const won=window._seasonWon;
-  if(won===undefined){showErr('Отметь: цель достигнута или нет.');return}
-  if(!conv){showErr('Заполни хотя бы «что конвертировалось».');return}
+  if(won===undefined){showErr(T('eWon'));return}
+  if(!conv){showErr(T('eConv'));return}
   s.retro={won,conv,burn,chg,ts:Date.now()};
   s.end=Date.now();
   s.outTotal=state.out.filter(t=>t>=s.start).length;
@@ -774,216 +1243,358 @@ function closeSeason(){
   state.seasons.unshift(s);
   state.season=null;
   window._seasonWon=undefined;
+  window._seasonRetro=undefined;
   save();render();
 }
-
 function trackCard(tr){
   const s=state.season;
   const need=Math.round(tr.norm*2);
   const d=s.wk.done[tr.id]||0;
   const pct=Math.min(100,Math.round(d/need*100));
-  const lv=LVL[tr.level]||LVL.core;
+  const TL={goal:{t:T('rGoal'),c:'var(--blue)'},core:{t:T('tgCore'),c:'var(--gold)'},
+    exp:{t:T('tgExp'),c:'var(--violet)'},body:{t:T('tgBody'),c:'var(--ember)'}};
+  const lv=TL[tr.lvl||((tr.role||'sup')==='goal'?'goal':'core')]||TL.core;
+  const tb=barCol(pct);
   const bet=tr.betId?state.allocs.find(x=>x.id===tr.betId&&!x.retro):null;
   let betLine='';
   if(bet){
-    const rem=bet.total-bet.done;
-    const wks=need>0?Math.ceil(rem/need):0;
-    betLine=`<div class="t-nums" style="margin-top:4px"><span>→ ставка: <b>${esc(bet.name)}</b></span><span>${bet.done}/${bet.total} чк · ~${wks} нед</span></div>`;
+    if(bet.done>=bet.total){
+      betLine=`<div class="t-nums" style="margin-top:4px;color:var(--violet)"><span><b style="color:var(--violet)">${T('retroWait')}</b></span></div>`
+        +retroForm(bet,'-s');
+    }else{
+      const rem=bet.total-bet.done;
+      const wks=need>0?Math.ceil(rem/need):0;
+      betLine=`<div class="t-nums" style="margin-top:4px"><span>${T('tBind')} <b>${esc(bet.name)}</b></span><span>${bet.done}/${bet.total} ${T('cp')} · ~${wks} ${T('tWks')}</span></div>`;
+    }
   }
-  return `<div class="trk" style="border-left:3px solid ${lv.c}">
+  const betActive=bet&&bet.done<bet.total;
+  const closedWeek=need>0&&d>=need&&!betActive;
+  const done=need>0&&d>=need;
+  const note=(s.wk.notes||{})[tr.id]||'';
+  return `<div class="trk" data-tid="${tr.id}" style="border-left:3px solid ${done?'var(--teal)':lv.c}">
     <div class="t-top">
-      <div class="t-name">${esc(tr.name)} <span class="edit" onclick="editTrack('${tr.id}')">✎</span></div>
+      <div class="t-name">${done?'':`<span class="drag" style="font-size:15px;padding:6px 10px 6px 0" onpointerdown="trkStart(event)">⠿</span>`}${esc(tr.name)} <span class="edit" onclick="editTrack('${tr.id}')">✎</span></div>
       <div style="display:flex;gap:6px;align-items:center">
         <span class="lvl" style="color:${lv.c};border-color:${lv.c}">${lv.t}</span>
-        <span class="edit" onclick="delTrack('${tr.id}')">✕</span>
+        <span class="edit" style="${armed['tk'+tr.id]?'color:var(--ember);opacity:1':''}" onclick="delTrack('${tr.id}')">${armed['tk'+tr.id]?T('delQ'):'✕'}</span>
       </div>
     </div>
-    <div class="bar slim"><div class="fill ${d>=need?'f-teal':''}" style="width:${pct}%"></div>
+    <div class="bar slim"><div class="fill" data-k="t${tr.id}" data-p="${pct}" style="width:${pct}%;background:linear-gradient(90deg,${tb[0]},${tb[1]})"></div>
       <div class="pct">${pct}%</div></div>
-    <div class="t-nums"><span><b>${fmt(d*0.5)}</b> / ${fmt(tr.norm)} ч на этой неделе</span>
-      <span><b>${d}</b>/${need} чк</span></div>
+    <div class="t-nums"><span><b>${fmt(d*0.5)}</b> / ${fmt(tr.norm)} ${T('h')} ${T('tWeek')}${d>=need?' <b style="color:var(--teal)">✓</b>':''}</span>
+      <span><b>${d}</b>/${need} ${T('cp')}</span></div>
     ${betLine}
-    <div class="t-act">
-      <button class="t-btn" onclick="trackTick('${tr.id}',1)">+ 30 МИН</button>
+    ${done?`<input type="text" style="margin-top:9px;font-size:13px;background:var(--card)" placeholder="${T('wkRetroPh')}" value="${esc(note)}" onchange="wkNote('${tr.id}',this.value)">`:''}
+    ${closedWeek?`<div class="t-act">
+      <div style="flex:1;text-align:center;padding:10px;border:1px dashed var(--teal);border-radius:7px;color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">${T('normClosed')}</div>
       <button class="t-sm" onclick="trackTick('${tr.id}',-1)">−30</button>
-    </div>
+    </div>`:`<div class="t-act">
+      <button class="t-btn" onclick="trackTick('${tr.id}',1)">${T('min30')}</button>
+      <button class="t-sm" onclick="trackTick('${tr.id}',-1)">−30</button>
+    </div>`}
   </div>`;
 }
-
 function seasonPane(){
   const el=document.getElementById('p-season');
   const s=state.season;
   let html='';
   if(!s){
+    html+=`<details class="addf"><summary>${T('cheatSum')}</summary>
+    <div class="box">${T('cheat')}</div></details>`;
     html+=`<div class="box">
-      <div class="lbl">Номер сезона</div>
+      <div class="lbl">${T('snNum')}</div>
       <input type="text" id="sn-num" value="${state.seasons.length+1}">
-      <div class="lbl">Цель — одна, бинарная</div>
-      <textarea id="sn-goal" placeholder="Например: оффер в CS/consultative B2B — или 3 финальных этапа собеседований"></textarea>
-      <div class="lbl">Исходящих в неделю — норма квеста</div>
+      <div class="lbl">${T('snGoal')}</div>
+      <textarea id="sn-goal" placeholder="${T('snGoalPh')}"></textarea>
+      <div class="lbl">${T('snLen')}</div>
+      <select id="sn-len">
+        <option value="30">${T('len30')}</option>
+        <option value="60">${T('len60')}</option>
+        <option value="90" selected>${T('len90')}</option>
+      </select>
+      <div class="lbl">${T('snOut')}</div>
       <input type="text" id="sn-out" inputmode="numeric" placeholder="10">
-      <div class="lbl">Kill-критерии</div>
-      <textarea id="sn-kill" placeholder="Например: 0 исходящих за неделю = провал; <30 откликов к дню 30 = пересмотр"></textarea>
-      <div class="hint">Треки билда (что прокачиваешь) добавляются после запуска.</div>
-      <button class="btn-g" onclick="startSeason()">ЗАПУСТИТЬ СЕЗОН</button>
+      <div class="lbl">${T('snKill')}</div>
+      <textarea id="sn-kill" placeholder="${T('snKillPh')}"></textarea>
+      <div class="hint">${T('snHint')}</div>
+      <button class="btn-g" onclick="startSeason()">${T('start')}</button>
     </div>`;
   }else{
     ensureWeek();
-    const day=Math.min(90,Math.floor((Date.now()-s.start)/86400000)+1);
-    const pct=Math.round(day/90*100);
+    const len=s.len||90;
+    const day=Math.min(len,Math.floor((Date.now()-s.start)/86400000)+1);
+    const pct=Math.round(day/len*100);
     const ws=s.wk.start;
     const outWeek=state.out.filter(t=>t>=ws).length;
     const outSeason=state.out.filter(t=>t>=s.start).length;
     const weekNum=(s.weeks||[]).length+1;
     const st=streak();
-    /* статус квеста недели */
     let tracksOk=(s.tracks||[]).length>0;
     for(const tr of (s.tracks||[])){
       if((s.wk.done[tr.id]||0)<Math.round(tr.norm*2)){tracksOk=false;break}
     }
     const outOk=outWeek>=(s.outGoal||0);
     const questOk=tracksOk&&outOk;
-
     if(window._editSeason){
       html+=`<div class="box">
-        <div class="lbl">Номер сезона</div>
+        <div class="lbl">${T('snNum')}</div>
         <input type="text" id="se-num" value="${esc(s.num)}">
-        <div class="lbl">Цель</div>
+        <div class="lbl">${T('snGoal')}</div>
         <textarea id="se-goal">${esc(s.goal)}</textarea>
-        <div class="lbl">Исходящих в неделю</div>
+        <div class="lbl">${T('snOut')}</div>
         <input type="text" id="se-out" inputmode="numeric" value="${s.outGoal||0}">
-        <div class="lbl">Kill-критерии</div>
+        <div class="lbl">${T('snKill')}</div>
         <textarea id="se-kill">${esc(s.kill||'')}</textarea>
-        <div class="a-actions"><button class="btn30" onclick="saveSeasonEdit()">СОХРАНИТЬ</button>
-          <button class="btn-sm" onclick="window._editSeason=false;render()">отмена</button></div>
+        <div class="a-actions"><button class="btn30" onclick="saveSeasonEdit()">${T('saveEdits')}</button>
+          <button class="btn-sm" onclick="window._editSeason=false;render()">${T('cancel')}</button></div>
       </div>`;
     }else{
       html+=`<div class="box">
-        <div class="season-head"><span class="s-num">Сезон №${esc(s.num)}</span>
-          <span class="s-day">день ${day} / 90</span></div>
+        <div class="season-head"><span class="s-num">${T('season')}${esc(s.num)}</span>
+          <span class="s-day">${T('day')(day,len)}</span></div>
         <div class="bar" style="margin-top:10px"><div class="fill" style="width:${pct}%;background:linear-gradient(90deg,#274b63,var(--blue))"></div>
           <div class="pct">${pct}%</div></div>
         <div class="s-goal">${esc(s.goal)}</div>
-        ${s.kill?`<div class="s-meta"><b>Kill-критерии</b>${esc(s.kill)}</div>`:''}
+        ${s.kill?`<div class="s-meta"><b>${T('killLbl')}</b>${esc(s.kill)}</div>`:''}
         <div class="a-actions">
-          <button class="btn-sm" onclick="editSeason()">✎ править</button>
-          <button class="btn-sm btn-kill" onclick="cancelSeason()">✕ отменить</button>
+          <button class="btn-sm" onclick="editSeason()">${T('edit')}</button>
+          <button class="btn-sm btn-kill" onclick="seasonKill()">${T('killS')}</button>
+          <button class="btn-sm" onclick="cancelSeason()">${armed['cs']?T('cancelSArm'):T('cancelS')}</button>
         </div>
       </div>`;
     }
-
-    /* квест недели */
-    html+=`<div class="box">
-      <div class="quest-head"><span class="q-week">Неделя ${weekNum} · квест</span>
-        <span class="q-streak">${st>0?'стрик ◆ '+st:'стрик —'}</span></div>
-      <div class="q-status" style="color:${questOk?'var(--teal)':'var(--dim)'}">
-        ${questOk?'◆ КВЕСТ НЕДЕЛИ ЗАКРЫТ':'нормы треков '+(tracksOk?'✓':'…')+' · исходящие '+outWeek+'/'+(s.outGoal||0)+(outOk?' ✓':'')}</div>
-      ${(s.tracks||[]).length?(s.tracks.map(trackCard).join('')):'<div class="empty" style="margin-bottom:9px">Треков нет — билд пуст.<br>Добавь, что прокачиваешь в этом сезоне.</div>'}
-    </div>`;
-
-    /* добавление трека */
-    const activeBets=state.allocs.filter(a=>!a.retro&&!a.killed&&a.done<a.total);
-    html+=`<details class="addf"><summary>+ добавить трек в билд</summary><div class="box">
-      <div class="lbl">Название</div>
-      <input type="text" id="tk-name" placeholder="Английский / ЛФК / Отклики / Ниша…" maxlength="50">
-      <div class="row" style="margin-top:12px">
-        <div style="flex:1"><div class="lbl">Уровень</div>
-          <select id="tk-level">
-            <option value="core">Core</option>
-            <option value="body">Носитель</option>
-            <option value="exp">Experimental</option>
-          </select></div>
-        <div style="width:110px"><div class="lbl">Ч / нед</div>
-          <input type="text" id="tk-norm" inputmode="decimal" placeholder="5"></div>
+    if(day>=len||window._seasonRetro){
+    html+=`<div class="box" id="season-retro">
+      <div class="r-title" style="color:var(--blue)">${T('closeT')}</div>
+      <div class="opts">
+        <div class="opt ${window._seasonWon===true?'sel-x2':''}" onclick="pickWon(true)">${T('won')}</div>
+        <div class="opt ${window._seasonWon===false?'sel-kl':''}" onclick="pickWon(false)">${T('lost')}</div>
       </div>
-      <div class="lbl">Привязать к ставке (+30 пойдёт в оба слоя)</div>
-      <select id="tk-bet">
-        <option value="">— без ставки —</option>
-        ${activeBets.map(a=>`<option value="${a.id}">${esc(a.name)} · ${fmt(a.de,2)} ДЕ</option>`).join('')}
-      </select>
-      <button class="btn-g" onclick="addTrack()">ДОБАВИТЬ ТРЕК</button>
-    </div></details>`;
-
-    /* исходящие */
-    html+=`<div class="box" style="text-align:center">
-      <div class="stats" style="margin-bottom:10px">
-        <div class="stat"><div class="v">${outWeek}${s.outGoal?' / '+s.outGoal:''}</div><div class="l">исходящих · неделя</div></div>
-        <div class="stat"><div class="v">${outSeason}</div><div class="l">исходящих · сезон</div></div>
-      </div>
-      <button class="btn-out" onclick="addOut()">+ 1 ИСХОДЯЩЕЕ · отклик / письмо / питч / публикация</button>
-      <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="undoOut()">− отменить последнее</button></div>
+      <textarea id="sr-conv" placeholder="${T('convPh')}"></textarea>
+      <div style="height:8px"></div>
+      <textarea id="sr-burn" placeholder="${T('burnPh')}"></textarea>
+      <div style="height:8px"></div>
+      <textarea id="sr-chg" placeholder="${T('chgPh')}"></textarea>
+      <button class="btn-g" style="border-color:var(--blue);color:var(--blue)" onclick="closeSeason()">${T('closeBtn')}</button>
+      ${(window._seasonRetro&&day<len)?`<div class="a-actions"><button class="btn-sm" style="flex:1" onclick="window._seasonRetro=false;render()">${T('cancel')}</button></div>`:''}
     </div>`;
-
-    /* история недель */
-    if((s.weeks||[]).length){
-      html+=`<div class="box"><div class="lbl" style="margin-top:0">История недель</div>
-        <div class="wchips">${s.weeks.map(w=>
-          `<span class="wchip ${w.ok?'w-ok':'w-no'}">${dstr(w.start)} ${w.ok?'✓':'✗'} · ${fmt(w.hrs)}ч · ${w.out}исх</span>`).join('')}
-        </div></div>`;
     }
 
-    /* закрытие */
+    /* квест недели: четыре уровневых блока, закрытые нормы — вниз в архив */
+    const gOrder=(s.grpOrder&&s.grpOrder.length===4)?s.grpOrder:['goal','core','exp','body'];
+    const lvlOf=t=>t.lvl||((t.role||'sup')==='goal'?'goal':'core');
+    const GT={goal:[T('grpGoal'),'var(--blue)'],core:[T('tgCore'),'var(--gold)'],
+      exp:[T('tgExp'),'var(--violet)'],body:[T('tgBody'),'var(--ember)']};
+    const isDone=t=>{const n=Math.round(t.norm*2);return n>0&&(s.wk.done[t.id]||0)>=n};
+    const openTracks=(s.tracks||[]).filter(t=>!isDone(t));
+    const doneTracks=(s.tracks||[]).filter(isDone);
+    let tHtml='';
+    for(const k of gOrder){
+      const list=openTracks.filter(t=>lvlOf(t)===k);
+      if(!list.length)continue;
+      const [gt,gc]=GT[k];
+      tHtml+=`<div class="blk" data-lvl="${k}">
+        <div class="lbl" style="margin:8px 0 7px;color:${gc}"><span class="drag" style="font-size:12px;padding:5px 9px 5px 2px" onpointerdown="blkStart(event)">⠿</span>${gt}</div>
+        <div class="tlist" data-lvl="${k}">${list.map(trackCard).join('')}</div></div>`;
+    }
+    const archHtml=doneTracks.length?`<details class="addf" style="margin:6px 0 2px"${window._wkArch?' open':''} ontoggle="window._wkArch=this.open">
+      <summary>${T('wkArch')(doneTracks.length)}</summary>
+      <div style="padding-top:10px">${doneTracks.map(trackCard).join('')}</div></details>`:'';
     html+=`<div class="box">
-      <div class="r-title" style="color:var(--blue)">Закрытие сезона — ретро 30 минут</div>
-      <div class="opts">
-        <div class="opt ${window._seasonWon===true?'sel-x2':''}" onclick="pickWon(true)">Цель достигнута</div>
-        <div class="opt ${window._seasonWon===false?'sel-kl':''}" onclick="pickWon(false)">Не достигнута</div>
-      </div>
-      <textarea id="sr-conv" placeholder="Что конвертировалось (дельта по счетам: навык, буфер, связи, наполненность)"></textarea>
-      <div style="height:8px"></div>
-      <textarea id="sr-burn" placeholder="Что сгорело (часы без дельты — куда и почему)"></textarea>
-      <div style="height:8px"></div>
-      <textarea id="sr-chg" placeholder="Что меняем в билде следующего сезона"></textarea>
-      <button class="btn-g" style="border-color:var(--blue);color:#8fc3e8;background:linear-gradient(135deg,#16303f,#0d1d27)" onclick="closeSeason()">ЗАКРЫТЬ СЕЗОН</button>
+      <div class="quest-head"><span class="q-week">${T('week')} ${weekNum} · ${T('quest')}</span>
+        <span class="q-streak">${st>0?'◆ '+st+' '+T('inRow'):T('streak0')}</span></div>
+      <div class="q-status" style="color:${questOk?'var(--teal)':'var(--dim)'}">
+        ${questOk?T('questOk'):T('qTracks')+(tracksOk?'✓':'…')+' · '+T('qOut')+outWeek+'/'+(s.outGoal||0)+(outOk?' ✓':'')}</div>
+      <div id="quest-blk">${tHtml||((s.tracks||[]).length?'':'<div class="empty" style="margin-bottom:9px">'+T('emptyT')+'</div>')}</div>
+      ${archHtml}
     </div>`;
+    const activeBets=state.allocs.filter(a=>!a.retro&&!a.killed&&a.done<a.total);
+    html+=`<details class="addf"><summary>${T('addTrack')}</summary><div class="box">
+      <div class="lbl">${T('tkName')}</div>
+      <input type="text" id="tk-name" placeholder="${T('tkNamePh')}" maxlength="50">
+      <div class="row" style="margin-top:12px">
+        <div style="flex:1"><div class="lbl">${T('tkLevel')}</div>
+          <select id="tk-lvl">
+            <option value="goal">${T('lvGoal')}</option>
+            <option value="core">${T('tgCore')}</option>
+            <option value="exp">${T('tgExp')}</option>
+            <option value="body">${T('tgBody')}</option>
+          </select></div>
+        <div style="width:100px"><div class="lbl">${T('tkNorm')}</div>
+          <input type="text" id="tk-norm" inputmode="decimal" placeholder="5"></div>
+      </div>
+      <div class="lbl">${T('tkBind')}</div>
+      <select id="tk-bet">
+        <option value="">${T('tkNoBind')}</option>
+        ${activeBets.map(a=>`<option value="${a.id}">${esc(a.name)} · ${fmt(a.de,2)} ${lang==='ru'?'ДЕ':'DU'}</option>`).join('')}
+      </select>
+      <button class="btn-g" onclick="addTrack()">${T('addTrackBtn')}</button>
+    </div></details>`;
+    html+=`<div class="box" style="text-align:center">
+      <div class="stats" style="margin-bottom:10px">
+        <div class="stat"><div class="v">${outWeek}${s.outGoal?' / '+s.outGoal:''}</div><div class="l">${T('outW')}</div></div>
+        <div class="stat"><div class="v">${outSeason}</div><div class="l">${T('outS')}</div></div>
+      </div>
+      <button class="btn-out" onclick="addOut()">${T('outBtn')}</button>
+      <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="undoOut()">${T('outUndo')}</button></div>
+    </div>`;
+    if((s.weeks||[]).length){
+      html+=`<div class="box"><div class="lbl" style="margin-top:0">${T('hist')}</div>
+        <div class="wchips">${s.weeks.map(w=>
+          `<span class="wchip ${w.ok?'w-ok':'w-no'}">${dstr(w.start)} ${w.ok?'✓':'✗'} · ${fmt(w.hrs)}${T('h')} · ${w.out}${T('outAbbr')}</span>`).join('')}
+        </div></div>`;
+    }
   }
-
   if(state.seasons.length){
-    html+='<div class="sec">Архив сезонов</div>';
+    html+='<div class="sec">'+T('archS')+'</div>';
     for(const a of state.seasons){
-      const m=a.retro.won?{c:'var(--teal)',t:'◆ ЦЕЛЬ ДОСТИГНУТА'}:{c:'var(--ember)',t:'✕ НЕ ДОСТИГНУТА'};
+      const m=a.retro.won?{c:'var(--teal)',t:T('wonB')}:{c:'var(--ember)',t:T('lostB')};
       html+=`<div class="alloc arch" style="border-left-color:${a.retro.won?'var(--teal)':'var(--ember)'}">
-        <div class="a-top"><div class="a-name">Сезон №${esc(a.num)}</div>
-          <div class="a-de">${a.outTotal||0} исх · недель ${a.weeksWon||0}/${a.weeksTotal||0}</div></div>
+        <div class="a-top"><div class="a-name">${T('season')}${esc(a.num)}</div>
+          <div class="a-de">${a.outTotal||0} ${T('outAbbr')} · ${T('wk')} ${a.weeksWon||0}/${a.weeksTotal||0}</div></div>
         <div class="r-view">
           <div class="r-badge" style="color:${m.c}">${m.t}</div>
-          <div class="q">Цель</div><div class="a">${esc(a.goal)}</div>
-          <div class="q">Конвертировалось</div><div class="a">${esc(a.retro.conv)}</div>
-          ${a.retro.burn?`<div class="q">Сгорело</div><div class="a">${esc(a.retro.burn)}</div>`:''}
-          ${a.retro.chg?`<div class="q">Меняем</div><div class="a">${esc(a.retro.chg)}</div>`:''}
+          <div class="q">${T('goalQ')}</div><div class="a">${esc(a.goal)}</div>
+          <div class="q">${T('convQ')}</div><div class="a">${esc(a.retro.conv)}</div>
+          ${a.retro.burn?`<div class="q">${T('burnQ')}</div><div class="a">${esc(a.retro.burn)}</div>`:''}
+          ${a.retro.chg?`<div class="q">${T('chgQ')}</div><div class="a">${esc(a.retro.chg)}</div>`:''}
         </div>
-        <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="removeSeason(${a.start})">убрать из архива</button></div>
+        <div class="a-actions"><button class="btn-sm" style="flex:1${armed['se'+a.start]?';border-color:var(--ember);color:var(--ember)':''}" onclick="removeSeason(${a.start})">${armed['se'+a.start]?T('delArm'):T('delBtn')}</button></div>
       </div>`;
     }
   }
   el.innerHTML=html;
 }
 
-/* ---------- render ---------- */
+/* ================= КАРТА (справка) ================= */
+const REF={
+ru:`
+<details class="ref"><summary><span class="rtag" style="color:var(--gold)">TICAP</span><span class="rt">Что это</span></summary>
+<div class="ref-body">
+<p><b>Time Capital Allocation System</b> — система управления временем как капиталом. Час либо накапливается в навык, доход, здоровье — либо потрачен. TICAP делает накопление видимым и управляемым.</p>
+<p>Разрыв между «знаю» и «делаю» закрывается механикой: слоты против распыления, ретро против самообмана, недельные квесты против длинной абстракции.</p>
+<p><b>Прогрессия освоения:</b> начни с Аллокаций → добавь Сезон, когда тик станет привычкой → шпаргалки этой вкладки для глубины.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--gold)">Ур.1</span><span class="rt">Дельта-Единица</span></summary>
+<div class="ref-body">
+<p><b>1 ДЕ = 100 часов.</b> Дельта = разница «было → стало»: измеряется приращение, не потраченное время. Разведка нового направления — 0,1–0,2 ДЕ; 1 ДЕ — достаточно данных для оценки направления.</p>
+<p>Погружение: ДЕ за 3–4 недели. Фоном: 2–3 месяца. Растяжка дольше ×1,5 от плана = провал аллокации независимо от метрик.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--violet)">Ур.3</span><span class="rt">Три уровня + отбор</span></summary>
+<div class="ref-body">
+<p><b>Core</b> — долгие активы (навыки, cash-flow, инфраструктура): не валидируется, не отсекается. <b>Experimental</b> — строго 1 слот: меньше распыления и decision fatigue. <b>Носитель</b> — тело и энергия: обслуживается до портфеля, час на фоне боли даёт 40–60% номинала.</p>
+<p><b>Цикл отбора:</b> разведка → полная аллокация → ретро → Удвоить / Пивот / Закрыть. Прошла отбор — следующая итерация больше. Kill-кнопка — досрочное закрытие по критериям, штатная операция.</p>
+<p>Дефицитный ресурс — слоты, не часы: реально 2–3 полных ДЕ в год.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Сезон · механика</span></summary>
+<div class="ref-body">
+<p><b>Сезон = 30/60/90 дней, одна бинарная цель.</b> План — треки с недельными нормами: твоя гипотеза «какой процесс произведёт цель». Целевые треки работают на цель, поддерживающие — инфраструктура сквозь сезоны.</p>
+<p><b>Недельный квест:</b> нормы всех треков + норма исходящих. Понедельник закрывает неделю автоматически (✓/✗ в историю), подряд — серия побед.</p>
+<p><b>Ретро сезона:</b> два независимых вопроса — «план исполнен?» (недели ✓/✗) и «цель достигнута?». Исполнен + не достигнута = гипотеза неверна, менять план. Не исполнен = чинить исполнение, не идею.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Шпаргалка: цель · исходящие · kill</span></summary>
+<div class="ref-body">
+<p><b>Цель — формула: проверяемый факт + число + к дню N.</b> Тест: посторонний скажет «да/нет» без объяснений. Шаблоны: «получен оффер», «N собеседований», «сдан тест уровня X», «опубликован/сдан», «первый платящий клиент», «N недель нормы без пропуска», «долг X закрыт». Не цель: «стать лучше», «развивать», «начать».</p>
+<p><b>Исходящие</b> — касание мира, где возможен отказ: отклик, письмо, питч, публикация. Не исходящие: учёба, тренировки, производство «в стол». Тапай в момент отправки.</p>
+<p><b>Kill-критерии</b> — записанные ДО старта условия «план не работает»: сигнал + порог + день проверки. Задним числом мозг подгонит критерии. Kill — отбор, не провал.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:#b08d6a">Свод</span><span class="rt">Принципы</span></summary>
+<div class="ref-body">
+<p><b>Глубина сильнее ширины</b> — второй ДЕ в ту же нишу дороже первого в новую. <b>Дистрибуция важнее продукта</b> — 50/50. <b>Доведение бьёт талант.</b></p>
+<p><b>Удовольствие не квотируется</b> — пики батчами, суверенная зона. Система нормирует слоты вложений, не жизнь.</p>
+<p><b>Трекер для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b></p>
+</div></details>`,
+en:`
+<details class="ref"><summary><span class="rtag" style="color:var(--gold)">TICAP</span><span class="rt">What it is</span></summary>
+<div class="ref-body">
+<p><b>Time Capital Allocation System</b> — manage time as capital. An hour either compounds into skill, income, health — or it's spent. TICAP makes compounding visible and manageable.</p>
+<p>The know–do gap is closed by mechanics: slots against scatter, retros against self-deception, weekly quests against long abstraction.</p>
+<p><b>Learning path:</b> start with Allocations → add the Season once tapping is a habit → this tab's cheat sheets for depth.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--gold)">L1</span><span class="rt">Delta Unit</span></summary>
+<div class="ref-body">
+<p><b>1 DU = 100 hours.</b> Delta = the "before → after" difference: what accrued, not what was spent. Scouting a new direction — 0.1–0.2 DU; 1 DU — enough data to judge a direction.</p>
+<p>Immersed: a DU in 3–4 weeks. Background: 2–3 months. Stretching past ×1.5 of plan = failed allocation regardless of metrics.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--violet)">L3</span><span class="rt">Three levels + selection</span></summary>
+<div class="ref-body">
+<p><b>Core</b> — long-term assets (skills, cash flow, infrastructure): never validated, never cut. <b>Experimental</b> — strictly 1 slot: less scatter, less decision fatigue. <b>Body</b> — your carrier: serviced before the portfolio; an hour in pain yields 40–60%.</p>
+<p><b>Selection cycle:</b> scout → full allocation → retro → Double / Pivot / Kill. Passed selection — next iteration is bigger. The kill button is early closure by criteria — a routine operation.</p>
+<p>The scarce resource is slots, not hours: realistically 2–3 full DUs a year.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--blue)">L4</span><span class="rt">Season · mechanics</span></summary>
+<div class="ref-body">
+<p><b>Season = 30/60/90 days, one binary goal.</b> The plan — tracks with weekly quotas: your hypothesis of "which process produces the goal". Target tracks work toward the goal; support tracks are cross-season infrastructure.</p>
+<p><b>Weekly quest:</b> all track quotas + outgoing quota. Monday closes the week automatically (✓/✗ into history); consecutive wins — a streak.</p>
+<p><b>Season retro:</b> two independent questions — "was the plan executed?" (weeks ✓/✗) and "was the goal reached?". Executed + not reached = wrong hypothesis, change the plan. Not executed = fix execution, not the idea.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:var(--blue)">L4</span><span class="rt">Cheat sheet: goal · outgoing · kill</span></summary>
+<div class="ref-body">
+<p><b>Goal formula: verifiable fact + number + by day N.</b> Test: a stranger says yes/no without explanations. Templates: "offer received", "N interviews", "level X test passed", "published/shipped", "first paying client", "N weeks of quota unbroken", "debt X closed". Not a goal: "get better", "develop", "start".</p>
+<p><b>Outgoing</b> — a touch of the world where rejection is possible: application, email, pitch, publication. Not outgoing: study, workouts, producing for the drawer. Tap at the moment of sending.</p>
+<p><b>Kill criteria</b> — written BEFORE the start: signal + threshold + check day. In hindsight the mind bends criteria. Kill is selection, not failure.</p>
+</div></details>
+<details class="ref"><summary><span class="rtag" style="color:#b08d6a">Code</span><span class="rt">Principles</span></summary>
+<div class="ref-body">
+<p><b>Depth beats breadth</b> — the second DU in the same niche pays more than the first in a new one. <b>Distribution beats production</b> — 50/50. <b>Finishing beats talent.</b></p>
+<p><b>Joy is not rationed</b> — peaks in batches, a sovereign zone. The system rations investment slots, not life.</p>
+<p><b>The tracker is for time you invest. Time you live doesn't need accounting.</b></p>
+</div></details>`};
+function refRender(){document.getElementById('ref-body').innerHTML=REF[lang]}
+
+/* ================= RENDER ================= */
+const seenAnim=new Set();let lastPct={},lastStat={};
+function animPass(){
+  document.querySelectorAll('.alloc[data-id],.trk[data-tid]').forEach(el=>{
+    const key=el.dataset.id?'a'+el.dataset.id:'t'+el.dataset.tid;
+    if(!seenAnim.has(key)){seenAnim.add(key);el.classList.add('anim-in')}
+  });
+  document.querySelectorAll('.fill[data-k]').forEach(f=>{
+    const k=f.dataset.k,now=parseFloat(f.dataset.p);
+    const prev=lastPct[k];
+    if(prev!=null&&prev!==now){
+      f.style.transition='none';f.style.width=prev+'%';
+      void f.offsetWidth;
+      f.style.transition='';f.style.width=now+'%';
+    }
+    lastPct[k]=now;
+  });
+  ['s-active','s-hours','s-de'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(lastStat[id]!=null&&lastStat[id]!==el.textContent){
+      el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
+    }
+    lastStat[id]=el.textContent;
+  });
+}
 function render(){
   for(const a of state.allocs){
     const rd=document.getElementById('rd-'+a.id);
     const rn=document.getElementById('rn-'+a.id);
     const rx=document.getElementById('rx-'+a.id);
     if(rd)a._rd=rd.value; if(rn)a._rn=rn.value; if(rx)a._rx=rx.value;
+    const rds=document.getElementById('rd-'+a.id+'-s');
+    const rns=document.getElementById('rn-'+a.id+'-s');
+    const rxs=document.getElementById('rx-'+a.id+'-s');
+    if(rds)a._rds=rds.value; if(rns)a._rns=rns.value; if(rxs)a._rxs=rxs.value;
   }
   const act=state.allocs.filter(a=>!a.retro);
   const done=state.allocs.filter(a=>a.retro);
-  const GMETA={core:['Core','var(--gold)'],exp:['Experimental — 1 слот','var(--violet)'],body:['Носитель','var(--ember)']};
+  const GM={core:['gCore','var(--gold)'],exp:['gExp','var(--violet)'],body:['gBody','var(--ember)']};
   const order=(state.lvlOrder&&state.lvlOrder.length===3)?state.lvlOrder:['core','exp','body'];
   let ah='';
   for(const k of order){
-    const [ttl,c]=GMETA[k];
+    const [tk,c]=GM[k];
     const list=act.filter(a=>(a.level||'core')===k);
     if(list.length)ah+='<div class="blk" data-level="'+k+'">'
       +'<div class="sec" style="margin:14px 0 9px;color:'+c+'">'
-      +'<span class="drag" style="font-size:13px;padding:6px 10px 6px 4px" onpointerdown="blkStart(event)">⠿</span>'+ttl+'</div>'
+      +'<span class="drag" style="font-size:13px;padding:6px 10px 6px 4px" onpointerdown="blkStart(event)">⠿</span>'+T(tk)+'</div>'
       +'<div class="glist" data-level="'+k+'">'+list.map(card).join('')+'</div></div>';
   }
-  document.getElementById('active-list').innerHTML=
-    ah||'<div class="empty">Нет открытых ставок.</div>';
+  document.getElementById('active-list').innerHTML=ah||'<div class="empty">'+T('emptyA')+'</div>';
   const ds=document.getElementById('done-sec');
   ds.style.display=done.length?'block':'none';
+  document.getElementById('done-sum').textContent=T('arch')(done.length);
   document.getElementById('done-list').innerHTML=done.map(card).join('');
   const hrs=state.allocs.reduce((s,a)=>s+a.done*0.5,0);
   const deClosed=done.reduce((s,a)=>s+(a.done/200),0);
@@ -991,8 +1602,23 @@ function render(){
   document.getElementById('s-hours').textContent=fmt(hrs);
   document.getElementById('s-de').textContent=fmt(deClosed,2);
   seasonPane();
+  animPass();
 }
-load();
+
+/* ================= МАНИФЕСТ + СТАРТ ================= */
+const manifest={
+  name:"TICAP",short_name:"TICAP",
+  start_url:location.href.split('#')[0],scope:"./",
+  display:"standalone",background_color:"#0d1014",theme_color:"#0d1014",
+  icons:[{src:"data:image/svg+xml,"+encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'+
+    '<rect width="512" height="512" fill="#0d1014"/>'+
+    '<rect x="146" y="146" width="220" height="220" transform="rotate(45 256 256)" fill="#1c150a" stroke="#c9a227" stroke-width="14"/>'+
+    '<text x="256" y="292" font-family="Georgia,serif" font-size="120" font-weight="bold" fill="#c9a227" text-anchor="middle">\u0394E</text></svg>'),
+    sizes:"any",type:"image/svg+xml",purpose:"any"}]
+};
+document.getElementById('mf').href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+updMute();load();
 </script>
 </body>
 </html>
