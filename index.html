@@ -19,11 +19,11 @@
     --scrim:rgba(6,8,10,.82);
   }
   [data-theme="light"]{
-    --bg:#e6ddc7; --card:#f4eddb; --sub:#eae0c9; --line:#c3b28c;
+    --bg:#f0ece2; --card:#fefdf9; --sub:#f4f0e5; --line:#c6b585;
     --text:#241c0d; --dim:#6e6350; --gold:#7c5e08; --ember:#9a3a25;
     --teal:#1d6151; --violet:#52458e; --blue:#2b5a80;
-    --bgc-core:#f1e6c6; --bgc-exp:#ebe4f0; --bgc-body:#f2e0d4;
-    --glow:radial-gradient(ellipse 700px 400px at 50% -80px,#f6efdb 0%,transparent 60%);
+    --bgc-core:#fbf4dc; --bgc-exp:#f3f0fa; --bgc-body:#faeee2;
+    --glow:radial-gradient(ellipse 700px 400px at 50% -80px,#fbf8f0 0%,transparent 60%);
     --scrim:rgba(42,34,18,.5);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -285,7 +285,7 @@
     box-shadow:0 1px 3px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.025)}
   [data-theme="light"] .box,[data-theme="light"] .alloc,[data-theme="light"] .stat,
   [data-theme="light"] .ref,[data-theme="light"] details.addf summary{
-    box-shadow:0 1px 3px rgba(90,75,40,.12),inset 0 1px 0 rgba(255,255,255,.6)}
+    box-shadow:0 2px 8px rgba(150,118,30,.14),0 1px 2px rgba(120,95,30,.1),inset 0 1px 0 rgba(255,255,255,.9)}
   .btn-g,.btn30,.t-btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 1px 2px rgba(0,0,0,.3)}
   .btn-out{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 1px 2px rgba(0,0,0,.3)}
   .bar{box-shadow:inset 0 2px 5px rgba(0,0,0,.35)}
@@ -450,7 +450,7 @@ ru:{
  killLbl:'Kill-критерии',edit:'✎ править',cancelS:'✕ отменить',cancelSArm:'точно отменить?',
  killS:'kill · закрыть досрочно',
  pauseBtn:'⏸ пауза',pauseT:'Пауза сезона — протокол деградации',
- pauseWhy:'Причина',pw1:'Болезнь',pw2:'Форс-мажор',pw3:'Обострение хронического (спина и т.п.)',
+ pauseWhy:'Причина',pw1:'Болезнь',pw2:'Форс-мажор',pw3:'Отпуск / поездка',
  pauseUntil:'Дата возврата (макс. 14 дней)',pauseNote:'Комментарий (необязательно)',
  pauseGo:'ОБЪЯВИТЬ ПАУЗУ',pauseOn:d=>'⏸ Пауза до '+d,pauseBack:'вернуться раньше',
  pauseLim:'Лимит пауз исчерпан (1 за сезон). Дальше честно: kill сезона или ребаланс норм.',
@@ -565,7 +565,7 @@ en:{
  killLbl:'Kill criteria',edit:'✎ edit',cancelS:'✕ cancel',cancelSArm:'sure?',
  killS:'kill · close early',
  pauseBtn:'⏸ pause',pauseT:'Season pause — degradation protocol',
- pauseWhy:'Reason',pw1:'Illness',pw2:'Force majeure',pw3:'Chronic flare-up (back etc.)',
+ pauseWhy:'Reason',pw1:'Illness',pw2:'Force majeure',pw3:'Vacation / trip',
  pauseUntil:'Return date (max 14 days)',pauseNote:'Comment (optional)',
  pauseGo:'DECLARE PAUSE',pauseOn:d=>'⏸ Paused until '+d,pauseBack:'return early',
  pauseLim:'Pause limit reached (1 per season). Next: season kill or quota rebalance.',
@@ -1724,7 +1724,7 @@ ru:`
 <p><b>Сезон</b> = 30/60/90 дней, одна бинарная цель.</p>
 <p><b>План</b> — треки с недельными нормами: гипотеза «какой процесс произведёт цель». Уровни треков: Цель сезона / Ядро / Эксперимент / Носитель.</p>
 <p><b>Квесты недели:</b> каждый трек — отдельный квест со своей нормой. Неделя ✓ = все квесты закрыты + норма исходящих. Неделя длится 7 дней от даты старта сезона и закрывается автоматически (✓/✗ в историю); подряд — серия побед.</p>
-<p><b>Пауза</b> — протокол деградации: причина (болезнь / форс-мажор / носитель) + дата возврата ≤14 дней, 1 раз за сезон. Недели паузы — ⏸, серия ждёт. Вторая пауза = kill сезона или ребаланс.</p>
+<p><b>Пауза</b> — протокол деградации: причина (болезнь / форс-мажор / отпуск) + дата возврата ≤14 дней, 1 раз за сезон. Недели паузы — ⏸, серия ждёт. Вторая пауза = kill сезона или ребаланс.</p>
 <p><b>Ретро сезона</b> — два независимых вопроса: «план исполнен?» (недели ✓/✗) и «цель достигнута?». Исполнен + не достигнута = гипотеза неверна, менять план. Не исполнен = чинить исполнение, не идею.</p>
 </div></details>
 <details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Шпаргалка: цель · исходящие · kill</span></summary>
@@ -1839,7 +1839,7 @@ en:`
 <p><b>Season</b> = 30/60/90 days, one binary goal.</p>
 <p><b>Plan</b> — tracks with weekly quotas: the hypothesis of which process produces the goal. Track levels: Season goal / Core / Experimental / Body.</p>
 <p><b>Weekly quest:</b> all track quotas + outgoing quota. Monday closes the week automatically (✓/✗ into history); consecutive wins — a streak.</p>
-<p><b>Pause</b> — degradation protocol: reason (illness / force majeure / body) + return date ≤14 days, once per season. Paused weeks show ⏸, the streak waits. A second pause = season kill or rebalance.</p>
+<p><b>Pause</b> — degradation protocol: reason (illness / force majeure / vacation) + return date ≤14 days, once per season. Paused weeks show ⏸, the streak waits. A second pause = season kill or rebalance.</p>
 <p><b>Season retro</b> — two independent questions: "was the plan executed?" and "was the goal reached?". Executed + not reached = wrong hypothesis, change the plan. Not executed = fix execution, not the idea.</p>
 </div></details>
 <details class="ref"><summary><span class="rtag" style="color:var(--blue)">L4</span><span class="rt">Cheat sheet: goal · outgoing · kill</span></summary>
