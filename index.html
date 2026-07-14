@@ -455,6 +455,7 @@ ru:{
  pauseGo:'ОБЪЯВИТЬ ПАУЗУ',pauseOn:d=>'⏸ Пауза до '+d,pauseBack:'вернуться раньше',
  pauseLim:'Лимит пауз исчерпан (1 за сезон). Дальше честно: kill сезона или ребаланс норм.',
  pauseErrD:'Дата возврата обязательна, не дальше 14 дней.',
+ backArm:'точно вернуться?',pauseRes:'Пауза возобновлена до прежней даты — лимит не потрачен.',
  pausePlate:'⏸ ПАУЗА',pauseSt:'⏸ пауза · треки заморожены, серия ждёт',
  allocFull:'Аллокация заполнена — ретро на вкладке Аллокации',
  retroWait:'⚑ ретро ждёт на вкладке Аллокации',
@@ -570,6 +571,7 @@ en:{
  pauseGo:'DECLARE PAUSE',pauseOn:d=>'⏸ Paused until '+d,pauseBack:'return early',
  pauseLim:'Pause limit reached (1 per season). Next: season kill or quota rebalance.',
  pauseErrD:'Return date required, max 14 days ahead.',
+ backArm:'sure?',pauseRes:'Pause resumed until the original date — limit not spent.',
  pausePlate:'⏸ PAUSED',pauseSt:'⏸ paused · tracks frozen, streak waits',
  allocFull:'Allocation filled — retro on the Allocations tab',
  retroWait:'⚑ retro awaits on Allocations',
@@ -1193,7 +1195,7 @@ function ensureWeek(){
   const s=state.season;if(!s)return;
   if(s.pause&&Date.now()>s.pause.until){
     s.pauses=s.pauses||[];
-    s.pauses.push({from:s.pause.ts,to:s.pause.until,why:s.pause.why});
+    s.pauses.push({from:s.pause.ts,to:s.pause.until,why:s.pause.why,note:s.pause.note||'',until:s.pause.until});
     s.pause=null;
   }
   if(!s.wk)s.wk={start:s.start,done:{},notes:{}};
@@ -1218,8 +1220,17 @@ function ensureWeek(){
     s.wk={start:end,done:{},notes:{}};g++;
   }
 }
+function pwName(k){return ({ill:T('pw1'),fm:T('pw2'),vac:T('pw3')})[k]||k}
 function pauseCount(){const s=state.season;return s?((s.pauses||[]).length+(s.pause?1:0)):0}
 function openPause(){
+  const s=state.season;if(!s)return;
+  const lp=(s.pauses||[])[(s.pauses||[]).length-1];
+  if(!s.pause&&lp&&lp.until&&Date.now()<lp.until){
+    /* возврат был ошибочным — возобновляем ту же паузу, лимит не тратится */
+    s.pauses.pop();
+    s.pause={why:lp.why,until:lp.until,note:lp.note||'',ts:Date.now()};
+    save();render();showOk(T('pauseRes'));return;
+  }
   if(pauseCount()>=1){showErr(T('pauseLim'));return}
   window._pauseForm=true;render();
 }
@@ -1237,9 +1248,11 @@ function startPause(){
 }
 function endPause(){
   const s=state.season;if(!s||!s.pause)return;
-  s.pauses=s.pauses||[];
-  s.pauses.push({from:s.pause.ts,to:Date.now(),why:s.pause.why});
-  s.pause=null;save();render();
+  arm('pz',()=>{
+    s.pauses=s.pauses||[];
+    s.pauses.push({from:s.pause.ts,to:Date.now(),why:s.pause.why,note:s.pause.note||'',until:s.pause.until});
+    s.pause=null;save();render();
+  });
 }
 function wkNote(tid,v){
   const s=state.season;if(!s)return;
@@ -1503,9 +1516,9 @@ function seasonPane(){
       </div>`;
       if(s.pause){
         html+=`<div class="box" style="border-color:var(--line)">
-          <div class="r-title" style="color:var(--dim)">${T('pauseOn')(dstr(s.pause.until))} · ${s.pause.why}</div>
+          <div class="r-title" style="color:var(--dim)">${T('pauseOn')(dstr(s.pause.until))} · ${pwName(s.pause.why)}</div>
           ${s.pause.note?`<div class="s-meta" style="margin-top:0">${esc(s.pause.note)}</div>`:''}
-          <div class="a-actions"><button class="btn-sm" style="flex:1" onclick="endPause()">${T('pauseBack')}</button></div>
+          <div class="a-actions"><button class="btn-sm" style="flex:1${armed['pz']?';border-color:var(--ember);color:var(--ember)':''}" onclick="endPause()">${armed['pz']?T('backArm'):T('pauseBack')}</button></div>
         </div>`;
       }
       if(window._pauseForm&&!s.pause){
@@ -1515,7 +1528,7 @@ function seasonPane(){
           <div class="r-title" style="color:var(--dim)">${T('pauseT')}</div>
           <div class="lbl">${T('pauseWhy')}</div>
           <select id="pz-why">
-            <option>${T('pw1')}</option><option>${T('pw2')}</option><option>${T('pw3')}</option>
+            <option value="ill">${T('pw1')}</option><option value="fm">${T('pw2')}</option><option value="vac">${T('pw3')}</option>
           </select>
           <div class="lbl">${T('pauseUntil')}</div>
           <input type="date" id="pz-until" min="${minD}" max="${maxD}"
