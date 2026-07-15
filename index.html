@@ -352,32 +352,38 @@
   .btn-kill{background:linear-gradient(180deg,#241a19,#171010);letter-spacing:.05em}
   /* окно помодоро + боковые кнопки */
   .mech{display:flex;gap:8px;margin-top:11px;align-items:stretch}
-  .mech-side{display:flex;flex-direction:column;gap:7px;width:62px;flex:none}
-  .mech-side .btn-sm,.mech-side .t-sm{flex:1;padding:4px;font-size:12px}
-  /* окно помодоро: тёмное стекло, крупный отсчёт */
-  .pomo{flex:1;min-width:0;min-height:106px;border-radius:8px;position:relative;
+  /* окно помодоро: компактная планка, «наливается» золотом снизу вверх */
+  .pomo{flex:1;min-width:0;min-height:62px;border-radius:8px;position:relative;overflow:hidden;
     border:1px solid rgba(0,0,0,.65);
     background:linear-gradient(180deg,#0b0d10,#07080a);
     box-shadow:inset 0 3px 10px rgba(0,0,0,.75),inset 0 -1px 0 rgba(255,255,255,.04);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:4px;padding:10px 12px 16px;contain:layout paint}
-  .trk .pomo{min-height:88px}
-  .pomo-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--dim);opacity:.8}
-  .pomo-time{font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:600;
-    color:var(--dim);letter-spacing:.06em;line-height:1.1;font-variant-numeric:tabular-nums}
-  .pomo.run .pomo-time{color:var(--gold);text-shadow:0 0 14px rgba(213,162,68,.4)}
-  .pomo-act{display:flex;gap:7px;margin-top:4px}
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;padding:7px 9px 7px 13px;contain:layout paint}
+  /* золотая жидкость: уровень = прошедшее время сессии */
+  .pomo-liquid{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(233,190,90,.36),rgba(122,95,20,.52));
+    box-shadow:inset 0 2px 5px -2px rgba(255,230,160,.55);
+    transition:height 1s linear}
+  /* гребень волны на поверхности; дрейф — только transform (композитор) */
+  .pomo-liquid::before{content:"";position:absolute;top:-6px;left:0;
+    width:calc(100% + 24px);height:7px;
+    background:radial-gradient(13px 7px at 12px 8px,rgba(233,190,90,.7) 0 55%,transparent 64%);
+    background-size:24px 7px;background-repeat:repeat-x}
+  .pomo.run .pomo-liquid::before{animation:pomoWave 3.2s linear infinite}
+  @keyframes pomoWave{to{transform:translateX(-24px)}}
+  .pomo-info{position:relative;z-index:1;display:flex;flex-direction:column;gap:1px;min-width:0}
+  .pomo-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--dim);opacity:.85}
+  .pomo-time{font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:600;
+    color:var(--dim);letter-spacing:.05em;line-height:1.05;font-variant-numeric:tabular-nums;
+    text-shadow:0 1px 3px rgba(0,0,0,.6)}
+  .pomo.run .pomo-time{color:var(--gold);text-shadow:0 0 14px rgba(213,162,68,.4),0 1px 3px rgba(0,0,0,.6)}
+  .pomo-act{position:relative;z-index:1;display:flex;gap:6px}
   .pomo-act button{background:var(--sub);border:1px solid var(--line);border-radius:7px;
-    color:var(--dim);font-size:12px;line-height:1;padding:8px 15px;cursor:pointer;
+    color:var(--dim);font-size:12px;line-height:1;padding:11px 13px;cursor:pointer;
     font-family:'JetBrains Mono',monospace;touch-action:manipulation}
-  .pomo-act .pomo-go{border-color:var(--gold);color:var(--gold);min-width:62px}
+  .pomo-act .pomo-go{border-color:var(--gold);color:var(--gold);min-width:52px}
   .pomo-act button:active{transform:scale(.94)}
-  .pomo-bar{position:absolute;left:8px;right:8px;bottom:7px;height:4px;border-radius:3px;
-    background:rgba(0,0,0,.5);overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
-  .pomo-fill{height:100%;width:0;border-radius:3px;
-    background:linear-gradient(90deg,#7a5f14,var(--gold));transition:width 1s linear}
-  .pomo.run .pomo-fill{box-shadow:0 0 8px rgba(213,162,68,.5)}
   body{background-image:var(--glow),
     radial-gradient(130% 100% at 50% 8%,transparent 50%,rgba(0,0,0,.6) 100%)}
   /* шкалы как на макете: тонкие плёночные колбы с мелкой сеткой */
@@ -492,8 +498,8 @@
      3) html.no-trans на момент смены темы гасит все transition/animation,
         чтобы новая палитра применялась одним кадром, без волны перекрасок */
   .alloc,.trk,.ref{content-visibility:auto}
-  .alloc{contain-intrinsic-size:auto 430px}
-  .trk{contain-intrinsic-size:auto 330px}
+  .alloc{contain-intrinsic-size:auto 390px}
+  .trk{contain-intrinsic-size:auto 300px}
   .ref{contain-intrinsic-size:auto 54px}
   .pomo,.tape{contain:layout paint}
   html.no-trans *,html.no-trans *::before,html.no-trans *::after{
@@ -619,12 +625,14 @@
 
   /* окно помодоро в светлой теме: тёплая мастерская */
   .pomo{border-color:rgba(150,125,65,.55);
-    background:
-      radial-gradient(170px 90px at 50% 112%,rgba(205,140,35,.18),transparent 70%),
-      linear-gradient(180deg,#e6ddc4,#d0c6a9);
+    background:linear-gradient(180deg,#e6ddc4,#d0c6a9);
     box-shadow:inset 0 2px 8px rgba(110,90,45,.35),inset 0 -1px 0 rgba(255,255,255,.5)}
-  .pomo-bar{background:rgba(90,75,40,.25);box-shadow:inset 0 1px 2px rgba(90,75,40,.3)}
+  .pomo-liquid{background:linear-gradient(180deg,rgba(205,140,35,.4),rgba(154,110,25,.5));
+    box-shadow:inset 0 2px 5px -2px rgba(255,255,255,.6)}
+  .pomo-liquid::before{background:radial-gradient(13px 7px at 12px 8px,rgba(154,110,25,.6) 0 55%,transparent 64%);
+    background-size:24px 7px;background-repeat:repeat-x}
   .pomo-act button{background:rgba(255,253,246,.7)}
+  .pomo-time{text-shadow:none}
   .pomo.run .pomo-time{text-shadow:none}
 
   /* ═══ LIGHT · MINIMAL PREMIUM: чистый свет, гладкие плоскости, сдержанная латунь ═══ */
@@ -684,7 +692,8 @@
   /* окно помодоро: тихая графика, без огня */
   .pomo{border-color:var(--line);background:var(--sub);
     box-shadow:inset 0 1px 3px rgba(60,50,25,.1)}
-  .pomo-bar{background:rgba(60,50,25,.12);box-shadow:none}
+  .pomo-liquid{background:linear-gradient(180deg,rgba(154,123,30,.22),rgba(154,123,30,.4));
+    box-shadow:none}
   .pomo-act button{background:var(--card)}
   /* лента-шкала в светлой теме */
   .tape{background:var(--sub);border-color:var(--line);
@@ -703,6 +712,69 @@
   .trk{box-shadow:0 1px 2px rgba(60,50,25,.05),0 6px 18px rgba(60,50,25,.05)}
   .onb-card{box-shadow:0 20px 60px rgba(40,32,15,.25)}
   .err{box-shadow:0 8px 28px rgba(40,32,15,.2)}
+
+  /* ═══ LIGHT · PREMIUM v3: тёплая бумага, карточки-слоновая кость отделены
+     от фона тенью и светом, латунные акценты. Финальный слой — побеждает. ═══ */
+  :root{
+    --bg:#e9e3d3;          /* фон заметно темнее карточек — они больше не сливаются */
+    --card:#fffefa;--sub:#f4efe1;--line:#d4c9ab;
+    --text:#211b0f;--dim:#6b6250;--gold:#8f6f14;
+    --bgc-core:#fdf7e3;--bgc-exp:#f4f0fb;--bgc-body:#fbeee0;
+  }
+  body{background:var(--bg)}
+  /* глубина фона: тёплый градиент-бумага с мягким светом сверху и виньеткой */
+  body::before{background-image:
+      radial-gradient(1000px 460px at 50% -140px,rgba(255,255,255,.9),transparent 62%),
+      radial-gradient(880px 660px at 90% 110%,rgba(176,140,58,.16),transparent 62%),
+      radial-gradient(880px 660px at -8% 112%,rgba(110,95,60,.12),transparent 60%),
+      linear-gradient(180deg,#f0ebde 0%,#e7e0cd 52%,#ded5bd 100%)!important}
+  body::after{background:radial-gradient(125% 95% at 50% 8%,transparent 60%,rgba(95,78,40,.10) 100%)}
+  /* карточки: слоновая кость, световая кромка сверху, двойная мягкая тень */
+  .box,.alloc,.trk,.stat,.ref,details.addf summary{
+    background:linear-gradient(180deg,#fffefa 0%,#fbf6ea 100%);
+    border-color:var(--line);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
+      0 1px 2px rgba(95,78,40,.10),0 12px 30px rgba(95,78,40,.14)}
+  /* меню-вкладки: приподнятая планка с латунной риской у активной */
+  .tabs{background:linear-gradient(180deg,#fffefa,#f2ecdc);
+    border-color:#cfc3a2;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),
+      0 2px 4px rgba(95,78,40,.10),0 10px 26px rgba(95,78,40,.18)}
+  .tab{color:#776d58}
+  .tab.on{background:linear-gradient(180deg,#f8f3e4,#f0e9d4);
+    border-color:rgba(143,111,20,.5);color:#6d520c;
+    box-shadow:inset 0 -2px 0 rgba(143,111,20,.65),inset 0 1px 2px rgba(120,95,30,.10);
+    text-shadow:none}
+  /* шапка: гравированная латунь */
+  h1{background:linear-gradient(180deg,#8f6f14 0%,#5d470c 55%,#3c2e08 100%);
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.85))}
+  .subt{color:#8f6f14;opacity:.9}
+  .gem{background:linear-gradient(135deg,#fdf6e0,#eddfb2);border-color:#8f6f14;
+    box-shadow:0 0 14px rgba(143,111,20,.28),inset 0 1px 0 rgba(255,255,255,.85),
+      0 2px 6px rgba(95,78,40,.25)}
+  .gem span{color:#6d520c}
+  .stat .v{color:#7c5e08}
+  /* поля и мелкие кнопки: белые на тёплом фоне, чёткий контур */
+  input[type=text],textarea,select{background:#fffefa;border-color:#d4c9ab}
+  .btn-sm,.t-sm,.b-btn{background:#fffefa;border-color:#d0c5a6;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 3px rgba(95,78,40,.12)}
+  .backup{background:rgba(238,232,218,.97);border-top-color:#cfc3a2;opacity:1}
+  .bar{background:#efe9d7;border-color:#d4c9ab;
+    box-shadow:inset 0 2px 4px rgba(95,78,40,.16),0 1px 0 rgba(255,255,255,.7)}
+  .tape{background:#efe9d7;border-color:#d4c9ab}
+  .empty{border-color:#cfc3a2;color:#8a7f68}
+  /* помодоро: латунная ванна чуть глубже карточки */
+  .pomo{background:linear-gradient(180deg,#f0ead8,#e5dcc2);border-color:#cfc3a2;
+    box-shadow:inset 0 2px 6px rgba(95,78,40,.18),inset 0 -1px 0 rgba(255,255,255,.6)}
+  .pomo-liquid{background:linear-gradient(180deg,rgba(176,140,58,.34),rgba(143,111,20,.5));
+    box-shadow:inset 0 2px 5px -2px rgba(255,255,255,.65)}
+  .pomo-act button{background:#fffefa;border-color:#d0c5a6}
+  .pomo-act .pomo-go{border-color:#8f6f14;color:#6d520c}
+  .lvl{background:rgba(255,255,255,.55)}
+  /* kill: приглушённая терракота вместо яркого красного */
+  .btn-kill{border-color:#cfa392;color:#96432f;background:#fffefa}
 </style>
 <script>/* включаем нужный бандл до первой отрисовки — без FOUC */
 (function(){var th='dark';try{th=localStorage.getItem('de_theme')||'dark'}catch(e){}
@@ -1072,7 +1144,7 @@ function applyTheme(){
   document.getElementById('css-light').disabled=th!=='light';
   de.setAttribute('data-theme',th);
   document.getElementById('theme-btn').textContent=th==='dark'?'☾':'☀';
-  document.querySelector('meta[name=theme-color]').content=th==='dark'?'#0d1014':'#f7f5f0';
+  document.querySelector('meta[name=theme-color]').content=th==='dark'?'#0d1014':'#e9e3d3';
   requestAnimationFrame(()=>requestAnimationFrame(()=>de.classList.remove('no-trans')));
 }
 function toggleTheme(){
@@ -1340,6 +1412,13 @@ function snd(type,pct){
       piano(220,t,1.0,0.075);piano(174.61,t+0.14,1.3,0.065);
     }else if(type==='out'){
       piano(392,t,0.8,0.085);piano(523.25,t+0.09,1.0,0.08);
+    }else if(type==='pomo'){
+      /* завершение помодоро: тёплый колокольчик — восходящее трезвучие C-E-G,
+         искра октавой выше и мягкая гитарная подложка */
+      gtr(261.63,t,0.9,0.05);
+      [523.25,659.25,783.99].forEach((f,i)=>piano(f,t+i*0.11,1.15,0.07));
+      piano(1046.5,t+0.34,1.7,0.05);
+      piano(1318.5,t+0.5,1.5,0.03);
     }else{
       /* движение шкалы (+30 / −30): тик часов, тик и так чередуются */
       tickAlt=!tickAlt;
@@ -1490,14 +1569,14 @@ function addAlloc(){
   const actN=state.allocs.filter(x=>!x.retro&&!x.killed&&x.done<x.total).length;
   if(actN>=4)showOk(T('manyA'));
 }
-function tick(id,delta){
+function tick(id,delta,quiet){
   const a=state.allocs.find(x=>x.id===id);if(!a)return;
   const prev=a.done;
   a.done=Math.max(0,Math.min(a.total,a.done+delta));
   if(a.done===prev)return; /* граница шкалы — ничего не изменилось */
   if(delta>0){
     if(a.done>=a.total){snd('full');celebrate();}
-    else snd('tick',Math.round(a.done/a.total*100));
+    else if(!quiet)snd('tick',Math.round(a.done/a.total*100));
   }
   else{
     snd('tick',Math.round(a.done/a.total*100));
@@ -1640,13 +1719,15 @@ function pomoRow(k){
   const p=pomoGet(k);
   const pct=Math.max(0,Math.min(100,(POMO_LEN-p.left)/POMO_LEN*100));
   return `<div class="pomo${p.run?' run':''}" data-pk="${k}">
-    <span class="pomo-lbl">${T('pomoT')}</span>
-    <span class="pomo-time">${pomoFmt(p.left)}</span>
+    <i class="pomo-liquid" style="height:${pct}%"></i>
+    <div class="pomo-info">
+      <span class="pomo-lbl">${T('pomoT')}</span>
+      <span class="pomo-time">${pomoFmt(p.left)}</span>
+    </div>
     <div class="pomo-act">
       <button class="pomo-go" onclick="pomoToggle('${k}')" aria-label="start/pause">${p.run?'❚❚':'▶'}</button>
       <button onclick="pomoReset('${k}')" aria-label="reset">↺</button>
     </div>
-    <div class="pomo-bar"><i class="pomo-fill" style="width:${pct}%"></i></div>
   </div>`;
 }
 function pomoPaint(k){
@@ -1654,7 +1735,7 @@ function pomoPaint(k){
   const p=pomoGet(k);
   w.classList.toggle('run',p.run);
   w.querySelector('.pomo-time').textContent=pomoFmt(p.left);
-  w.querySelector('.pomo-fill').style.width=Math.max(0,Math.min(100,(POMO_LEN-p.left)/POMO_LEN*100))+'%';
+  w.querySelector('.pomo-liquid').style.height=Math.max(0,Math.min(100,(POMO_LEN-p.left)/POMO_LEN*100))+'%';
   w.querySelector('.pomo-go').textContent=p.run?'❚❚':'▶';
 }
 function pomoToggle(k){
@@ -1674,10 +1755,10 @@ function pomoReset(k){
   pomoSave();pomoPaint(k);
 }
 function pomoFinish(k){
-  snd('out'); /* звонок завершения — поверх обычного звука чекпоинта */
+  snd('pomo'); /* колокольчик завершения сессии; щелчок чекпоинта глушим (quiet) */
   showOk(T('pomoDone'));
-  if(k[0]==='a')tick(k.slice(1),1);
-  else trackTick(k.slice(1),1);
+  if(k[0]==='a')tick(k.slice(1),1,true);
+  else trackTick(k.slice(1),1,true);
 }
 function pomoBeat(){ /* один такт: обновить идущие, завершить дошедшие до нуля */
   const n=Date.now();let any=false;
@@ -1745,15 +1826,12 @@ function card(a){
   const bc=barCol(pct);
   let actions='';
   if(!full&&!a.killed&&!a.retro){
-    actions=`<div class="mech">${pomoRow('a'+a.id)}
-      <div class="mech-side">
-        <button class="btn-sm" onclick="tick('${a.id}',-1)">−30</button>
-        <button class="btn-sm" style="color:var(--teal);border-color:var(--teal)" onclick="doneAlloc('${a.id}')">✓</button>
-        <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">${T('kill')}</button>
-      </div>
-    </div>
+    actions=`<div class="mech">${pomoRow('a'+a.id)}</div>
     <div class="a-actions">
       <button class="btn30" onclick="tick('${a.id}',1)">${T('min30')}</button>
+      <button class="btn-sm" onclick="tick('${a.id}',-1)">−30</button>
+      <button class="btn-sm" style="color:var(--teal);border-color:var(--teal)" onclick="doneAlloc('${a.id}')">✓</button>
+      <button class="btn-sm btn-kill" onclick="killAlloc('${a.id}')">${T('kill')}</button>
     </div>`;
   }
   return `<div class="alloc ${cls}" data-id="${a.id}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
@@ -1856,7 +1934,7 @@ function streak(){
   return n;
 }
 function goAlloc(){const t=document.querySelector('.tab[data-p="p-alloc"]');if(t)swTab(t);window.scrollTo({top:0,behavior:'smooth'})}
-function trackTick(tid,delta){
+function trackTick(tid,delta,quiet){
   const s=state.season;if(!s)return;
   ensureWeek();
   const cur=s.wk.done[tid]||0;
@@ -1882,7 +1960,7 @@ function trackTick(tid,delta){
     const need=tr?Math.round(tr.norm*2):0;
     if(allocDone){snd('full');celebrate();showOk(T('allocFull'));}
     else if(need>0&&cur<need&&s.wk.done[tid]>=need){snd('full');celebrate();}
-    else snd('tick',need>0?Math.min(100,Math.round(s.wk.done[tid]/need*100)):0);
+    else if(!quiet)snd('tick',need>0?Math.min(100,Math.round(s.wk.done[tid]/need*100)):0);
   }
   else if(delta<0&&s.wk.done[tid]<cur){
     const need=tr?Math.round(tr.norm*2):0;
@@ -2045,11 +2123,10 @@ function trackCard(tr){
     ${s.pause?`<div class="t-act"><div style="flex:1;text-align:center;padding:10px;border:1px dashed var(--line);border-radius:7px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">${T('pausePlate')}</div></div>`:closedWeek?`<div class="t-act">
       <div style="flex:1;text-align:center;padding:10px;border:1px dashed var(--teal);border-radius:7px;color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">${T('normClosed')}</div>
       <button class="t-sm" onclick="trackTick('${tr.id}',-1)">−30</button>
-    </div>`:`<div class="mech">${pomoRow('t'+tr.id)}
-      <div class="mech-side"><button class="t-sm" style="flex:1" onclick="trackTick('${tr.id}',-1)">−30</button></div>
-    </div>
+    </div>`:`<div class="mech">${pomoRow('t'+tr.id)}</div>
     <div class="t-act">
       <button class="t-btn" onclick="trackTick('${tr.id}',1)">${T('min30')}</button>
+      <button class="t-sm" onclick="trackTick('${tr.id}',-1)">−30</button>
     </div>`}
   </div>`;
 }
