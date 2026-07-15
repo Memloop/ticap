@@ -23,6 +23,8 @@
     --tick:rgba(255,255,255,.15); --tickH:rgba(255,255,255,.25); --tickM:rgba(233,190,90,.7);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  /* без задержки клика/двойного тапа на телефонах — нажатие срабатывает мгновенно */
+  button,.tab,.opt,.edit,.lvl,.b-btn,.btn-sm,.t-sm,.t-btn,.btn30,summary{touch-action:manipulation}
   body{
     background:var(--bg);background-image:var(--glow);
     color:var(--text);font-family:'Inter',sans-serif;font-size:15px;
@@ -1202,13 +1204,15 @@ function toast(t,ok){
 function showErr(t){toast(t,false)}
 function showOk(t){toast(t,true)}
 function swTab(el){
+  if(el.classList.contains('on'))return; /* повторный тап по активной вкладке — ничего не делаем */
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on','slide'));
+  /* сброс анимации, пока ВСЕ панели скрыты — layout пустой страницы дёшев;
+     раньше reflow форсировался уже после показа тяжёлой панели */
+  void document.body.offsetWidth;
   el.classList.add('on');
   const p=document.getElementById(el.dataset.p);
-  p.classList.add('on');
-  void p.offsetWidth;
-  p.classList.add('slide');
+  p.classList.add('on','slide');
 }
 function weekStart(ts){
   const d=new Date(ts);const day=(d.getDay()+6)%7;
@@ -1218,7 +1222,14 @@ function dstr(ts){const d=new Date(ts);return String(d.getDate()).padStart(2,'0'
 
 /* ================= ЗВУК + САЛЮТ ================= */
 let actx=null,lastTap={x:200,y:200};
-document.addEventListener('pointerdown',e=>{lastTap={x:e.clientX,y:e.clientY}},true);
+document.addEventListener('pointerdown',e=>{
+  lastTap={x:e.clientX,y:e.clientY};
+  /* прогрев звука: контекст создаётся/возобновляется уже на pointerdown,
+     к моменту click тик воспроизводится без задержки запуска */
+  if(localStorage.getItem('de_mute')!=='1'){
+    try{audioInit();if(actx&&actx.state==='suspended')actx.resume()}catch(_){}
+  }
+},true);
 let verb=null,wetG=null,dryG=null;
 function audioInit(){
   if(actx)return;
@@ -1291,16 +1302,19 @@ function voice(f,st,dur,vol){
     o.start(st);o.stop(st+dur+0.05);
   });
 }
-let tickAlt=false;
+let tickAlt=false,tickNB=null;
 function clockTick(st,alt){
   /* механический тик часов: щелчок анкера (узкополосный шум) +
      короткий звон оси + глухой отклик деревянного корпуса; тик/так чередуются */
   const out=actx.createGain();out.gain.value=1;out.connect(dryG);
-  const nl=Math.floor(actx.sampleRate*0.03);
-  const nb=actx.createBuffer(1,nl,actx.sampleRate);
-  const nd=nb.getChannelData(0);
-  for(let i=0;i<nl;i++)nd[i]=(Math.random()*2-1)*Math.pow(1-i/nl,3.4);
-  const src=actx.createBufferSource();src.buffer=nb;
+  /* шумовой буфер один раз, а не на каждое нажатие */
+  if(!tickNB){
+    const nl=Math.floor(actx.sampleRate*0.03);
+    tickNB=actx.createBuffer(1,nl,actx.sampleRate);
+    const nd=tickNB.getChannelData(0);
+    for(let i=0;i<nl;i++)nd[i]=(Math.random()*2-1)*Math.pow(1-i/nl,3.4);
+  }
+  const src=actx.createBufferSource();src.buffer=tickNB;
   const bp=actx.createBiquadFilter();bp.type='bandpass';
   bp.frequency.value=alt?2100:2700;bp.Q.value=6.5;
   const ng=actx.createGain();ng.gain.setValueAtTime(0.55,st);
@@ -1490,16 +1504,24 @@ function tick(id,delta){
   const a=state.allocs.find(x=>x.id===id);if(!a)return;
   const prev=a.done;
   a.done=Math.max(0,Math.min(a.total,a.done+delta));
-  if(delta>0&&a.done>prev){
+  if(a.done===prev)return; /* граница шкалы — ничего не изменилось */
+  if(delta>0){
     spinGears('a'+id);
     if(a.done>=a.total){snd('full');celebrate();}
     else snd('tick',Math.round(a.done/a.total*100));
   }
-  else if(delta<0&&a.done<prev){
+  else{
     spinGears('a'+id,-1);
     snd('tick',Math.round(a.done/a.total*100));
   }
-  save();render();
+  save();
+  /* быстрый путь: карточка осталась «в работе» — патчим только её,
+     тяжёлая полная перерисовка уходит из кадра нажатия */
+  if(prev<a.total&&a.done<a.total&&!a.killed&&!a.retro
+    &&patchCard('.alloc[data-id="'+id+'"]',card(a))){
+    updStats();renderSoon();return;
+  }
+  render();
 }
 function killAlloc(id){const a=state.allocs.find(x=>x.id===id);if(!a)return;a.killed=true;snd('kill');save();render()}
 function doneAlloc(id){
@@ -1806,7 +1828,21 @@ function trackTick(tid,delta){
     const need=tr?Math.round(tr.norm*2):0;
     snd('tick',need>0?Math.min(100,Math.round(s.wk.done[tid]/need*100)):0);
   }
-  save();render();
+  save();
+  /* быстрый путь: статус недельной нормы не пересёк границу и привязанная
+     аллокация не закрылась — патчим только карточку трека (и карточку
+     привязанной аллокации), без полной перерисовки обеих панелей */
+  const needN=tr?Math.round(tr.norm*2):0;
+  const wasDone=needN>0&&cur>=needN,nowDone=needN>0&&(s.wk.done[tid]||0)>=needN;
+  if(tr&&!allocDone&&wasDone===nowDone&&s.wk.done[tid]!==cur
+    &&patchCard('.trk[data-tid="'+tid+'"]',trackCard(tr))){
+    if(tr.betId){
+      const a=state.allocs.find(x=>x.id===tr.betId&&!x.retro);
+      if(a&&!a.killed)patchCard('.alloc[data-id="'+a.id+'"]',card(a));
+    }
+    updStats();renderSoon();return;
+  }
+  render();
 }
 function addTrack(){
   const s=state.season;if(!s)return;
@@ -2393,51 +2429,61 @@ function refRender(){document.getElementById('ref-body').innerHTML=REF[lang]}
 
 /* ================= RENDER ================= */
 const seenAnim=new Set();let lastPct={},lastStat={},lastTape={};
-function animPass(){
-  document.querySelectorAll('.alloc[data-id],.trk[data-tid]').forEach(el=>{
+/* animPass(root): FLIP-анимации шкал, лент и шестерней.
+   Оптимизация под телефоны: все «стартовые» значения пишутся первой фазой,
+   затем ОДИН общий reflow, затем финальные значения. Раньше layout форсировался
+   на каждый элемент (включая каждую из 10 шестерней каждой карточки) — десятки
+   синхронных reflow за нажатие, главный источник фризов.
+   root — необязательный элемент: обработать только его поддерево. */
+function animPass(root){
+  const $$=sel=>{
+    if(!root)return [...document.querySelectorAll(sel)];
+    const out=root.matches&&root.matches(sel)?[root]:[];
+    return out.concat([...root.querySelectorAll(sel)]);
+  };
+  $$('.alloc[data-id],.trk[data-tid]').forEach(el=>{
     const key=el.dataset.id?'a'+el.dataset.id:'t'+el.dataset.tid;
     if(!seenAnim.has(key)){seenAnim.add(key);el.classList.add('anim-in')}
   });
-  document.querySelectorAll('.fill[data-k]').forEach(f=>{
+  const fin=[]; /* вторая фаза: применяется после единственного reflow */
+  $$('.fill[data-k]').forEach(f=>{
     const k=f.dataset.k,now=parseFloat(f.dataset.p);
     const prev=lastPct[k];
     if(prev!=null&&prev!==now){
       f.style.transition='none';f.style.width=prev+'%';
-      void f.offsetWidth;
-      f.style.transition='';f.style.width=now+'%';
+      fin.push(()=>{f.style.transition='';f.style.width=now+'%'});
     }
     lastPct[k]=now;
   });
   /* лента-шкала: FLIP-сдвиг ровно на одну клетку от прежней позиции к новой */
-  document.querySelectorAll('.tape[data-tk]').forEach(w=>{
+  $$('.tape[data-tk]').forEach(w=>{
     const k=w.dataset.tk,done=+w.dataset.done,s=+w.dataset.start;
     const prev=lastTape[k];
     const st=w.querySelector('.tape-strip'),u=st&&st.querySelector('u');
     if(st&&prev!=null&&prev!==done){
       st.style.transition='none';st.style.transform='translateX('+(-(prev-s)*TAPE_CW)+'px)';
       if(u){u.style.transition='none';u.style.width=Math.max(0,(prev-s)*TAPE_CW)+'px'}
-      void st.getBoundingClientRect();
-      st.style.transition='';st.style.transform='translateX('+(-(done-s)*TAPE_CW)+'px)';
-      if(u){u.style.transition='';u.style.width=((done-s)*TAPE_CW)+'px'}
+      fin.push(()=>{
+        st.style.transition='';st.style.transform='translateX('+(-(done-s)*TAPE_CW)+'px)';
+        if(u){u.style.transition='';u.style.width=((done-s)*TAPE_CW)+'px'}
+      });
     }
     lastTape[k]=done;
   });
   /* проворот шестерней: FLIP от прежнего накопленного угла к новому */
-  document.querySelectorAll('.gearwin[data-gid]').forEach(w=>{
+  $$('.gearwin[data-gid]').forEach(w=>{
     const gid=w.dataset.gid,st=gearSteps[gid]||0,prev=lastGear[gid];
+    const moved=prev!=null&&prev!==st;
     w.querySelectorAll('.gr').forEach((g,i)=>{
       const stp=i%2?-22:18,off=(i*47)%60-30;
-      if(prev!=null&&prev!==st){
-        g.style.transition='none';g.style.transform='rotate('+(prev*stp+off)+'deg)';
-        void g.getBoundingClientRect();
-        g.style.transition='';g.style.transform='rotate('+(st*stp+off)+'deg)';
-      }else{
-        g.style.transition='none';g.style.transform='rotate('+(st*stp+off)+'deg)';
-        void g.getBoundingClientRect();g.style.transition='';
-      }
+      g.style.transition='none';
+      g.style.transform='rotate('+((moved?prev:st)*stp+off)+'deg)';
+      if(moved)fin.push(()=>{g.style.transition='';g.style.transform='rotate('+(st*stp+off)+'deg)'});
+      else fin.push(()=>{g.style.transition=''});
     });
     lastGear[gid]=st;
   });
+  if(fin.length){void document.body.offsetWidth;fin.forEach(f=>f())}
   ['s-active','s-hours','s-de'].forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     if(lastStat[id]!=null&&lastStat[id]!==el.textContent){
@@ -2445,6 +2491,49 @@ function animPass(){
     }
     lastStat[id]=el.textContent;
   });
+}
+/* ── быстрый путь нажатий ±30: точечный патч одной карточки ──
+   Полная перерисовка (render) пересобирает ОБЕ панели целиком — на телефонах
+   это 100–300 мс, из-за чего нажатие расходилось со звуком и шестернями.
+   patchCard заменяет только затронутую карточку (структура внутри неё может
+   меняться как угодно — HTML генерится теми же card/trackCard), а полная
+   сверка выполняется отложенно, вне кадра взаимодействия. */
+let _rsT=null;
+function renderSoon(){
+  if(_rsT)return;
+  _rsT=setTimeout(()=>{
+    _rsT=null;
+    const ae=document.activeElement;
+    /* не смахиваем текст, который пользователь набирает в форме */
+    if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA')){renderSoon();return}
+    render();
+  },450);
+}
+function patchCard(sel,html){
+  const old=document.querySelector(sel);if(!old)return false;
+  const tmp=document.createElement('div');tmp.innerHTML=html;
+  const nu=tmp.firstElementChild;if(!nu)return false;
+  old.replaceWith(nu);
+  animPass(nu); /* FLIP только внутри этой карточки */
+  return true;
+}
+function updStats(){
+  const act=state.allocs.filter(a=>!a.retro);
+  const doneA=state.allocs.filter(a=>a.retro);
+  const hrs=state.allocs.reduce((s,a)=>s+a.done*0.5,0);
+  const deClosed=doneA.reduce((s,a)=>s+(a.done/200),0);
+  const set=(id,v)=>{
+    const el=document.getElementById(id);if(!el)return;
+    const t=String(v);
+    if(el.textContent!==t){
+      el.textContent=t;
+      el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');
+    }
+    lastStat[id]=el.textContent;
+  };
+  set('s-active',act.filter(a=>a.done<a.total&&!a.killed).length);
+  set('s-hours',fmt(hrs));
+  set('s-de',fmt(deClosed,2));
 }
 function render(){
   for(const a of state.allocs){
@@ -2475,11 +2564,7 @@ function render(){
   ds.style.display=done.length?'block':'none';
   document.getElementById('done-sum').textContent=T('arch')(done.length);
   document.getElementById('done-list').innerHTML=done.map(card).join('');
-  const hrs=state.allocs.reduce((s,a)=>s+a.done*0.5,0);
-  const deClosed=done.reduce((s,a)=>s+(a.done/200),0);
-  document.getElementById('s-active').textContent=act.filter(a=>a.done<a.total&&!a.killed).length;
-  document.getElementById('s-hours').textContent=fmt(hrs);
-  document.getElementById('s-de').textContent=fmt(deClosed,2);
+  updStats();
   seasonPane();
   animPass();
 }
