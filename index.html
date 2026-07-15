@@ -20,6 +20,7 @@
     --bgc-core:#1c1810; --bgc-exp:#191424; --bgc-body:#1e1412;
     --glow:radial-gradient(ellipse 700px 400px at 50% -80px,#171d26 0%,transparent 60%);
     --scrim:rgba(6,8,10,.82);
+    --tick:rgba(255,255,255,.15); --tickH:rgba(255,255,255,.25); --tickM:rgba(233,190,90,.7);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{
@@ -368,8 +369,9 @@
   .gearwin .gr{transition:transform .4s cubic-bezier(.32,.72,0,1)}
   .gearstrip{position:absolute;left:50%;top:0;width:560px;height:100%;transform:translateX(-50%)}
   .gimg{position:absolute;display:block;background-size:100% 100%;background-repeat:no-repeat}
-  .gimg:not(.gback){filter:drop-shadow(0 6px 9px rgba(0,0,0,.65))}
-  .gback{filter:brightness(.68) blur(.6px);opacity:.9}
+  /* без drop-shadow/blur на шестернях: конволюционные фильтры — главный источник
+     фризов при дорисовке карточек во время скролла; глубину даёт свет спрайтов */
+  .gback{filter:brightness(.6);opacity:.85}
   body{background-image:var(--glow),
     radial-gradient(130% 100% at 50% 8%,transparent 50%,rgba(0,0,0,.6) 100%)}
   /* шкалы как на макете: тонкие плёночные колбы с мелкой сеткой */
@@ -461,14 +463,20 @@
     box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
   .tape.slim{height:32px}
   .tape-strip{position:absolute;left:50%;top:0;height:100%;
-    transition:transform .45s var(--ease);will-change:transform}
+    transition:transform .45s var(--ease);
+    /* деления — фоновые градиенты вместо ~100 DOM-элементов на ленту:
+       крупное (золото) каждые 10 клеток, среднее каждые 2, мелкое каждую;
+       сдвиг фаз major/hour задаётся инлайн из tape() */
+    background-image:
+      linear-gradient(90deg,var(--tickM) 0 1px,transparent 1px),
+      linear-gradient(90deg,var(--tickH) 0 1px,transparent 1px),
+      linear-gradient(90deg,var(--tick) 0 1px,transparent 1px);
+    background-repeat:repeat-x;
+    background-size:130px 16px,26px 12px,13px 8px}
   .tape-strip u{position:absolute;top:0;bottom:0;left:0;text-decoration:none;
     background:linear-gradient(180deg,rgba(213,162,68,.15),rgba(213,162,68,.04));
     border-right:1px solid rgba(233,190,90,.55);
     transition:width .45s var(--ease)}
-  .tape-strip i{position:absolute;bottom:6px;width:1px;height:8px;background:rgba(255,255,255,.15)}
-  .tape-strip i.H{height:12px;background:rgba(255,255,255,.25)}
-  .tape-strip i.M{height:16px;background:rgba(233,190,90,.7)}
   .tape-strip b{position:absolute;top:3px;transform:translateX(-50%);
     font-family:'JetBrains Mono',monospace;font-weight:500;font-size:9.5px;
     letter-spacing:.04em;color:var(--dim);white-space:nowrap}
@@ -486,7 +494,10 @@
         не тянет за собой остальную страницу;
      3) html.no-trans на момент смены темы гасит все transition/animation,
         чтобы новая палитра применялась одним кадром, без волны перекрасок */
-  .alloc,.trk,.ref{content-visibility:auto;contain-intrinsic-size:auto 320px}
+  .alloc,.trk,.ref{content-visibility:auto}
+  .alloc{contain-intrinsic-size:auto 430px}
+  .trk{contain-intrinsic-size:auto 330px}
+  .ref{contain-intrinsic-size:auto 54px}
   .gearwin,.tape{contain:layout paint}
   html.no-trans *,html.no-trans *::before,html.no-trans *::after{
     transition:none!important;animation:none!important}
@@ -568,7 +579,7 @@
   .lvl{background:rgba(255,255,255,.5)}
   .btn-kill{background:linear-gradient(180deg,#f6e8e2,#ecd6cc)}
   .gearwin .gimg{filter:brightness(1.8) contrast(.85)}
-  .gearwin .gback{filter:brightness(1.35) contrast(.8) blur(.7px);opacity:.55}
+  .gearwin .gback{filter:brightness(1.35) contrast(.8);opacity:.55}
   .gearwin{border-color:rgba(120,100,60,.45);
     background:
       radial-gradient(95px 62px at 22% 80%,rgba(200,120,20,.22),transparent 70%),
@@ -684,15 +695,13 @@
   .gearwin{border-color:var(--line);background:var(--sub);
     box-shadow:inset 0 1px 3px rgba(60,50,25,.1)}
   .gearwin .gimg{filter:grayscale(.55) brightness(1.9) contrast(.6);opacity:.55}
-  .gearwin .gback{filter:grayscale(.65) brightness(1.85) contrast(.5) blur(.7px);opacity:.3}
+  .gearwin .gback{filter:grayscale(.65) brightness(1.85) contrast(.5);opacity:.3}
   .gearwin::after{background:
     linear-gradient(90deg,rgba(244,242,236,.9),transparent 16%,transparent 84%,rgba(244,242,236,.9))}
   /* лента-шкала в светлой теме */
   .tape{background:var(--sub);border-color:var(--line);
     box-shadow:inset 0 1px 2px rgba(60,50,25,.08)}
-  .tape-strip i{background:rgba(60,50,25,.18)}
-  .tape-strip i.H{background:rgba(60,50,25,.3)}
-  .tape-strip i.M{background:rgba(154,123,30,.75)}
+  :root{--tick:rgba(60,50,25,.18);--tickH:rgba(60,50,25,.3);--tickM:rgba(154,123,30,.75)}
   .tape-strip u{background:linear-gradient(180deg,rgba(154,123,30,.13),rgba(154,123,30,.03));
     border-right-color:rgba(154,123,30,.6)}
   .tape-ptr{box-shadow:none}
@@ -1622,21 +1631,21 @@ function spinGears(gid,dir=1){gearSteps[gid]=(gearSteps[gid]||0)+dir}
 
 /* ── лента-шкала: клетка = 30 мин; каждое нажатие сдвигает ленту ровно на клетку.
    Указатель зафиксирован в центре, рисуется только окно ±W клеток вокруг позиции —
-   поэтому сдвиг виден одинаково и на коротких, и на очень длинных дистанциях ── */
+   поэтому сдвиг виден одинаково и на коротких, и на очень длинных дистанциях.
+   Деления рисуются фоновыми градиентами (см. .tape-strip), DOM — только подписи часов ── */
 const TAPE_CW=13;
 function tape(k,done,total,slim){
   const W=48;
   const s=Math.max(0,done-W),e=Math.min(total,done+W);
-  let cells='';
-  for(let i=s;i<=e;i++){
-    const x=(i-s)*TAPE_CW;
-    const major=i%10===0,hour=i%2===0;
-    cells+=`<i class="${major?'M':(hour?'H':'')}" style="left:${x}px"></i>`;
-    if(major)cells+=`<b style="left:${x}px">${fmt(i*0.5)}${T('h')}</b>`;
-  }
+  let labels='';
+  for(let i=Math.ceil(s/10)*10;i<=e;i+=10)
+    labels+=`<b style="left:${(i-s)*TAPE_CW}px">${fmt(i*0.5)}${T('h')}</b>`;
+  /* фазы фоновых слоёв: major выравнивается на клетки кратные 10, hour — кратные 2 */
+  const mj=((10-s%10)%10)*TAPE_CW,hr=((2-s%2)%2)*TAPE_CW,py='calc(100% - 6px)';
   return `<div class="tape${slim?' slim':''}" data-tk="${k}" data-done="${done}" data-start="${s}">`
-    +`<div class="tape-strip" style="width:${(e-s)*TAPE_CW}px;transform:translateX(${-(done-s)*TAPE_CW}px)">`
-    +`<u style="width:${(done-s)*TAPE_CW}px"></u>${cells}</div>`
+    +`<div class="tape-strip" style="width:${(e-s)*TAPE_CW}px;transform:translateX(${-(done-s)*TAPE_CW}px);`
+    +`background-position:${mj}px ${py},${hr}px ${py},0 ${py}">`
+    +`<u style="width:${(done-s)*TAPE_CW}px"></u>${labels}</div>`
     +`<span class="tape-ptr"></span></div>`;
 }
 
