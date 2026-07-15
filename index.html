@@ -96,7 +96,7 @@
   .edit:active{opacity:1;color:var(--gold)}
   .drag{color:var(--dim);cursor:grab;font-size:18px;padding:8px 14px 8px 2px;
     margin:-8px 0;display:inline-block;touch-action:none;user-select:none;
-    -webkit-user-select:none;opacity:.6}
+    -webkit-user-select:none;-webkit-touch-callout:none;opacity:.6}
   .dragging{opacity:.94;position:relative;z-index:6;
     box-shadow:0 10px 26px rgba(0,0,0,.45)}
   .alloc.dragging{border-color:var(--gold)}
@@ -453,7 +453,8 @@ ru:{
  pauseWhy:'Причина',pw1:'Болезнь',pw2:'Форс-мажор',pw3:'Отпуск / поездка',
  pauseUntil:'Дата возврата (макс. 14 дней)',pauseNote:'Комментарий (необязательно)',
  pauseGo:'ОБЪЯВИТЬ ПАУЗУ',pauseOn:d=>'⏸ Пауза до '+d,pauseBack:'вернуться раньше',
- pauseLim:'Лимит пауз исчерпан (1 за сезон). Дальше честно: kill сезона или ребаланс норм.',
+ pauseLim:'Две паузы за сезон уже были. Третья — сигнал: kill сезона или ребаланс норм.',
+ vacLim:'Отпуск-пауза уже была в этом сезоне. Второй слот — только болезнь или форс-мажор.',
  pauseErrD:'Дата возврата обязательна, не дальше 14 дней.',
  backArm:'точно вернуться?',pauseRes:'Пауза возобновлена до прежней даты — лимит не потрачен.',
  pausePlate:'⏸ ПАУЗА',pauseSt:'⏸ пауза · треки заморожены, серия ждёт',
@@ -499,7 +500,7 @@ ru:{
   {t:'Аллокации',b:'Аллокация — вложение времени в направление.<br><br><b>1 ДЕ (Дельта-Единица) = 100 часов.</b> Разведка нового направления — 0,1–0,2 ДЕ.<br><br>Поработал 30 минут → нажми <b>+30</b>. Шкала растёт и зреет от золота к бирюзе. Каждый чекпоинт — со звуком.'},
   {t:'Три уровня',b:'<b style="color:var(--gold)">Ядро</b> — долгие активы: навыки, доход, инфраструктура. Не отсекается.<br><br><b style="color:var(--violet)">Эксперимент</b> — строго один слот: меньше распыления.<br><br><b style="color:var(--ember)">Носитель</b> — тело и энергия. Без него КПД любого часа падает.'},
   {t:'Ретро и отбор',b:'Шкала заполнилась → короткое <b>ретро</b>: что реально приросло (дельта)?<br><br>Три исхода: <b style="color:var(--teal)">Удвоить</b> — работает, следующая итерация больше. <b style="color:var(--gold)">Пивот</b> — направление то, подход другой. <b style="color:var(--ember)">Закрыть</b> — честно убить.<br><br>Не дожидаясь конца: кнопка <b>kill</b>. Это отбор, не провал.'},
-  {t:'Твои данные — твои',b:'Всё хранится <b>только на этом устройстве</b>. Нет сервера, нет аккаунта, нет сбора данных.<br><br>Бэкап — кнопкой ⇪: файл сохраняется у тебя (локально или в своё облако), раз в неделю.<br><br><b>Трекер для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b>'}
+  {t:'Твои данные — твои',b:'Всё хранится <b>только на этом устройстве</b>. Нет сервера, нет аккаунта, нет сбора данных.<br><br>Бэкап — кнопкой ⇪: файл сохраняется у тебя (локально или в своё облако), раз в неделю.<br><br><b>Система для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b>'}
  ],
  next:'ДАЛЕЕ',startO:'НАЧАТЬ',skip:'пропустить',
 },
@@ -569,7 +570,8 @@ en:{
  pauseWhy:'Reason',pw1:'Illness',pw2:'Force majeure',pw3:'Vacation / trip',
  pauseUntil:'Return date (max 14 days)',pauseNote:'Comment (optional)',
  pauseGo:'DECLARE PAUSE',pauseOn:d=>'⏸ Paused until '+d,pauseBack:'return early',
- pauseLim:'Pause limit reached (1 per season). Next: season kill or quota rebalance.',
+ pauseLim:'Two pauses this season already. A third is a signal: season kill or quota rebalance.',
+ vacLim:'A vacation pause was already used this season. The second slot is for illness / force majeure only.',
  pauseErrD:'Return date required, max 14 days ahead.',
  backArm:'sure?',pauseRes:'Pause resumed until the original date — limit not spent.',
  pausePlate:'⏸ PAUSED',pauseSt:'⏸ paused · tracks frozen, streak waits',
@@ -614,7 +616,7 @@ en:{
   {t:'Allocations',b:'An allocation is time invested in a direction.<br><br><b>1 DU (Delta Unit) = 100 hours.</b> Scouting a new direction — 0.1–0.2 DU.<br><br>Worked 30 minutes → tap <b>+30</b>. The bar grows and ripens from gold to teal. Every checkpoint rings.'},
   {t:'Three levels',b:'<b style="color:var(--gold)">Core</b> — long-term assets: skills, income, infrastructure. Never cut.<br><br><b style="color:var(--violet)">Experimental</b> — strictly one slot: less scatter.<br><br><b style="color:var(--ember)">Body</b> — your carrier. Without it every hour\'s output drops.'},
   {t:'Retro & selection',b:'Bar filled → a short <b>retro</b>: what actually accrued (the delta)?<br><br>Three outcomes: <b style="color:var(--teal)">Double</b> — it works, next iteration is bigger. <b style="color:var(--gold)">Pivot</b> — same direction, new approach. <b style="color:var(--ember)">Kill</b> — end it honestly.<br><br>Don\'t wait for the end: the <b>kill</b> button. It\'s selection, not failure.'},
-  {t:'Your data is yours',b:'Everything is stored <b>on this device only</b>. No server, no account, no data collection.<br><br>Backup — the ⇪ button: the file stays with you (locally or your own cloud), weekly.<br><br><b>The tracker is for time you invest. Time you live doesn\'t need accounting.</b>'}
+  {t:'Your data is yours',b:'Everything is stored <b>on this device only</b>. No server, no account, no data collection.<br><br>Backup — the ⇪ button: the file stays with you (locally or your own cloud), weekly.<br><br><b>The system is for time you invest. Time you live doesn\'t need accounting.</b>'}
  ],
  next:'NEXT',startO:'START',skip:'skip',
 }};
@@ -1104,6 +1106,15 @@ function saveRetro(id,ctx=''){
     state.season.tracks.forEach(t=>{if(t.betId===id)t.betId=newId});
   save();render();
 }
+function cycleTrkLvl(id){
+  const s=state.season;if(!s)return;
+  const tr=s.tracks.find(t=>t.id===id);if(!tr)return;
+  const order=['goal','core','exp','body'];
+  const cur=tr.lvl||((tr.role||'sup')==='goal'?'goal':'core');
+  const nx=order[(order.indexOf(cur)+1)%4];
+  tr.lvl=nx;tr.role=(nx==='goal'?'goal':'sup');
+  save();render();
+}
 function cycleLevel(id){
   const a=state.allocs.find(x=>x.id===id);if(!a||a.retro)return;
   const order=['core','exp','body'];
@@ -1172,7 +1183,7 @@ function card(a){
     </div>`;
   }
   return `<div class="alloc ${cls}" data-id="${a.id}"${!cls?` style="border-left-color:${lv.c};background:linear-gradient(180deg,${lv.bg},var(--card) 70%)"`:''}>
-    <div class="a-top"><div class="a-name">${!a.retro?`<span class="drag" onpointerdown="dragStart(event,'${a.id}')">⠿</span>`:''}${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
+    <div class="a-top"><div class="a-name">${!a.retro?`<span class="drag" ontouchstart="event.preventDefault()" onpointerdown="dragStart(event,'${a.id}')">⠿</span>`:''}${esc(a.name)}${!a.retro?` <span class="edit" onclick="renameAlloc('${a.id}')">✎</span>`:''}</div>
       <div class="a-de"><span class="lvl" style="color:${lv.c};border-color:${lv.c};margin-right:7px${!a.retro?';cursor:pointer':''}"${!a.retro?` onclick="cycleLevel('${a.id}')"`:''}>${lv.t}</span>${fmt(a.de,2)} ${lang==='ru'?'ДЕ':'DU'}${!a.retro?` <span class="edit" style="${armed['al'+a.id]?'color:var(--ember);opacity:1':''}" onclick="removeAlloc('${a.id}')">${armed['al'+a.id]?T('delQ'):'✕'}</span>`:''}</div></div>
     <div class="bar"><div class="fill" data-k="a${a.id}" data-p="${pct}" style="width:${pct}%${!a.retro?`;background:linear-gradient(90deg,${bc[0]},${bc[1]})`:''}"></div>${ticks}
       <div class="pct">${pct}%</div></div>
@@ -1231,7 +1242,7 @@ function openPause(){
     s.pause={why:lp.why,until:lp.until,note:lp.note||'',ts:Date.now()};
     save();render();showOk(T('pauseRes'));return;
   }
-  if(pauseCount()>=1){showErr(T('pauseLim'));return}
+  if(pauseCount()>=2){showErr(T('pauseLim'));return}
   window._pauseForm=true;render();
 }
 function startPause(){
@@ -1242,6 +1253,7 @@ function startPause(){
   if(!dv){showErr(T('pauseErrD'));return}
   const until=new Date(dv+'T23:59:00').getTime();
   if(!(until>Date.now())||until>Date.now()+15*86400000){showErr(T('pauseErrD'));return}
+  if(why==='vac'&&(s.pauses||[]).some(p=>p.why==='vac')){showErr(T('vacLim'));return}
   s.pause={why,until,note,ts:Date.now()};
   window._pauseForm=false;
   save();render();
@@ -1424,9 +1436,9 @@ function trackCard(tr){
   const note=(s.wk.notes||{})[tr.id]||'';
   return `<div class="trk" data-tid="${tr.id}" style="border-left:3px solid ${done?'var(--teal)':lv.c}">
     <div class="t-top">
-      <div class="t-name">${done?'':`<span class="drag" style="font-size:15px;padding:6px 10px 6px 0" onpointerdown="trkStart(event)">⠿</span>`}${esc(tr.name)} <span class="edit" onclick="editTrack('${tr.id}')">✎</span></div>
+      <div class="t-name">${done?'':`<span class="drag" style="font-size:15px;padding:6px 10px 6px 0" ontouchstart="event.preventDefault()" onpointerdown="trkStart(event)">⠿</span>`}${esc(tr.name)} <span class="edit" onclick="editTrack('${tr.id}')">✎</span></div>
       <div style="display:flex;gap:6px;align-items:center">
-        <span class="lvl" style="color:${lv.c};border-color:${lv.c}">${lv.t}</span>
+        <span class="lvl" style="color:${lv.c};border-color:${lv.c};cursor:pointer" onclick="cycleTrkLvl('${tr.id}')">${lv.t}</span>
         <span class="edit" style="${armed['tk'+tr.id]?'color:var(--ember);opacity:1':''}" onclick="delTrack('${tr.id}')">${armed['tk'+tr.id]?T('delQ'):'✕'}</span>
       </div>
     </div>
@@ -1573,7 +1585,7 @@ function seasonPane(){
       if(!list.length)continue;
       const [gt,gc]=GT[k];
       tHtml+=`<div class="blk" data-lvl="${k}">
-        <div class="lbl" style="margin:8px 0 7px;color:${gc}"><span class="drag" style="font-size:12px;padding:5px 9px 5px 2px" onpointerdown="blkStart(event)">⠿</span>${gt}</div>
+        <div class="lbl" style="margin:8px 0 7px;color:${gc}"><span class="drag" style="font-size:12px;padding:5px 9px 5px 2px" ontouchstart="event.preventDefault()" onpointerdown="blkStart(event)">⠿</span>${gt}</div>
         <div class="tlist" data-lvl="${k}">${list.map(trackCard).join('')}</div></div>`;
     }
     const archHtml=doneTracks.length?`<details class="addf" style="margin:6px 0 2px"${window._wkArch?' open':''} ontoggle="window._wkArch=this.open">
@@ -1704,7 +1716,7 @@ ru:`
 <text x="260" y="687" text-anchor="middle" class="smT">РЕТРО СЕЗОНА</text>
 <text x="260" y="704" text-anchor="middle" class="smS">план исполнен? · цель достигнута? → правки раз в 90 дней</text>
 <rect x="20" y="736" width="480" height="46" rx="9" fill="none" stroke="var(--line)" stroke-dasharray="5 4"/>
-<text x="260" y="755" text-anchor="middle" class="smS">Трекер для времени, которое ты вкладываешь.</text>
+<text x="260" y="755" text-anchor="middle" class="smS">Система для времени, которое ты вкладываешь.</text>
 <text x="260" y="771" text-anchor="middle" class="smS">Время, которое ты живёшь, в учёте не нуждается.</text>
 </svg>
 </div></details>
@@ -1737,7 +1749,7 @@ ru:`
 <p><b>Сезон</b> = 30/60/90 дней, одна бинарная цель.</p>
 <p><b>План</b> — треки с недельными нормами: гипотеза «какой процесс произведёт цель». Уровни треков: Цель сезона / Ядро / Эксперимент / Носитель.</p>
 <p><b>Квесты недели:</b> каждый трек — отдельный квест со своей нормой. Неделя ✓ = все квесты закрыты + норма исходящих. Неделя длится 7 дней от даты старта сезона и закрывается автоматически (✓/✗ в историю); подряд — серия побед.</p>
-<p><b>Пауза</b> — протокол деградации: причина (болезнь / форс-мажор / отпуск) + дата возврата ≤14 дней, 1 раз за сезон. Недели паузы — ⏸, серия ждёт. Вторая пауза = kill сезона или ребаланс.</p>
+<p><b>Пауза</b> — протокол деградации: причина (болезнь / форс-мажор / отпуск) + дата возврата ≤14 дней. Лимит: всего 2 за сезон, отпуск — не более 1 (второй слот — резерв под болезнь и форс-мажор, их не планируют). Недели паузы — ⏸, серия ждёт. Третья пауза = kill сезона или ребаланс.</p>
 <p><b>Ретро сезона</b> — два независимых вопроса: «план исполнен?» (недели ✓/✗) и «цель достигнута?». Исполнен + не достигнута = гипотеза неверна, менять план. Не исполнен = чинить исполнение, не идею.</p>
 </div></details>
 <details class="ref"><summary><span class="rtag" style="color:var(--blue)">Ур.4</span><span class="rt">Шпаргалка: цель · исходящие · kill</span></summary>
@@ -1760,7 +1772,7 @@ ru:`
 <p><b>Доведение бьёт талант.</b></p>
 <p><b>Удовольствие не квотируется</b> — пики батчами, суверенная зона. Система нормирует слоты вложений, не жизнь.</p>
 <p><b>Восстановление объявляется вперёд</b> — у паузы есть причина и точка выхода.</p>
-<p><b>Трекер для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b></p>
+<p><b>Система для времени, которое ты вкладываешь. Время, которое ты живёшь, в учёте не нуждается.</b></p>
 </div></details>`,
 en:`
 <details class="ref" open><summary><span class="rtag" style="color:var(--gold)">Scheme</span><span class="rt">How it all connects</span></summary>
@@ -1819,7 +1831,7 @@ en:`
 <text x="260" y="687" text-anchor="middle" class="seT">SEASON RETRO</text>
 <text x="260" y="704" text-anchor="middle" class="seS">plan executed? · goal reached? → edits every 90 days</text>
 <rect x="20" y="736" width="480" height="46" rx="9" fill="none" stroke="var(--line)" stroke-dasharray="5 4"/>
-<text x="260" y="755" text-anchor="middle" class="seS">The tracker is for time you invest.</text>
+<text x="260" y="755" text-anchor="middle" class="seS">The system is for time you invest.</text>
 <text x="260" y="771" text-anchor="middle" class="seS">Time you live doesn't need accounting.</text>
 </svg>
 </div></details>
@@ -1852,7 +1864,7 @@ en:`
 <p><b>Season</b> = 30/60/90 days, one binary goal.</p>
 <p><b>Plan</b> — tracks with weekly quotas: the hypothesis of which process produces the goal. Track levels: Season goal / Core / Experimental / Body.</p>
 <p><b>Weekly quest:</b> all track quotas + outgoing quota. Monday closes the week automatically (✓/✗ into history); consecutive wins — a streak.</p>
-<p><b>Pause</b> — degradation protocol: reason (illness / force majeure / vacation) + return date ≤14 days, once per season. Paused weeks show ⏸, the streak waits. A second pause = season kill or rebalance.</p>
+<p><b>Pause</b> — degradation protocol: reason (illness / force majeure / vacation) + return date ≤14 days. Limit: 2 per season total, vacation at most 1 (the second slot is reserved for illness and force majeure — you can't plan those). Paused weeks show ⏸, the streak waits. A third pause = season kill or rebalance.</p>
 <p><b>Season retro</b> — two independent questions: "was the plan executed?" and "was the goal reached?". Executed + not reached = wrong hypothesis, change the plan. Not executed = fix execution, not the idea.</p>
 </div></details>
 <details class="ref"><summary><span class="rtag" style="color:var(--blue)">L4</span><span class="rt">Cheat sheet: goal · outgoing · kill</span></summary>
@@ -1875,7 +1887,7 @@ en:`
 <p><b>Finishing beats talent.</b></p>
 <p><b>Joy is not rationed</b> — peaks in batches, a sovereign zone. The system rations investment slots, not life.</p>
 <p><b>Recovery is declared in advance</b> — a pause has a reason and an exit point.</p>
-<p><b>The tracker is for time you invest. Time you live doesn't need accounting.</b></p>
+<p><b>The system is for time you invest. Time you live doesn't need accounting.</b></p>
 </div></details>`};
 function refRender(){document.getElementById('ref-body').innerHTML=REF[lang]}
 
@@ -1925,7 +1937,7 @@ function render(){
     const list=act.filter(a=>(a.level||'core')===k);
     if(list.length)ah+='<div class="blk" data-level="'+k+'">'
       +'<div class="sec" style="margin:14px 0 9px;color:'+c+'">'
-      +'<span class="drag" style="font-size:13px;padding:6px 10px 6px 4px" onpointerdown="blkStart(event)">⠿</span>'+T(tk)+'</div>'
+      +'<span class="drag" style="font-size:13px;padding:6px 10px 6px 4px" ontouchstart="event.preventDefault()" onpointerdown="blkStart(event)">⠿</span>'+T(tk)+'</div>'
       +'<div class="glist" data-level="'+k+'">'+list.map(card).join('')+'</div></div>';
   }
   document.getElementById('active-list').innerHTML=ah||'<div class="empty">'+T('emptyA')+'</div>';
